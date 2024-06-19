@@ -37,6 +37,7 @@ export default function UploadPage() {
 
     return (
         <div>
+            <p>j</p>
             <h1>Upload a PDF File</h1>
             <form onSubmit={handleSubmit}>
                 <input type="file" accept="application/pdf" onChange={handleFileChange} />
