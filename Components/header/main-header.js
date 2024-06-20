@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import classes from './main-header.module.css'
+import classes from '@/Components/header/main-header.module.css'
 
 export default function MainHeader() {
     return (
@@ -12,13 +12,13 @@ export default function MainHeader() {
 
                 <ul className="nav nav-pills">
                     <li className="nav-item">
-                        <Link href="/" className={`${classes.link1} nav-link`}>Servizi</Link>
+                        <Link href="/" className={classes.link1}>Servizi</Link>
                     </li>
                     <li className="nav-item">
-                        <Link href="/" className={`${classes.link2} nav-link`}>Contatti</Link>
+                        <Link href="/dashboard" className={classes.link2}>Contatti</Link>
                     </li>
                     <div className="cta-wrapper  d-flex flex">
-                        <a href="/login" className={`${classes.loginPulsante} btn`}>Login</a>
+                        <Link href="/login" className={classes.loginPulsante}>Login</Link>
                     </div>
                 </ul>
             </div>

@@ -1,4 +1,4 @@
-import classes from './page.module.css';
+import classes from '@/app/login/page.module.css';
 
 const LoginForm = () => {
     return (

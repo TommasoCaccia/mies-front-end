@@ -1,36 +1,41 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
 .Header {
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: white;
     top: 0;
+    position: fixed;
+    z-index: 1000;
 }
 
 .logo {
     max-width: 100px;
 }
 
-.link1, .link2{
-    color: #3c3b3b !important;
+.link1, .link2 {
+    color: #616161;
     font-family: "Montserrat", sans-serif;
     text-transform: uppercase;
-    font-size: 13px!important;
-    font-weight: 600!important;
-    display: flex !important;
-    padding-top: 12px!important;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    padding: 12px 20px 12px 20px;
+
 }
 
 
-.loginPulsante{
-    background-color: #2C4D79!important;
-    border-radius: 0!important;
-    color: white!important; ;
+.loginPulsante {
+    background-color: #2C4D79;
+    border-radius: 0;
+    color: white;;
     text-transform: uppercase;
-    display: flex !important;
+    display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 15px!important;
-    font-weight: 600!important;
-    padding: 10px 2rem!important;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 2rem;
+    font-family: "Montserrat", sans-serif;
 }
