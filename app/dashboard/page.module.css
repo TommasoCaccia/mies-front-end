@@ -2,12 +2,18 @@
 
 
 .container {
-    padding: 20px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    background-color: #f0f0f0;
-    height: 100vh;
-    margin-top: 95.94px;
+    background-color: #efefef;
+    margin-top: 125px; /* Altezza Header 95.94 */
+    width: 100%;
+    padding-bottom: 80px;
+}
+
+.paragrafo2 {
+    flex-wrap: wrap;
+    margin: 0 300px;
 }
 
 .header {
@@ -61,54 +67,106 @@
     margin: 10px;
 }
 
-.controlloPulsante {
+.controlloPulsante, .budgetPulsante, .futuresPulsante {
     background-color: #2C4D79;
+    border-color: #2C4D79;
     border-radius: 5px;
-    color: white;;
+    color: white;
     text-transform: uppercase;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 20px;
     font-weight: 600;
-    padding: 25px 2rem;
-    margin-right: 20px;
+    padding: 26px 3rem;
+    font-family: "Montserrat", sans-serif;
+    border-width: 2px;
 }
 
-.budgetPulsante {
-    background-color: #2C4D79;
-    border-radius: 5px;
-    color: white;;
+.controlloPulsante:hover, .budgetPulsante:hover, .futuresPulsante:hover {
+    background-color: #1f3f65 !important;
+    border-color: #2C4D79 !important;
+    border-radius: 5px !important;
+    color: #ffffff;
     text-transform: uppercase;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 20px;
     font-weight: 600;
-    padding: 25px 2rem;
-    margin-right: 20px;
-    margin-left: 20px
+    padding: 26px 3rem;
+    font-family: "Montserrat", sans-serif;
+    border-width: 2px;
 }
 
-.futuresPulsante {
-    background-color: #2C4D79;
-    border-radius: 5px;
-    color: white;;
+.controlloPulsante:active, .budgetPulsante:active, .futuresPulsante:active {
+    background-color: #1f3f65 !important;
+    border-color: #2C4D79 !important;
+    border-radius: 5px !important;
+    color: #ffffff;
     text-transform: uppercase;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 20px;
     font-weight: 600;
-    padding: 25px 2rem;
-    margin-left: 20px;
-
+    padding: 26px 3rem;
+    font-family: "Montserrat", sans-serif;
+    border-width: 2px;
 }
 
-.esteroPulsante {
+
+.fassaPulsante, .impaPulsante, .cbPulsante, .esteroPulsante {
     background-color: #2C4D79;
+    border-color: #2C4D79;
     border-radius: 5px;
-    color: white;;
+    color: white;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 3rem;
+    font-family: "Montserrat", sans-serif;
+}
+
+.fassaPulsante:hover, .impaPulsante:hover, .cbPulsante:hover, .esteroPulsante:hover {
+    background-color: #1f3f65 !important;
+    border-color: #2C4D79 !important;
+    border-radius: 5px !important;
+    color: #ffffff;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 3rem;
+    font-family: "Montserrat", sans-serif;
+}
+
+
+.fassaPulsante:active, .impaPulsante:active, .cbPulsante:active, .esteroPulsante:active {
+    background-color: #1f3f65 !important;
+    border-color: #2C4D79 !important;
+    border-radius: 5px !important;
+    color: #ffffff;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 3rem;
+    font-family: "Montserrat", sans-serif;
+}
+
+.annoPulsante, .mesePulsante {
+    background-color: #606060;
+    border-color: #606060 !important;
+    border-radius: 5px;
+    color: white;
     text-transform: uppercase;
     display: flex;
     justify-content: center;
@@ -116,71 +174,18 @@
     font-size: 15px;
     font-weight: 600;
     padding: 10px 2rem;
-    margin-left: 20px;
-
-}
-
-.cbPulsante {
-    background-color: #2C4D79;
-    border-radius: 5px;
-    color: white;;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 2rem;
-    margin-left: 20px;
-
-}
-
-.impaPulsante {
-    background-color: #2C4D79;
-    border-radius: 5px;
-    color: white;;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 2rem;
-    margin-left: 20px;
-}
-
-.fassaPulsante {
-    background-color: #2C4D79;
-    border-radius: 5px;
-    color: white;;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 2rem;
-    margin-left: 20px;
+    cursor: pointer;
+    box-shadow: none !important;
+    border: 0;
+    font-family: "Montserrat", sans-serif;
+    margin: 20px;
 }
 
 .podPulsante {
-    background-color: #616161;
+    background-color: #606060;
+    border-color: #606060 !important;
     border-radius: 5px;
-    color: #ffffff;;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 2rem;
-    margin-right: 200px;
-}
-
-.annoPulsante {
-    background-color: #616161;
-    border-radius: 5px;
-    color: #ffffff;;
+    color: white;
     text-transform: uppercase;
     display: flex;
     justify-content: center;
@@ -189,21 +194,40 @@
     font-weight: 600;
     padding: 10px 2rem;
     cursor: pointer;
+    box-shadow: none !important;
+    border: 0;
+    font-family: "Montserrat", sans-serif;
 }
 
-.mesePulsante {
-    background-color: #616161;
-    border-radius: 5px;
-    color: #ffffff;;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 2rem;
-    cursor: pointer;
+.dropdownPod {
+    background-color: #ffffff;
+    border-color: #606060;
+    padding-left: 10px;
+    min-width: 111.85px;
+    font-family: "Montserrat", sans-serif;
+    border-width: 2px;
 }
+
+.dropdownAnno {
+    background-color: #ffffff;
+    border-color: #606060;
+    padding-left: 10px;
+    min-width: 124.3px;
+    font-family: "Montserrat", sans-serif;
+    border-width: 2px;
+}
+
+
+.dropdownMese {
+    background-color: #ffffff;
+    border-color: #606060;
+    padding-left: 10px;
+    min-width: 119.85px;
+    font-family: "Montserrat", sans-serif;
+    border-width: 2px;
+
+}
+
 
 .pod {
     position: relative;
@@ -231,16 +255,6 @@
     margin-right: 10px;
 }
 
-.dropdown {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    top: 100%;
-    left: 0;
-    min-width: 100px;
-}
 
 .dropdown ul {
     list-style-type: none;
@@ -289,3 +303,39 @@
         max-width: 90%;
     }
 }
+
+
+.annomese {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100%;
+}
+
+
+
+.spaziaturaPulsanti > a {
+    margin-left: 100px; /* Spazio tra i pulsanti */
+    margin-bottom: 20px;
+}
+
+.grafico1{
+    width: 600px;
+    height: auto;
+
+}
+
+.grafico2{
+    width: 40%;
+    height: auto;
+}
+
+.grafici{
+    align-items: center;
+    display: flex;
+    justify-content: space-between !important;
+}
+
+
+
+
+

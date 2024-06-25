@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+.logo {
+    width: 120px;
+    height: auto;
+}
+
+.map {
+    width: 200px;
+    height: auto;
+}
+
+.footerFullWidth {
+    width: 100%;
+}
+
+.bgLightFullWidth {
+    width: 100%;
+}
+
+.sedeLegale{
+    background-color: #2C4D79;
+    font-family: "Montserrat", sans-serif;
+}
+
+.paragrafoFooter{
+    font-family: "Montserrat", sans-serif;
+}

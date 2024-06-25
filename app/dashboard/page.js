@@ -1,88 +1,115 @@
-"use client";
+"use client"
 
-import React, {useState} from 'react';
-import classes from '@/app/dashboard/page.module.css/';
-import Link from "next/link";
+import React from 'react';
+import {Dropdown, DropdownButton, Button, Form} from 'react-bootstrap';
+import {Line} from 'react-chartjs-2';
+import {Chart, registerables} from 'chart.js';
+import Link from 'next/link';
+import classes from '@/app/dashboard/page.module.css';
 
-const Dashboard = () => {
-    const [showPodDropdown, setShowPodDropdown] = useState(false);
-    const [showYearDropdown, setShowYearDropdown] = useState(false);
-    const [showMonthDropdown, setShowMonthDropdown] = useState(false);
+Chart.register(...registerables);
 
-    const togglePodDropdown = () => setShowPodDropdown(!showPodDropdown);
-    const toggleYearDropdown = () => setShowYearDropdown(!showYearDropdown);
-    const toggleMonthDropdown = () => setShowMonthDropdown(!showMonthDropdown);
+const dataEuro = {
+    labels: ['GEN', 'FEB', 'MAR', 'APR', 'MAG', 'GIU', 'LUG', 'AGO', 'SET', 'OTT', 'NOV', 'DEC'],
+    datasets: [
+        {
+            label: '€',
+            data: [100, 200, 300, 500, 400, 600, 700, 500, 400, 300, 200, 100],
+            borderColor: '#2C4D79',
+            borderWidth: 1,
+            fill: false,
+        },
+    ],
+};
 
+const dataKwh = {
+    labels: ['GEN', 'FEB', 'MAR', 'APR', 'MAG', 'GIU', 'LUG', 'AGO', 'SET', 'OTT', 'NOV', 'DEC'],
+    datasets: [
+        {
+            label: 'Kwh',
+            data: [600, 500, 400, 300, 200, 100, 200, 300, 400, 500, 600, 700],
+            borderColor: '#2C4D79',
+            borderWidth: 1,
+            fill: false,
+        },
+    ],
+};
+
+const CustomToggle = React.forwardRef(({children, onClick, className}, ref) => (
+    <button
+        ref={ref}
+        className={`${classes.podPulsante} dropdown-toggle ${className}`}
+        onClick={(e) => {
+            e.preventDefault();
+            onClick(e);
+        }}
+    >
+        {children}
+    </button>
+));
+
+
+const HomePage = () => {
     return (
-        <div className={classes.container}>
-            <div className={classes.header}>
-                <div className={classes.pod}>
-                    <div onClick={togglePodDropdown} className={classes.podPulsante}>POD</div>
-                    <div className={`${classes.dropdown} ${showPodDropdown ? classes.show : ''}`}>
-                        <ul>
-                            <li><input type="checkbox" id="pod1"/> POD 1</li>
-                            <li><input type="checkbox" id="pod2"/> POD 2</li>
-                            <li><input type="checkbox" id="pod3"/> POD 3</li>
-                            <li><input type="checkbox" id="pod4"/> POD 4</li>
-                        </ul>
-                    </div>
-                </div>
-                <div className={classes.menu}>
-                    <div className="cta-wrapper  d-flex flex">
-                        <Link href="/login" className={classes.fassaPulsante}>Fassa</Link>
-                    </div>
-                    <div className="cta-wrapper  d-flex flex">
-                        <Link href="/login" className={classes.impaPulsante}>Impa</Link>
-                    </div>
-                    <div className="cta-wrapper  d-flex flex">
-                        <Link href="/login" className={classes.cbPulsante}>Cb</Link>
-                    </div>
-                    <div className="cta-wrapper  d-flex flex">
-                        <Link href="/login" className={classes.esteroPulsante}>Estero</Link>
-                    </div>
+        <div className={`${classes.container} container`}>
+            <div className="d-flex justify-content-between mb-4">
+                <Dropdown>
+                    <Dropdown.Toggle as={CustomToggle} id="dropdown-anno" className={classes.podPulsante}>
+                        POD
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className={classes.dropdownPod}>
+                        <Form.Check type="checkbox" label="POD 1"/>
+                        <Form.Check type="checkbox" label="POD 2"/>
+                        <Form.Check type="checkbox" label="POD 3"/>
+                        <Form.Check type="checkbox" label="POD 4"/>
+                    </Dropdown.Menu>
+                </Dropdown>
+                <div className={`${classes.spaziaturaPulsanti} d-flex justify-content-center`}>
+                    <Link href="/dashboard/fassa"><Button className={classes.fassaPulsante}>FASSA</Button></Link>
+                    <Link href="/dashboard/impa"><Button className={classes.impaPulsante}>IMPA</Button></Link>
+                    <Link href="/dashboard/cb"><Button className={classes.cbPulsante}>CB</Button></Link>
+                    <Link href="/dashboard/estero"><Button className={classes.esteroPulsante}>ESTERO</Button></Link>
                 </div>
             </div>
-            <div className={classes.main}>
-                <div className="cta-wrapper  d-flex flex">
-                    <Link href="/login" className={classes.controlloPulsante}>Controllo</Link>
-                </div>
-                <div className="cta-wrapper  d-flex flex">
-                    <Link href="/login" className={classes.budgetPulsante}>Budget</Link>
-                </div>
-                <div className="cta-wrapper  d-flex flex">
-                    <Link href="/login" className={classes.futuresPulsante}>Futures</Link>
-                </div>
+            <div className={`${classes.paragrafo2} d-flex justify-content-between`}>
+                <Link href="/upload-file"><Button className={classes.controlloPulsante}>Controllo</Button></Link>
+                <Link href="/dashboard/budget"><Button className={classes.budgetPulsante}>Budget</Button></Link>
+                <Link href="/dashboard/futures"><Button className={classes.futuresPulsante}>Futures</Button></Link>
             </div>
-            <div className={classes.filters}>
-                <div>
-                    <div onClick={toggleYearDropdown} className={classes.annoPulsante}>ANNO</div>
-                    <div className={`${classes.dropdown} ${showYearDropdown ? classes.show : ''}`}>
-                        <ul>
-                            <li><input type="checkbox" id="year2023"/> 2023</li>
-                            <li><input type="checkbox" id="year2024"/> 2024</li>
-                            <li><input type="checkbox" id="year2025"/> 2025</li>
-                            <li><input type="checkbox" id="year2026"/> 2026</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <div onClick={toggleMonthDropdown} className={classes.mesePulsante}>MESE</div>
-                    <div className={`${classes.dropdown} ${showMonthDropdown ? classes.show : ''}`}>
-                        <ul>
-                            <li><input type="checkbox" id="jan"/> GEN</li>
-                            <li><input type="checkbox" id="feb"/> FEB</li>
-                            <li><input type="checkbox" id="mar"/> MAR</li>
-                            <li><input type="checkbox" id="apr"/> APR</li>
-                        </ul>
-                    </div>
-                </div>
+            <div className={`${classes.annomese} d-flex justify-content-between mb-4`}>
+                <Dropdown>
+                    <Dropdown.Toggle as={CustomToggle} id="dropdown-anno" className={classes.annoPulsante}>
+                        ANNO
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className={classes.dropdownAnno}>
+                        <Form.Check type="checkbox" label="2023"/>
+                        <Form.Check type="checkbox" label="2024"/>
+                        <Form.Check type="checkbox" label="2025"/>
+                        <Form.Check type="checkbox" label="2026"/>
+                    </Dropdown.Menu>
+                </Dropdown>
+                <Dropdown>
+                    <Dropdown.Toggle as={CustomToggle} id="dropdown-anno" className={classes.mesePulsante}>
+                        MESE
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className={classes.dropdownMese}>
+                        <Form.Check type="checkbox" label="GEN"/>
+                        <Form.Check type="checkbox" label="FEB"/>
+                        <Form.Check type="checkbox" label="MAR"/>
+                        <Form.Check type="checkbox" label="APR"/>
+                    </Dropdown.Menu>
+                </Dropdown>
             </div>
-            <div className={classes.charts}>
-                <div className={classes.chartPlaceholder}></div>
-                <div className={classes.chartPlaceholder2}></div>
+            <div className={`${classes.grafici} row`}>
+                <div className={`${classes.grafico1} col-md-6`}>
+                    <Line data={dataEuro}/>
+                </div>
+                <div className={`${classes.grafico1} col-md-6`}>
+                    <Line data={dataKwh}/>
+                </div>
             </div>
         </div>
     );
 };
 
-export default Dashboard;
+export default HomePage;

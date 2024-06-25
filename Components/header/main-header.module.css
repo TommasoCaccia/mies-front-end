@@ -28,8 +28,8 @@
 
 .loginPulsante {
     background-color: #2C4D79;
-    border-radius: 0;
-    color: white;;
+    border-radius: 5px;
+    color: white;
     text-transform: uppercase;
     display: flex;
     justify-content: center;
