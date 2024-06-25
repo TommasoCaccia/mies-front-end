@@ -1,23 +1,16 @@
 // pages/upload.js
 'use client';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import classes from '@/app/upload-file/page.module.css'; // Import CSS module for styles
+import classes from '@/app/upload-file/page.module.css'; // Importa CSS module per gli stili
 
 export default function UploadPage() {
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState('');
-    const fileInputRef = useRef(null); // Riferimento all'input del file
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
-    };
-
-    const resetInputFile = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.value = ""; // Resetta il valore dell'input file
-        }
     };
 
     const handleSubmit = async (event) => {
@@ -38,8 +31,6 @@ export default function UploadPage() {
                 }
             });
             setMessage('File uploaded successfully.');
-            resetInputFile(); // Chiama la funzione per resettare l'input del file
-            setFile(null);
         } catch (error) {
             console.error('Error uploading file', error);
             setMessage('Error uploading file.');
@@ -51,12 +42,7 @@ export default function UploadPage() {
         <div className={classes.uploadContainer}>
             <h1>Upload a PDF File</h1>
             <form onSubmit={handleSubmit} className={classes.uploadForm}>
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="application/pdf"
-                    onChange={handleFileChange}
-                    className={classes.inputField}/>
+                <input type="file" accept="application/pdf" onChange={handleFileChange} className={classes.inputField}/>
                 <button type="submit" disabled={uploading} className={classes.uploadButton}>
                     {uploading ? 'Uploading...' : 'Upload'}
                 </button>
