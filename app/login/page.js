@@ -1,5 +1,6 @@
 import classes from '@/app/login/page.module.css';
 
+
 const LoginForm = () => {
     return (
         <div className={classes.root}>
@@ -19,7 +20,7 @@ const LoginForm = () => {
                 <h2 className={`active ${classes.Sign}`}>Login</h2>
                 <form>
                     <div className={`form-group ${classes.GruppoUsername}`}>
-                        <input type="email" className={`form-control ${classes.Username2}`} name="username"/>
+                        <input type="text" className={`form-control ${classes.Username2}`} name="username"/>
                         <span className={classes.Username}>Username</span>
                     </div>
                     <div className="form-group">
