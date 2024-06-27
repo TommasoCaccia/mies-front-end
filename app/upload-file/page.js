@@ -24,6 +24,7 @@ export default function UploadPage() {
         const formData = new FormData();
         formData.append('fileName',file.name)
         formData.append('fileData', file);
+        console.log(formData);
         try {
             const response = await axios.post('http://localhost:8080/files', formData, {
                 headers: {
