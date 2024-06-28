@@ -22,10 +22,10 @@ export default function UploadPage() {
 
         setUploading(true);
         const formData = new FormData();
-        formData.append('file', file);
-
+        formData.append('fileName',file.name)
+        formData.append('fileData', file);
         try {
-            const response = await axios.post('http://localhost:8080/upload', formData, {
+            const response = await axios.post('http://localhost:8080/files', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
