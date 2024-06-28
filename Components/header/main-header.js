@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import classes from '@/Components/header/main-header.module.css'
+import classes from '@/Components/header/main-header.module.css';
+
 
 export default function MainHeader() {
     return (
@@ -15,11 +16,23 @@ export default function MainHeader() {
                         <Link href="/" className={classes.link1}>Servizi</Link>
                     </li>
                     <li className="nav-item">
-                        <Link href="/dashboard" className={classes.link2}>Contatti</Link>
+                        <Link href="/" className={classes.link2}>Contatti</Link>
                     </li>
-                    <div className="cta-wrapper  d-flex flex">
+                    <li className={`nav-item dropdown ${classes.navItem}`}>
+                        <a className={`dropdown-toggle ${classes.link3}`} role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            En. Portfolio
+                        </a>
+                        <ul className={`dropdown-menu ${classes.dropMenu}`}>
+                            <li><Link href="/dashboard" className={classes.dropdownItem}>Dashboard</Link></li>
+                            <li><Link href="/pod" className={classes.dropdownItem}>pod</Link></li>
+                            <li><Link href="/dashboard/estero" className={classes.dropdownItem}>Estero</Link></li>
+                        </ul>
+                    </li>
+                    <div className="cta-wrapper d-flex flex">
                         <Link href="/login" className={classes.loginPulsante}>Login</Link>
                     </div>
+
                 </ul>
             </div>
         </header>

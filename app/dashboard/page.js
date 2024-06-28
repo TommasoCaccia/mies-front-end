@@ -64,18 +64,18 @@ const HomePage = () => {
                         <Form.Check type="checkbox" label="POD 4"/>
                     </Dropdown.Menu>
                 </Dropdown>
-                <div className={`${classes.spaziaturaPulsanti} d-flex justify-content-center`}>
-                    <Link href="/dashboard/fassa"><Button className={classes.fassaPulsante}>FASSA</Button></Link>
-                    <Link href="/dashboard/impa"><Button className={classes.impaPulsante}>IMPA</Button></Link>
-                    <Link href="/dashboard/cb"><Button className={classes.cbPulsante}>CB</Button></Link>
-                    <Link href="/dashboard/estero"><Button className={classes.esteroPulsante}>ESTERO</Button></Link>
+                <div className={`${classes.paragrafo1} d-flex justify-content-center`}>
+                    <Button href="/upload-file" className={`nav-link ${classes.controlloPulsante}`}>Controllo</Button>
+                    <Button href="/" className={`nav-link ${classes.budgetPulsante}`}>Budget</Button>
+                    <Button href="/" className={`nav-link ${classes.futuresPulsante}`}>Futures</Button>
+                    <Button href="/" className={`nav-link ${classes.esteroPulsante}`}>Estero</Button>
                 </div>
             </div>
-            <div className={`${classes.paragrafo2} d-flex justify-content-between`}>
+            {/*<div className={`${classes.paragrafo2} d-flex justify-content-between`}>
                 <Link href="/upload-file"><Button className={classes.controlloPulsante}>Controllo</Button></Link>
-                <Link href="/dashboard/budget"><Button className={classes.budgetPulsante}>Budget</Button></Link>
+                <Link href="/pod"><Button className={classes.budgetPulsante}>Budget</Button></Link>
                 <Link href="/dashboard/futures"><Button className={classes.futuresPulsante}>Futures</Button></Link>
-            </div>
+            </div>*/}
             <div className={`${classes.annomese} d-flex justify-content-between mb-4`}>
                 <Dropdown>
                     <Dropdown.Toggle as={CustomToggle} id="dropdown-anno" className={classes.annoPulsante}>

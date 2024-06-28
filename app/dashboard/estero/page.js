@@ -1,4 +1,4 @@
-export default function futures() {
+export default function estero() {
     return (
         <main>
 
