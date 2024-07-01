@@ -17,15 +17,15 @@ const LoginForm = () => {
         });
 
         if (response.ok) {
-            console.log(response);
+           // console.log(response);
             localStorage.setItem("accessoEffettuato", true);
             const data = await response; // Cambiato da response a response.json()
-            console.log('Risposta del server:', data);
-            console.log('Login effettuato con successo');
+            //console.log('Risposta del server:', data);
+            //console.log('Login effettuato con successo');
         } else {
             const text = await response.text();
-            console.log('Errore del server:', text);
-            console.error('Errore durante il login');
+            //console.log('Errore del server:', text);
+            //console.error('Errore durante il login');
         }
     };
 

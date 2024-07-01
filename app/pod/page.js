@@ -1,5 +1,5 @@
 "use client"
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import axios from 'axios';
 import classes from "@/app/pod/page.module.css";
 
@@ -8,13 +8,37 @@ export default function Pod() {
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState('');
+    const [pods, setPods] = useState([]);
+
+
+    //estrazione di tutti i pod
+    useEffect(() => {
+        const fetchPods = async () => {
+            const response = await fetch('http://localhost:8080/pod/all', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setPods(data);
+            } else {
+                const text = await response.text();
+                console.error('Errore del server:', text);
+                console.error('Errore durante il recupero dei pod');
+            }
+        }
+        fetchPods();
+    }, []);
 
     // Esempio di dati per i pod
-    const pods = [
-        {id: 1, name: 'Pod 1',},
-        {id: 2, name: 'Pod 2',},
-        {id: 3, name: 'Pod 3',}
-    ];
+    /*    const pods = [
+            {id: 1, name: 'Pod 1',},
+            {id: 2, name: 'Pod 2',},
+            {id: 3, name: 'Pod 3',}
+        ];*/
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
@@ -61,16 +85,18 @@ export default function Pod() {
                 <thead className="table-dark">
                 <tr>
                     <th>ID</th>
-                    <th>Nome</th>
-                    <th>Status</th>
+                    <th>Potenza Disponibile</th>
+                    <th>Potenza Impegnata</th>
+                    <th>Tensione di Alimentazione</th>
                 </tr>
                 </thead>
                 <tbody>
                 {pods.map(pod => (
                     <tr key={pod.id}>
                         <td>{pod.id}</td>
-                        <td>{pod.name}</td>
-                        <td>{pod.status}</td>
+                        <td>{pod.potenza_Disponibile}</td>
+                        <td>{pod.potenza_Impegnata}</td>
+                        <td>{pod.tensione_Alimentazione}</td>
                     </tr>
                 ))}
                 </tbody>
