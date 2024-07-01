@@ -67,7 +67,7 @@
     margin: 10px;
 }
 
-.controlloPulsante, .budgetPulsante, .futuresPulsante {
+.controlloPulsante, .budgetPulsante, .futuresPulsante, .esteroPulsante {
     background-color: #2C4D79;
     border-color: #2C4D79;
     border-radius: 5px;
@@ -83,7 +83,8 @@
     border-width: 2px;
 }
 
-.controlloPulsante:hover, .budgetPulsante:hover, .futuresPulsante:hover {
+.controlloPulsante:hover, .budgetPulsante:hover, .futuresPulsante:hover, .esteroPulsante:hover{
+
     background-color: #1f3f65 !important;
     border-color: #2C4D79 !important;
     border-radius: 5px !important;
@@ -99,7 +100,7 @@
     border-width: 2px;
 }
 
-.controlloPulsante:active, .budgetPulsante:active, .futuresPulsante:active {
+.controlloPulsante:active, .budgetPulsante:active, .futuresPulsante:active, .esteroPulsante:active {
     background-color: #1f3f65 !important;
     border-color: #2C4D79 !important;
     border-radius: 5px !important;
@@ -116,7 +117,7 @@
 }
 
 
-.fassaPulsante, .impaPulsante, .cbPulsante, .esteroPulsante {
+.fassaPulsante, .impaPulsante, .cbPulsante {
     background-color: #2C4D79;
     border-color: #2C4D79;
     border-radius: 5px;
@@ -131,9 +132,9 @@
     font-family: "Montserrat", sans-serif;
 }
 
-.fassaPulsante:hover, .impaPulsante:hover, .cbPulsante:hover, .esteroPulsante:hover {
-    background-color: #1f3f65 !important;
-    border-color: #2C4D79 !important;
+.fassaPulsante:hover, .impaPulsante:hover, .cbPulsante:hover {
+    background-color: #1d3b5e !important;
+    border-color: #1d3b5e !important;
     border-radius: 5px !important;
     color: #ffffff;
     text-transform: uppercase;
@@ -147,9 +148,9 @@
 }
 
 
-.fassaPulsante:active, .impaPulsante:active, .cbPulsante:active, .esteroPulsante:active {
-    background-color: #1f3f65 !important;
-    border-color: #2C4D79 !important;
+.fassaPulsante:active, .impaPulsante:active, .cbPulsante:active {
+    background-color: #1d3b5e !important;
+    border-color: #1d3b5e !important;
     border-radius: 5px !important;
     color: #ffffff;
     text-transform: uppercase;
@@ -312,24 +313,29 @@
 }
 
 
-
-.spaziaturaPulsanti > a {
-    margin-left: 100px; /* Spazio tra i pulsanti */
+.paragrafo1 > a {
+    margin-left: 80px; /* Spazio tra i pulsanti */
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
-.grafico1{
+.paragrafo1 {
+    flex-wrap: wrap;
+}
+
+
+.grafico1 {
     width: 600px;
     height: auto;
 
 }
 
-.grafico2{
+.grafico2 {
     width: 40%;
     height: auto;
 }
 
-.grafici{
+.grafici {
     align-items: center;
     display: flex;
     justify-content: space-between !important;

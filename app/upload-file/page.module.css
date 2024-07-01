@@ -1,57 +1,101 @@
-/* upload.module.css */
 .uploadContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 80vh;
-    background-color: #f4f4f4;
-    color: #333;
-    font-family: 'Arial', sans-serif;
+    color: #616161;
+    font-family: "Montserrat", sans-serif;
+    margin-top: 191.94px !important;
+}
+
+.titoloBolletta {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 40px;
+    margin-bottom: 40px;
 }
 
 .uploadForm {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
     align-items: center;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    padding: 25px;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
     background: white;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .inputField {
-    width: 300px;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
+    width: 100%;
+    max-width: 360px;
+    max-height: 300px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    margin: 0 10px 10px 10px;
 }
+
+.inputField:focus {
+    border-color: #2C4D79;
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgba(44, 77, 121, 0.51);
+}
+
 
 .uploadButton {
-    padding: 10px 20px;
+    width: 100%;
+    max-width: 125px;
+    padding: 10px;
     color: white;
-    background-color: #007bff;
+    background-color: #2C4D79;
+    font-weight: 600;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.uploadButton:hover {
-    background-color: #0056b3;
+    transition: background-color 0.2s ease-in-out;
+    text-transform: uppercase;
+    margin-top: 0 !important;
 }
 
 .uploadButton:disabled {
-    background-color: #ccc;
+    font-size: 12px;
+    background-color: #616161!important;
+}
+
+.uploadButton:hover {
+    background-color: #1f3f65;
+}
+
+.uploadButton:active {
+    background-color: #1f3f65 !important;;
+}
+
+.uploadButton:disabled {
+    background-color: #6c757d;
+}
+
+.message, .uploadingMessage {
+    margin-top: 12px;
+    padding: 8px;
+    border-radius: 5px;
+    width: 25%;
+    text-align: center;
 }
 
 .message {
-    color: green;
+    background-color: #d4edda;
+    color: #155724;
 }
 
 .uploadingMessage {
-    color: red;
+    background-color: #f8d7da;
+    color: #721c24;
 }
+
+
+
+
+
+
 

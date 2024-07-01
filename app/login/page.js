@@ -1,4 +1,3 @@
-"use client";
 import classes from '@/app/login/page.module.css';
 
 const LoginForm = () => {
