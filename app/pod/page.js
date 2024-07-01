@@ -33,13 +33,6 @@ export default function Pod() {
         fetchPods();
     }, []);
 
-    // Esempio di dati per i pod
-    /*    const pods = [
-            {id: 1, name: 'Pod 1',},
-            {id: 2, name: 'Pod 2',},
-            {id: 3, name: 'Pod 3',}
-        ];*/
-
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
     };
