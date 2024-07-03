@@ -22,22 +22,51 @@ export default function UploadPage() {
 
         setUploading(true);
         const formData = new FormData();
-        formData.append('fileName',file.name)
+        formData.append('fileName', file.name);
         formData.append('fileData', file);
-        console.log(formData);
+
         try {
-            const response = await axios.post('http://localhost:8080/files', formData, {
+            // Ottieni il valore del cookie SESSION_COOKIE
+            const sessionId = getSessionCookie(); // Implementa questa funzione per ottenere il valore del cookie SESSION_COOKIE
+
+            const response = await fetch('http://localhost:8080/file', {
+                method: 'POST',
+                body: formData,
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'SESSION_COOKIE': sessionId // Aggiungi il cookie alla richiesta
                 }
             });
-            setMessage('Bolletta caricata con successo.');
+
+            if (!response.ok) {
+                throw new Error('Errore nel caricamento del file');
+            }
+
+            const data = await response.text();
+            setMessage('Bolletta caricata con successo: ' + data);
         } catch (error) {
             console.error('Error uploading file', error);
-            setMessage('Errore nel caricamente della bolletta.');
+            setMessage('Errore nel caricamento della bolletta.');
         }
         setUploading(false);
     };
+
+// Implementa questa funzione per ottenere il valore del cookie SESSION_COOKIE
+    const getSessionCookie = () => {
+        const name = 'SESSION_COOKIE=';
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return '';
+    };
+
 
     return (
         <div className={`${classes.uploadContainer} container my-5`}>
