@@ -71,9 +71,7 @@ export default function Pod() {
 
             if (!response.ok) {
                 throw new Error('Errore nel caricamento del file');
-                window.location.href = '/pod';
             }
-
             const data = await response.text();
             setMessage('Bolletta caricata con successo: ' + data);
         } catch (error) {
@@ -81,6 +79,7 @@ export default function Pod() {
             setMessage('Errore nel caricamento della bolletta.');
         }
         setUploading(false);
+        window.location.href = '/pod';
     };
 
 
