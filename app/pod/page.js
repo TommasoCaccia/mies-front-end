@@ -71,6 +71,7 @@ export default function Pod() {
 
             if (!response.ok) {
                 throw new Error('Errore nel caricamento del file');
+                window.location.href = '/pod';
             }
 
             const data = await response.text();
