@@ -66,7 +66,7 @@ const HomePage = () => {
                 </Dropdown>
                 <div className={`${classes.paragrafo1} d-flex justify-content-center`}>
                     <Button href="/upload-file" className={`nav-link ${classes.controlloPulsante}`}>Controllo</Button>
-                    <Button href="/" className={`nav-link ${classes.budgetPulsante}`}>Budget</Button>
+                    <Button href="/dashboard/budget" className={`nav-link ${classes.budgetPulsante}`}>Budget</Button>
                     <Button href="/" className={`nav-link ${classes.futuresPulsante}`}>Futures</Button>
                     <Button href="/" className={`nav-link ${classes.esteroPulsante}`}>Estero</Button>
                 </div>

@@ -9,9 +9,9 @@ export default function Login() {
                 <div className="row justify-content-center">
                     <h2 className={`text-center mb-4 ${classes.titoloLogin}`}>Login</h2>
                     <form className={classes.formLogin}>
-                        <div className={`form-group ${classes.formEmail}`}>
-                        <input type="email" className={`form-control ${classes.email}`} id="email" required/>
-                            <label htmlFor="email">Indirizzo Email</label>
+                        <div className={`form-group ${classes.formUsername}`}>
+                        <input type="username" className={`form-control ${classes.username}`} id="username" required/>
+                            <label htmlFor="username">Username</label>
                         </div>
                         <div className={`form-group ${classes.formPassword}`}>
                             <input type="password" className={`form-control ${classes.password}`} id="password"

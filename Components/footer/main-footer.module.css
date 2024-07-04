@@ -1,12 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-
 .logo {
-    width: 120px;
-    height: auto;
-}
-
-.map {
-    width: 200px;
+    width: 100px;
     height: auto;
 }
 
@@ -14,15 +7,32 @@
     width: 100%;
 }
 
-.bgLightFullWidth {
-    width: 100%;
-}
-
-.sedeLegale{
+.sedeLegale {
     background-color: #2C4D79;
     font-family: "Montserrat", sans-serif;
+    user-select: none;
+    font-size: 18px;
 }
 
-.paragrafoFooter{
+.sedeOperativa {
+    background-color: #ffffff;
     font-family: "Montserrat", sans-serif;
+    user-select: none;
+    color: black;
+    font-size: 16px;
+}
+
+.paragrafoFooter1 {
+    font-family: "Montserrat", sans-serif;
+    font-size: 10px;
+}
+
+.paragrafoFooter2 {
+    font-family: "Montserrat", sans-serif;
+    font-size: 10px;
+    align-items: end;
+}
+
+.email{
+    text-decoration: underline;
 }

@@ -26,7 +26,7 @@ export default function MainHeader() {
                         <ul className={`dropdown-menu ${classes.dropMenu}`}>
                             <li><Link href="/dashboard" className={classes.dropdownItem}>Dashboard</Link></li>
                             <li><Link href="/pod" className={classes.dropdownItem}>pod</Link></li>
-                            <li><Link href="/dashboard/estero" className={classes.dropdownItem}>Estero</Link></li>
+                            <li><Link href="/home-accesso" className={classes.dropdownItem}>Estero</Link></li>
                         </ul>
                     </li>
                     <div className="cta-wrapper d-flex flex">
