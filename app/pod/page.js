@@ -1,17 +1,12 @@
 "use client"
 import {useEffect, useState} from 'react';
-import axios from 'axios';
 import classes from "@/app/pod/page.module.css";
 
 export default function Pod() {
-    const [country, setCountry] = useState('');
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState('');
     const [pods, setPods] = useState([]);
-    const [selectedPod, setSelectedPod] = useState(null);
-    const [sede, setSede] = useState('');
-    const [nazione, setNazione] = useState('');
     const [isEditable, setIsEditable] = useState({});
 
     useEffect(() => {
@@ -68,9 +63,6 @@ export default function Pod() {
         formData.append('fileData', file);
 
         try {
-            // Ottieni il valore del cookie SESSION_COOKIE
-            const sessionId = getSessionCookie(); // Implementa questa funzione per ottenere il valore del cookie SESSION_COOKIE
-
             const response = await fetch('http://localhost:8080/upload', {
                 method: 'POST',
                 body: formData,
@@ -88,23 +80,6 @@ export default function Pod() {
             setMessage('Errore nel caricamento della bolletta.');
         }
         setUploading(false);
-    };
-
-// Implementa questa funzione per ottenere il valore del cookie SESSION_COOKIE
-    const getSessionCookie = () => {
-        const name = 'SESSION_COOKIE=';
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const ca = decodedCookie.split(';');
-        for(let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) === 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return '';
     };
 
 
