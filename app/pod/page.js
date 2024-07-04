@@ -64,21 +64,49 @@ export default function Pod() {
 
         setUploading(true);
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('fileName', file.name);
+        formData.append('fileData', file);
 
         try {
-            const response = await axios.post('http://localhost:8080/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+            // Ottieni il valore del cookie SESSION_COOKIE
+            const sessionId = getSessionCookie(); // Implementa questa funzione per ottenere il valore del cookie SESSION_COOKIE
+
+            const response = await fetch('http://localhost:8080/upload', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
             });
-            setMessage('Bolletta caricata con successo.');
+
+            if (!response.ok) {
+                throw new Error('Errore nel caricamento del file');
+            }
+
+            const data = await response.text();
+            setMessage('Bolletta caricata con successo: ' + data);
         } catch (error) {
             console.error('Error uploading file', error);
             setMessage('Errore nel caricamento della bolletta.');
         }
         setUploading(false);
     };
+
+// Implementa questa funzione per ottenere il valore del cookie SESSION_COOKIE
+    const getSessionCookie = () => {
+        const name = 'SESSION_COOKIE=';
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+        for(let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return '';
+    };
+
 
     const updatePod = async (podId) => {
         const podToUpdate = pods.find(pod => pod.id === podId);
