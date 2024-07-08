@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+"use client"
+import {useEffect, useState} from 'react';
 import classes from "@/app/pod/page.module.css";
 
 export default function Pod() {
@@ -78,7 +79,7 @@ export default function Pod() {
             setMessage('Errore nel caricamento della bolletta.');
         }
         setUploading(false);
-        window.location.reload(); // Ricarica la pagina dopo il caricamento
+        window.location.href = '/pod';
     };
 
 
@@ -107,20 +108,11 @@ export default function Pod() {
                 const text = await response.text();
                 if (text) {
                     const data = JSON.parse(text);
-                    setPods(prevPods => prevPods.map(p => p.id === podId ? { ...p, ...data } : p));
-                    // Imposta isEditable a false dopo l'aggiornamento
-                    setIsEditable(prevState => ({
-                        ...prevState,
-                        [podId]: {
-                            sede: false,
-                            nazione: false
-                        }
-                    }));
-                    // Ricarica la pagina per nascondere il pulsante "Modifica"
-                    window.location.reload();
+                    setPods(prevPods => prevPods.map(p => p.id === podId ? {...p, ...data} : p));
                 } else {
                     setPods(prevPods => prevPods.map(p => p.id === podId ? podToUpdate : p));
                 }
+                window.location.href = '/pod';
             } else {
                 const text = await response.text();
                 console.error('Errore del server:', text);
@@ -138,19 +130,17 @@ export default function Pod() {
     const handleInputChange = (podId, field, value) => {
         setPods(prevPods => prevPods.map(pod => {
             if (pod.id === podId) {
-                return { ...pod, [field]: value };
+                return {...pod, [field]: value};
             }
             return pod;
         }));
-
-        // Non gestire più l'isEditable qui
     };
 
     return (
         <div className={`${classes.container} container mt-5`}>
             <h1 className={`${classes.titoloBolletta} mb-4 text-center`}>Carica la Bolletta</h1>
             <form onSubmit={handleSubmit} className={`shadow p-3 mb-5 ${classes.formBolletta}`}>
-                <input type="file" accept="application/pdf" onChange={handleFileChange} className="form-control" />
+                <input type="file" accept="application/pdf" onChange={handleFileChange} className="form-control"/>
                 <button type="submit" disabled={uploading} className={`btn btn-primary mt-3 ${classes.bottoneCarica}`}>
                     {uploading ? 'Caricamento in corso...' : 'Carica'}
                 </button>
