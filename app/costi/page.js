@@ -1,30 +1,28 @@
 "use client"
 import React, { useState } from 'react';
-import { Table, Form, Button, InputGroup, FormControl, DropdownButton, Dropdown, Alert } from 'react-bootstrap';
+import { Table, Form, Button, InputGroup, FormControl, Alert } from 'react-bootstrap';
 import { FaFilter } from 'react-icons/fa';
 import classes from '@/app/costi/page.module.css';
 
 function DataEntry() {
     const [data] = useState([]);
-    const [formData] = useState({
+    const [formData, setFormData] = useState({
         id: undefined,
         nome: '',
         unitaDiMisura: '',
         valore: '',
-        selectedTrimestre: '',
-        isAnnualeSet: false
-    });
-    const [valoriTrimestrali] = useState({
-        trimestre1: '',
-        trimestre2: '',
-        trimestre3: '',
-        trimestre4: ''
+        trimestre: '',
+        anno: ''
     });
     const [editMode] = useState(false);
     const [error] = useState('');
     const [showFilter] = useState(false);
-    const [filterName] = useState('');
+    const [filterName, setFilterName] = useState('');
     const [deleteError] = useState('');
+
+    const handleInputChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
     return (
         <div className={`${classes.container} container`}>
@@ -36,7 +34,7 @@ function DataEntry() {
                         placeholder="Filtra per nome"
                         aria-label="Filtra per nome"
                         value={filterName}
-                        onChange={() => {}}
+                        onChange={(e) => setFilterName(e.target.value)}
                     />
                 </div>
             )}
@@ -55,11 +53,8 @@ function DataEntry() {
                             </Button>
                         </th>
                         <th>Unità di Misura</th>
-                        <th>Trimestre 1</th>
-                        <th>Trimestre 2</th>
-                        <th>Trimestre 3</th>
-                        <th>Trimestre 4</th>
-                        <th>Annuale</th>
+                        <th>Trimestre o Anno</th>
+                        <th>Valore</th>
                         {data.length > 0 && <th>Azioni</th>}
                     </tr>
                     </thead>
@@ -77,8 +72,9 @@ function DataEntry() {
                             className={classes.formNome}
                             placeholder="Nome"
                             aria-label="Nome"
+                            name="nome"
                             value={formData.nome}
-                            onChange={() => {}}
+                            onChange={handleInputChange}
                         />
                     </InputGroup>
                     <InputGroup className="mb-3">
@@ -86,29 +82,40 @@ function DataEntry() {
                             className={classes.formUnitadimisura}
                             placeholder="Unità di Misura"
                             aria-label="Unità di Misura"
+                            name="unitaDiMisura"
                             value={formData.unitaDiMisura}
-                            onChange={() => {}}
+                            onChange={handleInputChange}
                         />
                     </InputGroup>
                     <InputGroup className="mb-3">
-                        <DropdownButton
-                            className={classes.customDropdownButton}
-                            title="Seleziona Trimestre/Annuale"
-                            onSelect={() => {}}
-                        >
-                            <Dropdown.Item eventKey="trimestre1">Trimestre 1</Dropdown.Item>
-                            <Dropdown.Item eventKey="trimestre2">Trimestre 2</Dropdown.Item>
-                            <Dropdown.Item eventKey="trimestre3">Trimestre 3</Dropdown.Item>
-                            <Dropdown.Item eventKey="trimestre4">Trimestre 4</Dropdown.Item>
-                            <Dropdown.Item eventKey="annuale">Annuale</Dropdown.Item>
-                        </DropdownButton>
                         <FormControl
-                            className={classes.formTrimestriAnno}
+                            className="mr-2"
                             type="number"
-                            placeholder="Inserisci il valore"
+                            placeholder="Numero Trimestre"
+                            aria-label="Trimestre"
+                            name="trimestre"
+                            value={formData.trimestre}
+                            onChange={handleInputChange}
+                        />
+                        <InputGroup.Text>O</InputGroup.Text>
+                        <FormControl
+                            className="ml-2"
+                            type="number"
+                            placeholder="Anno"
+                            aria-label="Anno"
+                            name="anno"
+                            value={formData.anno}
+                            onChange={handleInputChange}
+                        />
+                    </InputGroup>
+                    <InputGroup className="mb-3">
+                        <FormControl
+                            type="number"
+                            placeholder="Valore"
                             aria-label="Valore"
+                            name="valore"
                             value={formData.valore}
-                            onChange={() => {}}
+                            onChange={handleInputChange}
                         />
                     </InputGroup>
                     <Button className={classes.bottoneAggiungi} type="submit">Crea Costo</Button>
