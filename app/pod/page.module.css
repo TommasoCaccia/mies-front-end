@@ -33,6 +33,11 @@
     border-width: 0.8px;
 }
 
+.tabellaPod td {
+    border-color: #000000 !important;
+    border-width: 0.8px;
+}
+
 .bottoneCarica {
     background-color: #2C4D79;
     color: white;
