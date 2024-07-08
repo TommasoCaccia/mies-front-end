@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from 'react';
 import classes from "@/app/pod/page.module.css";
 
@@ -78,7 +79,7 @@ export default function Pod() {
             setMessage('Errore nel caricamento della bolletta.');
         }
         setUploading(false);
-        window.location.href = '/pod';
+        // Non fare più la redirect qui
     };
 
 
@@ -111,7 +112,6 @@ export default function Pod() {
                 } else {
                     setPods(prevPods => prevPods.map(p => p.id === podId ? podToUpdate : p));
                 }
-                window.location.href = '/pod';
             } else {
                 const text = await response.text();
                 console.error('Errore del server:', text);
@@ -134,14 +134,27 @@ export default function Pod() {
             return pod;
         }));
 
-        // Aggiorna lo stato di editabilità per consentire future modifiche
-        setIsEditable(prevState => ({
-            ...prevState,
-            [podId]: {
-                ...prevState[podId],
-                [field]: true  // Imposta a true per consentire modifiche future
-            }
-        }));
+        // Verifica se entrambi i campi sono stati compilati
+        const podToUpdate = pods.find(pod => pod.id === podId);
+        if (podToUpdate.sede && podToUpdate.nazione) {
+            // Entrambi i campi sono stati compilati, nascondi il pulsante "Modifica"
+            setIsEditable(prevState => ({
+                ...prevState,
+                [podId]: {
+                    sede: false,
+                    nazione: false
+                }
+            }));
+        } else {
+            // Almeno uno dei campi è vuoto, lascia il pulsante "Modifica" visibile
+            setIsEditable(prevState => ({
+                ...prevState,
+                [podId]: {
+                    ...prevState[podId],
+                    [field]: true
+                }
+            }));
+        }
     };
 
     return (
@@ -198,7 +211,9 @@ export default function Pod() {
                             )}
                         </td>
                         <td>
-                            <button onClick={() => handleUpdateClick(pod.id)}>Modifica</button>
+                            {(!pod.sede || !pod.nazione) && (
+                                <button onClick={() => handleUpdateClick(pod.id)}>Inserisci</button>
+                            )}
                         </td>
                     </tr>
                 ))}
