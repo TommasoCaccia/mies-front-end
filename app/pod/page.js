@@ -1,5 +1,4 @@
-"use client"
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import classes from "@/app/pod/page.module.css";
 
 export default function Pod() {
@@ -108,7 +107,7 @@ export default function Pod() {
                 const text = await response.text();
                 if (text) {
                     const data = JSON.parse(text);
-                    setPods(prevPods => prevPods.map(p => p.id === podId ? {...p, ...data} : p));
+                    setPods(prevPods => prevPods.map(p => p.id === podId ? { ...p, ...data } : p));
                 } else {
                     setPods(prevPods => prevPods.map(p => p.id === podId ? podToUpdate : p));
                 }
@@ -130,9 +129,18 @@ export default function Pod() {
     const handleInputChange = (podId, field, value) => {
         setPods(prevPods => prevPods.map(pod => {
             if (pod.id === podId) {
-                return {...pod, [field]: value};
+                return { ...pod, [field]: value };
             }
             return pod;
+        }));
+
+        // Aggiorna lo stato di editabilità per consentire future modifiche
+        setIsEditable(prevState => ({
+            ...prevState,
+            [podId]: {
+                ...prevState[podId],
+                [field]: true  // Imposta a true per consentire modifiche future
+            }
         }));
     };
 
@@ -140,7 +148,7 @@ export default function Pod() {
         <div className={`${classes.container} container mt-5`}>
             <h1 className={`${classes.titoloBolletta} mb-4 text-center`}>Carica la Bolletta</h1>
             <form onSubmit={handleSubmit} className={`shadow p-3 mb-5 ${classes.formBolletta}`}>
-                <input type="file" accept="application/pdf" onChange={handleFileChange} className="form-control"/>
+                <input type="file" accept="application/pdf" onChange={handleFileChange} className="form-control" />
                 <button type="submit" disabled={uploading} className={`btn btn-primary mt-3 ${classes.bottoneCarica}`}>
                     {uploading ? 'Caricamento in corso...' : 'Carica'}
                 </button>
@@ -190,9 +198,7 @@ export default function Pod() {
                             )}
                         </td>
                         <td>
-                            {(!pod.sede || !pod.nazione) && (
-                                <button onClick={() => handleUpdateClick(pod.id)}>Modifica</button>
-                            )}
+                            <button onClick={() => handleUpdateClick(pod.id)}>Modifica</button>
                         </td>
                     </tr>
                 ))}
