@@ -1,3 +1,4 @@
+"use client";
 import classes from '@/app/login/page.module.css';
 
 const LoginForm = () => {
@@ -30,7 +31,7 @@ const LoginForm = () => {
     };
 
     return (
-        <div className={classes.root}>
+        <div className={classes.loginContainer}>
             <div className={classes.leftSection}>
                 <h1 className={classes.title}>Mies</h1>
                 <p className={classes.description}>
