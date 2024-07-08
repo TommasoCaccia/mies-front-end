@@ -191,7 +191,7 @@ export default function Pod() {
                         </td>
                         <td>
                             {(!pod.sede || !pod.nazione) && (
-                                <button onClick={() => handleUpdateClick(pod.id)}>Modifica</button>
+                                <button onClick={() => handleUpdateClick(pod.id)}>Inserisci</button>
                             )}
                         </td>
                     </tr>
