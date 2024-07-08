@@ -138,18 +138,18 @@ export default function Pod() {
 
     return (
         <div className={`${classes.container} container mt-5`}>
-            <h1 className="mb-4 text-center">Carica la Bolletta</h1>
-            <form onSubmit={handleSubmit} className="shadow p-3 mb-5 bg-white rounded">
+            <h1 className={`${classes.titoloBolletta} mb-4 text-center`}>Carica la Bolletta</h1>
+            <form onSubmit={handleSubmit} className={`shadow p-3 mb-5 ${classes.formBolletta}`}>
                 <input type="file" accept="application/pdf" onChange={handleFileChange} className="form-control"/>
-                <button type="submit" disabled={uploading} className="btn btn-primary mt-3">
+                <button type="submit" disabled={uploading} className={`btn btn-primary mt-3 ${classes.bottoneCarica}`}>
                     {uploading ? 'Caricamento in corso...' : 'Carica'}
                 </button>
             </form>
             {message &&
                 <p className={`alert ${uploading ? 'alert-danger' : 'alert-success'}`}>{message}</p>}
-            <h2 className="text-center">Elenco dei Pod</h2>
-            <table className="table table-hover">
-                <thead className="table-dark">
+            <h2 className={`${classes.titoloPod} mb-4 text-center`}>Elenco dei Pod</h2>
+            <table className={`${classes.tabellaPod} table table-hover`}>
+                <thead>
                 <tr>
                     <th>ID</th>
                     <th>Potenza Disponibile</th>

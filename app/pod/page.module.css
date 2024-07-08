@@ -1,4 +1,46 @@
 .container {
-    margin-top: 150px!important;
-    margin-bottom: 150px;
+    margin-top: 125px !important;
+    margin-bottom: 125px;
+    font-family: "Montserrat", sans-serif;
+}
+
+.formBolletta {
+    width: 40%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.titoloBolletta, .titoloPod{
+    font-weight: 600;
+    color: #424242
+}
+
+.tabellaPod th, .tabellaPod td {
+    background-color: #ffffff !important;
+    color: #616161 !important;
+    font-weight: bold !important;
+    text-align: center !important;
+}
+.tabellaPod th {
+    background-color: #2C4D79 !important;
+    color: white !important;
+    border-color: white!important;
+    border-width: 0.8px;
+}
+
+.bottoneCarica {
+    background-color: #2C4D79;
+    color: white;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 10px 20px 10px 20px;
 }
