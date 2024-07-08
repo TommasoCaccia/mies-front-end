@@ -16,7 +16,7 @@ export default function MainHeader() {
                         <Link href="/" className={classes.link1}>Servizi</Link>
                     </li>
                     <li className="nav-item">
-                        <Link href="/" className={classes.link2}>Contatti</Link>
+                        <Link href="/costi" className={classes.link2}>Contatti</Link>
                     </li>
                     <li className={`nav-item dropdown ${classes.navItem}`}>
                         <a className={`dropdown-toggle ${classes.link3}`} role="button" data-bs-toggle="dropdown"
@@ -24,9 +24,9 @@ export default function MainHeader() {
                             En. Portfolio
                         </a>
                         <ul className={`dropdown-menu ${classes.dropMenu}`}>
-                            <li><Link href="/dashboard" className={classes.dropdownItem}>Dashboard</Link></li>
-                            <li><Link href="/pod" className={classes.dropdownItem}>pod</Link></li>
-                            <li><Link href="/home-accesso" className={classes.dropdownItem}>Estero</Link></li>
+                            <li><a href="/dashboard" className={classes.dropdownItem}>Dashboard</a></li>
+                            <li><a href="/pod" className={classes.dropdownItem}>pod</a></li>
+                            <li><a href="/home-accesso" className={classes.dropdownItem}>Estero</a></li>
                         </ul>
                     </li>
                     <div className="cta-wrapper d-flex flex">

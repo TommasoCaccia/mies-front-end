@@ -51,10 +51,23 @@
     color: #ffffff;
 }
 
-.formNome:focus, .formUnitadimisura:focus, .formTrimestriAnno:focus{
+.formNome:focus, .formUnitadimisura:focus, .formTrimestriAnno:focus {
     border-color: #2C4D79;
     outline: 0;
     box-shadow: 0 0 0 .25rem rgba(44, 77, 121, 0.51);
+}
+
+.formTrimestre2, .formTrimestre3 {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.formTrimestre1 {
+    margin-right: 10px;
+}
+
+.formTrimestre4 {
+    margin-left: 10px;
 }
 
 .bottoneModifica {
@@ -76,7 +89,7 @@
 
 .bottoneModifica:active {
     background-color: #1d3b5e !important;
-    color: #ffffff!important;
+    color: #ffffff !important;
 }
 
 .bottoneElimina {
@@ -96,4 +109,10 @@
 .icona {
     color: white;
     padding-bottom: 5px;
+}
+
+.customDropdownButton {
+    background-color: #931010!important;
+    color: #000;
+    /* Altri stili qui */
 }

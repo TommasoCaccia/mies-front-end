@@ -1,6 +1,7 @@
 "use client"
 import React, {useEffect, useState, useRef} from 'react';
 import classes from '@/app/home-accesso/page.module.css';
+import Link from "next/link";
 
 export default function Home() {
     const [activeSection, setActiveSection] = useState('section1');
@@ -101,9 +102,13 @@ export default function Home() {
                     caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
                     software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
 
-                <iframe title="Dashboard Sublitex" width="800" height="600"
-                        src="https://app.powerbi.com/reportEmbed?reportId=92de7c0c-f0f4-4307-a2e9-6f0512b178b9&autoAuth=true&ctid=552bed02-4512-450c-858d-84cfe2b4186d"
+                <iframe id="dashboard" title="Dashboard Sublitex" width="800" height="467"
+                        src="https://app.powerbi.com/reportEmbed?reportId=92de7c0c-f0f4-4307-a2e9-6f0512b178b9&autoAuth=true&ctid=552bed02-4512-450c-858d-84cfe2b4186d&filterPaneEnabled=false&navContentPaneEnabled=false"
                         frameBorder="0" allowFullScreen="true"></iframe>
+
+                <div className="cta-wrapper d-flex flex">
+                    <a href="/home-accesso/powerbi" className={classes.bottonePowerbi}>Visualliza PowerBI</a>
+                </div>
 
             </div>
             <div id="section2" ref={sectionRefs.current.section2} className={classes.section}>

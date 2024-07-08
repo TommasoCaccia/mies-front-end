@@ -71,6 +71,18 @@
 }
 
 
+.bottonePowerbi{
+    background-color: #2C4D79;
+    color: white;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 10px 16px 10px 16px;
+}
+
 
 
 
