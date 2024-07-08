@@ -1,4 +1,3 @@
-"use client"
 import { useEffect, useState } from 'react';
 import classes from "@/app/pod/page.module.css";
 
@@ -79,7 +78,7 @@ export default function Pod() {
             setMessage('Errore nel caricamento della bolletta.');
         }
         setUploading(false);
-        // Non fare più la redirect qui
+        window.location.reload(); // Ricarica la pagina dopo il caricamento
     };
 
 
@@ -109,6 +108,16 @@ export default function Pod() {
                 if (text) {
                     const data = JSON.parse(text);
                     setPods(prevPods => prevPods.map(p => p.id === podId ? { ...p, ...data } : p));
+                    // Imposta isEditable a false dopo l'aggiornamento
+                    setIsEditable(prevState => ({
+                        ...prevState,
+                        [podId]: {
+                            sede: false,
+                            nazione: false
+                        }
+                    }));
+                    // Ricarica la pagina per nascondere il pulsante "Modifica"
+                    window.location.reload();
                 } else {
                     setPods(prevPods => prevPods.map(p => p.id === podId ? podToUpdate : p));
                 }
@@ -134,27 +143,7 @@ export default function Pod() {
             return pod;
         }));
 
-        // Verifica se entrambi i campi sono stati compilati
-        const podToUpdate = pods.find(pod => pod.id === podId);
-        if (podToUpdate.sede && podToUpdate.nazione) {
-            // Entrambi i campi sono stati compilati, nascondi il pulsante "Modifica"
-            setIsEditable(prevState => ({
-                ...prevState,
-                [podId]: {
-                    sede: false,
-                    nazione: false
-                }
-            }));
-        } else {
-            // Almeno uno dei campi è vuoto, lascia il pulsante "Modifica" visibile
-            setIsEditable(prevState => ({
-                ...prevState,
-                [podId]: {
-                    ...prevState[podId],
-                    [field]: true
-                }
-            }));
-        }
+        // Non gestire più l'isEditable qui
     };
 
     return (
@@ -212,7 +201,7 @@ export default function Pod() {
                         </td>
                         <td>
                             {(!pod.sede || !pod.nazione) && (
-                                <button onClick={() => handleUpdateClick(pod.id)}>Inserisci</button>
+                                <button onClick={() => handleUpdateClick(pod.id)}>Modifica</button>
                             )}
                         </td>
                     </tr>
