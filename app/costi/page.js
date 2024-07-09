@@ -12,7 +12,8 @@ function DataEntry() {
         unitaDiMisura: '',
         valore: '',
         trimestre: '',
-        anno: ''
+        anno: '',
+        categoria: '' // Aggiunto stato per la categoria
     });
     const [editMode] = useState(false);
     const [error] = useState('');
@@ -60,7 +61,7 @@ function DataEntry() {
                     </thead>
                     <tbody>
                     <tr>
-                        <td colSpan="8" className="text-center">Nessun dato presente</td>
+                        <td colSpan="5" className="text-center">Nessun dato presente</td>
                     </tr>
                     </tbody>
                 </Table>
@@ -107,6 +108,22 @@ function DataEntry() {
                             value={formData.anno}
                             onChange={handleInputChange}
                         />
+                    </InputGroup>
+                    <InputGroup className="mb-3">
+                        <FormControl
+                            as="select"
+                            name="categoria"
+                            value={formData.categoria}
+                            onChange={handleInputChange}
+                            className={classes.formCategoria}
+                        >
+                            <option value="">Seleziona Categoria</option>
+                            <option value="dispacciamento">Dispacciamento</option>
+                            <option value="trasporti">Trasporti</option>
+                            <option value="speseMateria">Spese materia</option>
+                            <option value="energia">Energia</option>
+                            <option value="altro">Altro</option>
+                        </FormControl>
                     </InputGroup>
                     <InputGroup className="mb-3">
                         <FormControl
