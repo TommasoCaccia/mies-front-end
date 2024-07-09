@@ -125,7 +125,7 @@ function DataEntry() {
                             aria-label="Trimestre"
                             name="trimestre"
                         />
-                        <InputGroup.Text>O</InputGroup.Text>
+                        <InputGroup.Text>o</InputGroup.Text>
                         <FormControl
                             className="ml-2"
                             type="number"
