@@ -36,11 +36,15 @@ function DataEntry() {
 
     const aggiungiCosto = async () => {
         const descrizione = event.target.nome ? event.target.nome.value : undefined;
-        const unitaDiMisura = event.target.unitaDiMisura ? event.target.unitaDiMisura.value : undefined;
+        const unitaMisura = event.target.unitaDiMisura ? event.target.unitaDiMisura.value : undefined;
         const trimestre = event.target.trimestre ? event.target.trimestre.value : undefined;
         const anno = event.target.anno ? event.target.anno.value : undefined;
         const categoria = event.target.categoria ? event.target.categoria.value : undefined;
-        const costo = event.target.valore ? event.target.valore.value : undefined;
+        const costoS = event.target.valore ? event.target.valore.value : undefined;
+        const costo = costoS ? parseFloat(costoS) : undefined;
+
+
+        console.log(descrizione, unitaMisura, trimestre, anno, categoria, costo)
 
         const response = await fetch('http://localhost:8080/costi/aggiungi', {
             method: 'POST',
@@ -48,7 +52,7 @@ function DataEntry() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({descrizione, unitaDiMisura, trimestre, anno, costo, categoria}),
+            body: JSON.stringify({descrizione, unitaMisura, trimestre, anno, costo, categoria}),
         });
     }
 
@@ -69,7 +73,7 @@ function DataEntry() {
                     <thead>
                     <tr>
                         <th>
-                            Nome
+                            Descrizione
                             <Button
                                 variant="link"
                                 className="p-0 ml-2"
@@ -79,15 +83,25 @@ function DataEntry() {
                             </Button>
                         </th>
                         <th>Unità di Misura</th>
-                        <th>Trimestre o Anno</th>
+                        <th>Trimestre</th>
+                        <th>Anno</th>
                         <th>Valore</th>
                         {data.length > 0 && <th>Azioni</th>}
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td colSpan="5" className="text-center">Nessun dato presente</td>
-                    </tr>
+                    {data.map((costo, index) => (
+                        <tr key={index}>
+                            <td>{costo.descrizione}</td>
+                            <td>{costo.unitaMisura}</td>
+                            <td>{costo.trimestre}</td>
+                            <td>{costo.anno}</td>
+                            <td>{costo.costo}</td>
+                            <td>
+                                <Button variant="danger">Elimina</Button>
+                            </td>
+                        </tr>
+                    ), (<div>Dati non trovati </div>))}
                     </tbody>
                 </Table>
             </div>
@@ -142,7 +156,7 @@ function DataEntry() {
                     </InputGroup>
                     <InputGroup className="mb-3">
                         <FormControl
-                            type="number"
+                            type="text"
                             placeholder="Valore"
                             aria-label="Valore"
                             name="valore"
