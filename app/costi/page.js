@@ -1,67 +1,33 @@
 "use client"
-import React, {useEffect, useState} from 'react';
-import {Table, Form, Button, InputGroup, FormControl, DropdownButton, Dropdown, Alert} from 'react-bootstrap';
-import {FaFilter} from 'react-icons/fa';
+import React, { useState } from 'react';
+import { Table, Form, Button, InputGroup, FormControl, Alert } from 'react-bootstrap';
+import { FaFilter } from 'react-icons/fa';
 import classes from '@/app/costi/page.module.css';
 
 function DataEntry() {
+    const [data] = useState([]);
+    const [formData, setFormData] = useState({
+        id: undefined,
+        nome: '',
+        unitaDiMisura: '',
+        valore: '',
+        trimestre: '',
+        anno: ''
+    });
+    const [editMode] = useState(false);
+    const [error] = useState('');
     const [showFilter] = useState(false);
-    const [filterName] = useState('');
-    const [data, setData] = useState([]);
+    const [filterName, setFilterName] = useState('');
+    const [deleteError] = useState('');
 
-
-    const aggiungiCosto = async () => {
-        const descrizione = event.target.nome ? event.target.nome.value : undefined;
-        const unitaMisura = event.target.unitaDiMisura ? event.target.unitaDiMisura.value : undefined;
-        const costo = event.target.valore ? event.target.valore.value : undefined;
-        const trimestrale = event.target.trimestreAnno ? event.target.trimestreAnno.value : undefined;
-
-        const response = await fetch('http://localhost:8080/costi/aggiungi', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({descrizione, unitaMisura, costo, trimestrale})
-        });
-
-        if (response.ok) {
-            console.log(response);
-            const data = await response.json(); // Cambiato da response a response.json()
-            //console.log('Risposta del server:', data);
-            //console.log('Costo aggiunto con successo');
-        } else {
-            const text = await response.text();
-            //console.log('Errore del server:', text);
-            //console.error('Errore durante l\'aggiunta del costo');
-        }
-
-    }
-    useEffect(() => {
-        const costi = async () => {
-            const response = await fetch('http://localhost:8080/costi', {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                const text = await response.text();
-                if (text) {
-                    const data = JSON.parse(text);
-                    setData(data);
-                } else {
-                    console.error('Errore durante il recupero dei costi');
-                }
-            }
-        }
-        costi();
-    }, []);
+    const handleInputChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
     return (
         <div className={`${classes.container} container`}>
+            {error && <Alert variant="danger">{error}</Alert>}
+            {deleteError && <Alert variant="danger">{deleteError}</Alert>}
             {showFilter && (
                 <div className="mb-3">
                     <FormControl
@@ -100,13 +66,15 @@ function DataEntry() {
                 </Table>
             </div>
             <div className={classes.formcontainer}>
-                <Form onSubmit={aggiungiCosto}>
+                <Form>
                     <InputGroup className="mb-3">
                         <FormControl
                             className={classes.formNome}
                             placeholder="Nome"
                             aria-label="Nome"
                             name="nome"
+                            value={formData.nome}
+                            onChange={handleInputChange}
                         />
                     </InputGroup>
                     <InputGroup className="mb-3">
@@ -115,6 +83,8 @@ function DataEntry() {
                             placeholder="Unità di Misura"
                             aria-label="Unità di Misura"
                             name="unitaDiMisura"
+                            value={formData.unitaDiMisura}
+                            onChange={handleInputChange}
                         />
                     </InputGroup>
                     <InputGroup className="mb-3">
@@ -124,6 +94,8 @@ function DataEntry() {
                             placeholder="Numero Trimestre"
                             aria-label="Trimestre"
                             name="trimestre"
+                            value={formData.trimestre}
+                            onChange={handleInputChange}
                         />
                         <InputGroup.Text>o</InputGroup.Text>
                         <FormControl
@@ -132,6 +104,8 @@ function DataEntry() {
                             placeholder="Anno"
                             aria-label="Anno"
                             name="anno"
+                            value={formData.anno}
+                            onChange={handleInputChange}
                         />
                     </InputGroup>
                     <InputGroup className="mb-3">
@@ -140,6 +114,8 @@ function DataEntry() {
                             placeholder="Valore"
                             aria-label="Valore"
                             name="valore"
+                            value={formData.valore}
+                            onChange={handleInputChange}
                         />
                     </InputGroup>
                     <Button className={classes.bottoneAggiungi} type="submit">Crea Costo</Button>
