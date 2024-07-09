@@ -1,33 +1,59 @@
 "use client"
-import React, { useState } from 'react';
-import { Table, Form, Button, InputGroup, FormControl, Alert } from 'react-bootstrap';
-import { FaFilter } from 'react-icons/fa';
+import React, {useEffect, useState} from 'react';
+import {Table, Form, Button, InputGroup, FormControl, Alert} from 'react-bootstrap';
+import {FaFilter} from 'react-icons/fa';
 import classes from '@/app/costi/page.module.css';
 
 function DataEntry() {
-    const [data] = useState([]);
-    const [formData, setFormData] = useState({
-        id: undefined,
-        nome: '',
-        unitaDiMisura: '',
-        valore: '',
-        trimestre: '',
-        anno: ''
-    });
-    const [editMode] = useState(false);
-    const [error] = useState('');
+    const [data, setData] = useState([]);
     const [showFilter] = useState(false);
     const [filterName, setFilterName] = useState('');
-    const [deleteError] = useState('');
 
-    const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    useEffect(() => {
+        const fetchCosti = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/costi', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setData(data);
+                } else {
+                    console.error('Errore durante il fetch:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Errore di rete:', error);
+            }
+        };
+
+        fetchCosti();
+    }, []);
+
+    const aggiungiCosto = async () => {
+        const descrizione = event.target.nome ? event.target.nome.value : undefined;
+        const unitaDiMisura = event.target.unitaDiMisura ? event.target.unitaDiMisura.value : undefined;
+        const trimestre = event.target.trimestre ? event.target.trimestre.value : undefined;
+        const anno = event.target.anno ? event.target.anno.value : undefined;
+        const categoria = event.target.categoria ? event.target.categoria.value : undefined;
+        const costo = event.target.valore ? event.target.valore.value : undefined;
+
+        const response = await fetch('http://localhost:8080/costi/aggiungi', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({descrizione, unitaDiMisura, trimestre, anno, costo, categoria}),
+        });
+    }
 
     return (
         <div className={`${classes.container} container`}>
-            {error && <Alert variant="danger">{error}</Alert>}
-            {deleteError && <Alert variant="danger">{deleteError}</Alert>}
             {showFilter && (
                 <div className="mb-3">
                     <FormControl
@@ -49,7 +75,7 @@ function DataEntry() {
                                 className="p-0 ml-2"
                                 onClick={() => setShowFilter(!showFilter)}
                             >
-                                <FaFilter className={classes.icona} />
+                                <FaFilter className={classes.icona}/>
                             </Button>
                         </th>
                         <th>Unità di Misura</th>
@@ -60,21 +86,19 @@ function DataEntry() {
                     </thead>
                     <tbody>
                     <tr>
-                        <td colSpan="8" className="text-center">Nessun dato presente</td>
+                        <td colSpan="5" className="text-center">Nessun dato presente</td>
                     </tr>
                     </tbody>
                 </Table>
             </div>
             <div className={classes.formcontainer}>
-                <Form>
+                <Form onSubmit={aggiungiCosto}>
                     <InputGroup className="mb-3">
                         <FormControl
                             className={classes.formNome}
                             placeholder="Nome"
                             aria-label="Nome"
                             name="nome"
-                            value={formData.nome}
-                            onChange={handleInputChange}
                         />
                     </InputGroup>
                     <InputGroup className="mb-3">
@@ -83,8 +107,6 @@ function DataEntry() {
                             placeholder="Unità di Misura"
                             aria-label="Unità di Misura"
                             name="unitaDiMisura"
-                            value={formData.unitaDiMisura}
-                            onChange={handleInputChange}
                         />
                     </InputGroup>
                     <InputGroup className="mb-3">
@@ -94,8 +116,6 @@ function DataEntry() {
                             placeholder="Numero Trimestre"
                             aria-label="Trimestre"
                             name="trimestre"
-                            value={formData.trimestre}
-                            onChange={handleInputChange}
                         />
                         <InputGroup.Text>o</InputGroup.Text>
                         <FormControl
@@ -104,9 +124,21 @@ function DataEntry() {
                             placeholder="Anno"
                             aria-label="Anno"
                             name="anno"
-                            value={formData.anno}
-                            onChange={handleInputChange}
                         />
+                    </InputGroup>
+                    <InputGroup className="mb-3">
+                        <FormControl
+                            as="select"
+                            name="categoria"
+                            className={classes.formCategoria}
+                        >
+                            <option value="">Seleziona Categoria</option>
+                            <option value="dispacciamento">Dispacciamento</option>
+                            <option value="trasporti">Trasporti</option>
+                            <option value="speseMateria">Spese materia</option>
+                            <option value="energia">Energia</option>
+                            <option value="altro">Altro</option>
+                        </FormControl>
                     </InputGroup>
                     <InputGroup className="mb-3">
                         <FormControl
@@ -114,8 +146,6 @@ function DataEntry() {
                             placeholder="Valore"
                             aria-label="Valore"
                             name="valore"
-                            value={formData.valore}
-                            onChange={handleInputChange}
                         />
                     </InputGroup>
                     <Button className={classes.bottoneAggiungi} type="submit">Crea Costo</Button>
