@@ -4,9 +4,11 @@ import {Table, Form, Button, InputGroup, FormControl, Alert} from 'react-bootstr
 import {FaFilter} from 'react-icons/fa';
 import classes from '@/app/costi/page.module.css';
 
+export default DataEntry;
+
 function DataEntry() {
     const [data, setData] = useState([]);
-    const [showFilter] = useState(false);
+    const [showFilter, setShowFilter] = useState(false);
     const [filterName, setFilterName] = useState('');
 
     useEffect(() => {
@@ -34,27 +36,44 @@ function DataEntry() {
         fetchCosti();
     }, []);
 
-    const aggiungiCosto = async () => {
-        const descrizione = event.target.nome ? event.target.nome.value : undefined;
-        const unitaMisura = event.target.unitaDiMisura ? event.target.unitaDiMisura.value : undefined;
-        const trimestre = event.target.trimestre ? event.target.trimestre.value : undefined;
-        const anno = event.target.anno ? event.target.anno.value : undefined;
-        const categoria = event.target.categoria ? event.target.categoria.value : undefined;
-        const costoS = event.target.valore ? event.target.valore.value : undefined;
-        const costo = costoS ? parseFloat(costoS) : undefined;
+    const aggiungiCosto = async (e) => {
+        e.preventDefault();
 
+        const descrizione = e.target.nome ? e.target.nome.value : null;
+        const unitaMisura = e.target.unitaDiMisura ? e.target.unitaDiMisura.value : null;
+        const trimestre = e.target.trimestre ? e.target.trimestre.value : 0;
+        const anno = e.target.anno ? e.target.anno.value : null;
+        const categoria = e.target.categoria ? e.target.categoria.value : null;
+        const costoS = e.target.valore ? e.target.valore.value : null;
+        const costo = costoS ? parseFloat(costoS) : null;
 
-        console.log(descrizione, unitaMisura, trimestre, anno, categoria, costo)
+        console.log({descrizione, unitaMisura, trimestre, anno, costo, categoria});
 
-        const response = await fetch('http://localhost:8080/costi/aggiungi', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({descrizione, unitaMisura, trimestre, anno, costo, categoria}),
-        });
-    }
+        try {
+            const response = await fetch('http://localhost:8080/costi/aggiungi', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({descrizione, unitaMisura, trimestre, anno, costo, categoria}),
+            });
+
+            if (response.ok) {
+                console.log("Costo aggiunto con successo");
+                // Resetta il form dopo aver aggiunto il costo
+                e.target.reset();
+                // Aggiorna la lista dei costi (opzionale, se vuoi mostrare immediatamente il nuovo costo)
+                const newCosti = await response.json();
+                setData(newCosti);
+                window.location.replace('/costi');
+            } else {
+                console.error('Errore durante il fetch:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Errore di rete:', error);
+        }
+    };
 
     return (
         <div className={`${classes.container} container`}>
@@ -86,6 +105,7 @@ function DataEntry() {
                         <th>Trimestre</th>
                         <th>Anno</th>
                         <th>Valore</th>
+                        <th>Categoria</th>
                         {data.length > 0 && <th>Azioni</th>}
                     </tr>
                     </thead>
@@ -94,9 +114,10 @@ function DataEntry() {
                         <tr key={index}>
                             <td>{costo.descrizione}</td>
                             <td>{costo.unitaMisura}</td>
-                            <td>{costo.trimestre}</td>
+                            <td>{costo.trimestre !== 0 ? costo.trimestre : ''}</td>
                             <td>{costo.anno}</td>
                             <td>{costo.costo}</td>
+                            <td>{costo.categoria}</td>
                             <td>
                                 <Button variant="danger">Elimina</Button>
                             </td>
@@ -130,11 +151,12 @@ function DataEntry() {
                             placeholder="Numero Trimestre"
                             aria-label="Trimestre"
                             name="trimestre"
+                            defaultValue="0"
                         />
                         <InputGroup.Text>o</InputGroup.Text>
                         <FormControl
                             className="ml-2"
-                            type="number"
+                            type="text"
                             placeholder="Anno"
                             aria-label="Anno"
                             name="anno"
@@ -168,5 +190,3 @@ function DataEntry() {
         </div>
     );
 }
-
-export default DataEntry;
