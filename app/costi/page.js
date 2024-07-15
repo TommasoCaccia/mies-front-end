@@ -8,6 +8,7 @@ function DataEntry() {
     const [data, setData] = useState([]);
     const [showFilter] = useState(false);
     const [filterName, setFilterName] = useState('');
+    const [categoria, setCategoria] = useState('');
 
     useEffect(() => {
         const fetchCosti = async () => {
@@ -144,16 +145,46 @@ function DataEntry() {
                         <FormControl
                             as="select"
                             name="categoria"
-                            className={classes.formCategoria}
+                            className={classes.formUnitadimisura}
+                            value={categoria}
+                            onChange={(e) => setCategoria(e.target.value)}
                         >
                             <option value="">Seleziona Categoria</option>
                             <option value="dispacciamento">Dispacciamento</option>
                             <option value="trasporti">Trasporti</option>
-                            <option value="speseMateria">Spese materia</option>
-                            <option value="energia">Energia</option>
+                            <option value="speseMateria">Spese per Materia Energia</option>
                             <option value="altro">Altro</option>
                         </FormControl>
                     </InputGroup>
+                    {categoria && categoria !== 'dispacciamento' && (
+                        <InputGroup className="mb-3">
+                            <FormControl
+                                as="select"
+                                name="tipoDiTensione"
+                                className={classes.formUnitadimisura}
+                            >
+                                <option value="">Seleziona Tipo di Tensione</option>
+                                <option value="altaTensione">Alta Tensione</option>
+                                <option value="mediaTensione">Media Tensione</option>
+                                <option value="bassaTensione">Bassa Tensione</option>
+                            </FormControl>
+                        </InputGroup>
+                    )}
+                    {categoria && categoria !== 'dispacciamento' && categoria && categoria !== 'trasporti' && (
+                        <InputGroup className="mb-3">
+                            <FormControl
+                                as="select"
+                                name="classeDiAgevolazione"
+                                className={classes.formUnitadimisura}
+                            >
+                                <option value="">Seleziona Classe di Agevolazione</option>
+                                <option value="Val1">Val1</option>
+                                <option value="Val2">Val2</option>
+                                <option value="Val3">Val3</option>
+                                <option value="Fat1">Fat1</option>
+                            </FormControl>
+                        </InputGroup>
+                    )}
                     <InputGroup className="mb-3">
                         <FormControl
                             type="text"

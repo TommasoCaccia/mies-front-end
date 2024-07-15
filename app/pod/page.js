@@ -79,7 +79,7 @@ export default function Pod() {
             setMessage('Errore nel caricamento della bolletta.');
         }
         setUploading(false);
-        window.location.href = '/pod';
+       // window.location.href = '/pod';
     };
 
 
