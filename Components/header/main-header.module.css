@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
 .Header {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: white;
     top: 0;
     position: fixed;
@@ -10,6 +12,13 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.navItem {
+    position: relative;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .logo {
     max-width: 100px;
@@ -55,6 +64,8 @@
     font-weight: 600;
     padding: 10px 2rem;
     font-family: "Montserrat", sans-serif;
+    cursor: pointer;
+    margin-left: 25px;
 }
 
 
@@ -65,14 +76,14 @@
 .dropMenu {
     display: none;
     position: absolute;
-    background-color: #ffffff !important;
-    min-width: 156.25px !important;
-    z-index: 1;
+    background-color: #2C4D79 !important;
+    color: white !important;
+    min-width: 135px !important;
     background-clip: padding-box;
     border: 0 !important;
     border-radius: 0 !important;
     font-family: "Montserrat", sans-serif;
-    font-size: 13px !important;
+    font-size: 12px !important;
     font-weight: 600;
     text-transform: uppercase;
     margin: 0 !important;
@@ -80,27 +91,63 @@
     align-items: center !important;
     left: 50%; /* Centra il dropdown rispetto al genitore */
     transform: translateX(-50%); /* Sposta il dropdown indietro di metà della sua larghezza */
-    top: 100%; /* Posiziona il dropdown giusto sotto il pulsante */
+    top: 72px; /* Posiziona il dropdown giusto sotto il pulsante */
+}
+
+.energyPortfolio {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 
 .dropMenu a {
-    color: #616161;
+    color: #ffffff;
     padding: 12px 20px 12px 20px;
     text-decoration: none;
     display: block;
-    text-align: left;
+    text-align: center;
 }
 
 .dropMenu a:hover {
-    background-color: #2C4D79;
+    background-color: #00b1d7;
     border-radius: 0 !important;
     border: none !important;
-    color: white;
+    color: #f8f8f8;
+    border: 0 !important;
+    border-radius: 0 !important;
+    --bs-dropdown-padding-y: 0 !important;
 
 }
 
 
+.dropdownsubMenu {
+    position: relative;
+}
+
+
+.dropMenuu {
+    display: none; /* Nascondi il submenu */
+    position: absolute;
+    left: 100%; /* Posiziona il submenu a destra dell'elemento padre */
+    top: 0;
+    background-color:#2C4D79 !important;
+    min-width: 135px !important;
+    z-index: 1;
+    background-clip: padding-box;
+    border: 0 !important;
+    border-radius: 0 !important;
+    font-family: "Montserrat", sans-serif;
+    font-size: 12px !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin: 0 !important;
+    --bs-dropdown-padding-y: 0 !important;
+    align-items: center !important;
+}
+
+.dropdownsubMenu:hover .dropMenuu {
+    display: block;
+}
 
 
 

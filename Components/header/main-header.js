@@ -11,28 +11,36 @@ export default function MainHeader() {
                     <img src="/Logo.png" className={`${classes.logo} d-block`} alt="Logo"/>
                 </Link>
 
-                <ul className="nav nav-pills">
+                <ul className={`${classes.navItem} nav nav-pills`}>
                     <li className="nav-item">
                         <Link href="/" className={classes.link1}>Servizi</Link>
                     </li>
                     <li className="nav-item">
                         <Link href="/costi" className={classes.link2}>Contatti</Link>
                     </li>
-                    <li className={`nav-item dropdown ${classes.navItem}`}>
+                    <li className="nav-item dropdown">
                         <a className={`dropdown-toggle ${classes.link3}`} role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
-                            En. Portfolio
+                            Tools
                         </a>
                         <ul className={`dropdown-menu ${classes.dropMenu}`}>
-                            <li><a href="/dashboard" className={classes.dropdownItem}>Dashboard</a></li>
-                            <li><a href="/pod" className={classes.dropdownItem}>pod</a></li>
-                            <li><a href="/home-accesso" className={classes.dropdownItem}>Estero</a></li>
+                            <li className={classes.dropdownsubMenu}>
+                                <a href="/energyportfolio" className={`dropdown-toggle ${classes.energyPortfolio}`}
+                                   role="button">
+                                    Energy<br></br>Portfolio
+                                </a>
+                                <ul className={`dropdown-menu ${classes.dropMenuu}`}>
+                                    <li><a href="/pod" className={classes.dropdownItem}>Carica Bolletta</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="/iso500001" className={classes.dropdownItem}>Iso 500001</a></li>
+                            <li><a href="https://oneview.miesgroup.it/" className={classes.dropdownItem} target="_blank"
+                                   rel="noopener noreferrer">Oneview</a></li>
                         </ul>
                     </li>
                     <div className="cta-wrapper d-flex flex">
                         <Link href="/login" className={classes.loginPulsante}>Login</Link>
                     </div>
-
                 </ul>
             </div>
         </header>
