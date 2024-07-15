@@ -6,7 +6,7 @@ import classes from '@/app/costi/page.module.css';
 
 function DataEntry() {
     const [data, setData] = useState([]);
-    const [showFilter] = useState(false);
+    const [showFilter,setShowFilter] = useState(false);
     const [filterName, setFilterName] = useState('');
     const [categoria, setCategoria] = useState('');
 
@@ -87,6 +87,8 @@ function DataEntry() {
                         <th>Trimestre</th>
                         <th>Anno</th>
                         <th>Valore</th>
+                        <th>Tensione</th>
+                        <th>Classe di agevolazione</th>
                         {data.length > 0 && <th>Azioni</th>}
                     </tr>
                     </thead>
@@ -98,6 +100,8 @@ function DataEntry() {
                             <td>{costo.trimestre}</td>
                             <td>{costo.anno}</td>
                             <td>{costo.costo}</td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <Button variant="danger">Elimina</Button>
                             </td>
