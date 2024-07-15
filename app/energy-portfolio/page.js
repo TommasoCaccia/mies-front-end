@@ -1,6 +1,6 @@
 "use client"
 import React, {useEffect, useState, useRef} from 'react';
-import classes from '@/app/energyportfolio/page.module.css';
+import classes from '@/app/energy-portfolio/page.module.css';
 import Link from "next/link";
 
 export default function Home() {

@@ -1,0 +1,80 @@
+/* page.module.css */
+.loginContainer {
+    color: #616161;
+    background-color: white;
+    font-family: "Montserrat", sans-serif;
+    border-radius: 5px;
+    max-width: 400px; /* Massima larghezza del form */
+    margin-top: 150px;
+    margin-bottom: 54.06px;
+    box-shadow: var(--bs-box-shadow) !important;
+    padding: 50px 50px 50px 50px;
+
+}
+
+
+.titoloCreazioneUtente {
+    margin-bottom: 50px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.formUsername {
+    margin-bottom: 25px;
+    font-size: 15px;
+}
+
+.formPassword {
+    margin-bottom: 25px;
+    font-size: 15px;
+}
+
+.username, .password {
+    border-radius: 5px;
+    padding: 6px 10px 6px 10px;
+}
+
+
+.creaUtente {
+    background-color: #2C4D79;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 10px 16px 10px 16px;
+    display: block;
+
+    width: 100%;
+    margin-top: 50px;
+}
+
+.login:hover {
+    background-color: #1d3b5e;
+    color: white;
+}
+
+
+.login:focus {
+    background-color: #1d3b5e;
+    color: white;
+}
+
+.login:active {
+    background-color: #1d3b5e !important;
+    color: white;
+}
+
+.username:focus , .password:focus{
+    border-color: #2C4D79;
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgba(44, 77, 121, 0.51);
+}
+
+

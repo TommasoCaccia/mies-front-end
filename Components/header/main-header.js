@@ -25,7 +25,7 @@ export default function MainHeader() {
                         </a>
                         <ul className={`dropdown-menu ${classes.dropMenu}`}>
                             <li className={classes.dropdownsubMenu}>
-                                <a href="/energyportfolio" className={`dropdown-toggle ${classes.energyPortfolio}`}
+                                <a href="/energy-portfolio" className={`dropdown-toggle ${classes.energyPortfolio}`}
                                    role="button">
                                     Energy<br></br>Portfolio
                                 </a>
@@ -34,9 +34,18 @@ export default function MainHeader() {
                                 </ul>
                             </li>
                             <li><a href="/iso500001" className={classes.dropdownItem}>Iso 500001</a></li>
-                            <li><a href="/costi" className={classes.dropdownItem}>Costi</a></li>
                             <li><a href="https://oneview.miesgroup.it/" className={classes.dropdownItem} target="_blank"
                                    rel="noopener noreferrer">Oneview</a></li>
+                        </ul>
+                    </li>
+                    <li className={`nav-item dropdown ${classes.navDrop}`}>
+                        <a className={`dropdown-toggle ${classes.link3}`} role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Admin
+                        </a>
+                        <ul className={`dropdown-menu ${classes.dropMenu}`}>
+                            <li><a href="/creazione-utente" className={classes.dropdownItem}>Creazione Utente</a></li>
+                            <li><a href="/costi" className={classes.dropdownItem}>Costi</a></li>
                         </ul>
                     </li>
                     <div className="cta-wrapper d-flex flex">
