@@ -11,14 +11,14 @@ export default function MainHeader() {
                     <img src="/Logo.png" className={`${classes.logo} d-block`} alt="Logo"/>
                 </Link>
 
-                <ul className={`${classes.navItem} nav nav-pills`}>
-                    <li className="nav-item">
+                <ul className={`nav nav-pills ${classes.navItem}`}>
+                    <li className={`nav-item ${classes.navItem}`}>
                         <Link href="/" className={classes.link1}>Servizi</Link>
                     </li>
-                    <li className="nav-item">
-                        <Link href="/costi" className={classes.link2}>Contatti</Link>
+                    <li className={`nav-item ${classes.navItem}`}>
+                        <Link href="/" className={classes.link2}>Contatti</Link>
                     </li>
-                    <li className="nav-item dropdown">
+                    <li className={`nav-item dropdown ${classes.navDrop}`}>
                         <a className={`dropdown-toggle ${classes.link3}`} role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
                             Tools
@@ -34,6 +34,7 @@ export default function MainHeader() {
                                 </ul>
                             </li>
                             <li><a href="/iso500001" className={classes.dropdownItem}>Iso 500001</a></li>
+                            <li><a href="/costi" className={classes.dropdownItem}>Costi</a></li>
                             <li><a href="https://oneview.miesgroup.it/" className={classes.dropdownItem} target="_blank"
                                    rel="noopener noreferrer">Oneview</a></li>
                         </ul>

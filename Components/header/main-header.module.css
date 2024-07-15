@@ -20,6 +20,15 @@
     align-items: center;
 }
 
+.navDrop{
+    position: relative;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 .logo {
     max-width: 100px;
 }
@@ -69,7 +78,7 @@
 }
 
 
-.navItem:hover .dropMenu {
+.navDrop:hover .dropMenu {
     display: block;
 }
 
@@ -91,7 +100,7 @@
     align-items: center !important;
     left: 50%; /* Centra il dropdown rispetto al genitore */
     transform: translateX(-50%); /* Sposta il dropdown indietro di metà della sua larghezza */
-    top: 72px; /* Posiziona il dropdown giusto sotto il pulsante */
+    top: 100px; /* Posiziona il dropdown giusto sotto il pulsante */
 }
 
 .energyPortfolio {
