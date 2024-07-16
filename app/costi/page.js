@@ -6,7 +6,7 @@ import classes from '@/app/costi/page.module.css';
 
 function DataEntry() {
     const [data, setData] = useState([]);
-    const [showFilter,setShowFilter] = useState(false);
+    const [showFilter, setShowFilter] = useState(false);
     const [filterName, setFilterName] = useState('');
     const [categoria, setCategoria] = useState('');
 
@@ -35,7 +35,9 @@ function DataEntry() {
         fetchCosti();
     }, []);
 
-    const aggiungiCosto = async () => {
+    const aggiungiCosto = async (event) => {
+        event.preventDefault(); // Prevenire il comportamento predefinito del form
+
         const descrizione = event.target.nome ? event.target.nome.value : undefined;
         const unitaMisura = event.target.unitaDiMisura ? event.target.unitaDiMisura.value : undefined;
         const trimestre = event.target.trimestre ? event.target.trimestre.value : undefined;
@@ -43,9 +45,10 @@ function DataEntry() {
         const categoria = event.target.categoria ? event.target.categoria.value : undefined;
         const costoS = event.target.valore ? event.target.valore.value : undefined;
         const costo = costoS ? parseFloat(costoS) : undefined;
+        const tipoTensione = event.target.tipoDiTensione ? event.target.tipoDiTensione.value : undefined;
+        const classeAgevolazione = event.target.classeDiAgevolazione ? event.target.classeDiAgevolazione.value : undefined;
 
-
-        console.log(descrizione, unitaMisura, trimestre, anno, categoria, costo)
+        console.log(descrizione, unitaMisura, trimestre, anno, categoria, costo);
 
         const response = await fetch('http://localhost:8080/costi/aggiungi', {
             method: 'POST',
@@ -53,7 +56,16 @@ function DataEntry() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({descrizione, unitaMisura, trimestre, anno, costo, categoria}),
+            body: JSON.stringify({
+                descrizione,
+                unitaMisura,
+                trimestre,
+                anno,
+                costo,
+                categoria,
+                tipoTensione,
+                classeAgevolazione
+            }),
         });
     }
 
@@ -106,7 +118,10 @@ function DataEntry() {
                                 <Button variant="danger">Elimina</Button>
                             </td>
                         </tr>
-                    ), (<div>Dati non trovati </div>))}
+                    ))}
+                    {data.length === 0 && (<tr>
+                        <td colSpan="8">Dati non trovati</td>
+                    </tr>)}
                     </tbody>
                 </Table>
             </div>
@@ -135,11 +150,12 @@ function DataEntry() {
                             placeholder="Numero Trimestre"
                             aria-label="Trimestre"
                             name="trimestre"
+                            defaultValue="0"
                         />
                         <InputGroup.Text>o</InputGroup.Text>
                         <FormControl
                             className="ml-2"
-                            type="number"
+                            type="text"
                             placeholder="Anno"
                             aria-label="Anno"
                             name="anno"
@@ -156,11 +172,11 @@ function DataEntry() {
                             <option value="">Seleziona Categoria</option>
                             <option value="dispacciamento">Dispacciamento</option>
                             <option value="trasporti">Trasporti</option>
-                            <option value="speseMateria">Spese per Materia Energia</option>
+                            <option value="penali">penali</option>
                             <option value="altro">Altro</option>
                         </FormControl>
                     </InputGroup>
-                    {categoria && categoria !== 'dispacciamento' && (
+                    {categoria && categoria !== 'dispacciamento' && categoria && categoria !== 'penali' &&(
                         <InputGroup className="mb-3">
                             <FormControl
                                 as="select"
@@ -174,7 +190,7 @@ function DataEntry() {
                             </FormControl>
                         </InputGroup>
                     )}
-                    {categoria && categoria !== 'dispacciamento' && categoria && categoria !== 'trasporti' && (
+                    {categoria && categoria !== 'dispacciamento' && categoria !== 'trasporti' && categoria && categoria !== 'penali' &&(
                         <InputGroup className="mb-3">
                             <FormControl
                                 as="select"
