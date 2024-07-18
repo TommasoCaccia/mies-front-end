@@ -10,6 +10,8 @@ function DataEntry() {
     const [filterName, setFilterName] = useState('');
     const [categoria, setCategoria] = useState('');
     const [filterCategoria, setFilterCategoria] = useState('');
+    const [filterPotenza, setFilterPotenza] = useState('');
+    const [filterClasse, setFilterClasse] = useState('');
 
     useEffect(() => {
         const fetchCosti = async () => {
@@ -72,9 +74,23 @@ function DataEntry() {
 
     const handleFilterCategoria = (e) => {
         setFilterCategoria(e.target.value);
+        setFilterPotenza('');
+        setFilterClasse('');
     }
 
-    const filteredData = filterCategoria ? data.filter(costo => costo.categoria === filterCategoria) : data;
+    const handleFilterPotenza = (e) => {
+        setFilterPotenza(e.target.value);
+    }
+
+    const handleFilterClasse = (e) => {
+        setFilterClasse(e.target.value);
+    }
+
+    const filteredData = data.filter(costo => {
+        return (!filterCategoria || costo.categoria === filterCategoria) &&
+            (!filterPotenza || costo.tipoTensione === filterPotenza) &&
+            (!filterClasse || costo.classeAgevolazione === filterClasse);
+    });
 
     return (
         <div className={`${classes.container} container`}>
@@ -88,7 +104,7 @@ function DataEntry() {
                     />
                 </div>
             )}
-            <div className="mb-3">
+            <div className="mb-3 d-flex">
                 <FormControl
                     as="select"
                     value={filterCategoria}
@@ -101,6 +117,53 @@ function DataEntry() {
                     <option value="penali">Penali</option>
                     <option value="altro">Altro</option>
                 </FormControl>
+                {filterCategoria === 'trasporti' && (
+                    <FormControl
+                        as="select"
+                        value={filterPotenza}
+                        onChange={handleFilterPotenza}
+                        className="ml-3"
+                        style={{ marginLeft: '10px' }}
+                    >
+                        <option value="">Seleziona Intervallo Potenza</option>
+                        <option value=">500KW">+500KW</option>
+                        <option value="100-500KW">100-500KW</option>
+                        <option value="<100KW">-100KW</option>
+                    </FormControl>
+                )}
+                {filterCategoria === 'altro' && (
+                    <>
+                        <FormControl
+                            as="select"
+                            value={filterPotenza}
+                            onChange={handleFilterPotenza}
+                            className="ml-3"
+                            style={{ marginLeft: '15px' }}
+                        >
+                            <option value="">Seleziona Intervallo Potenza</option>
+                            <option value=">500KW">+500KW</option>
+                            <option value="100-500KW">100-500KW</option>
+                            <option value="<100KW">-100KW</option>
+                        </FormControl>
+                        <FormControl
+                            as="select"
+                            value={filterClasse}
+                            onChange={handleFilterClasse}
+                            className="ml-3"
+                            style={{ marginLeft: '15px' }}
+                        >
+                            <option value="">Seleziona Classe di Agevolazione</option>
+                            <option value="Val1">Val1</option>
+                            <option value="Val2">Val2</option>
+                            <option value="Val3">Val3</option>
+                            <option value="Val4">Val4</option>
+                            <option value="Fat1">Fat1</option>
+                            <option value="Fat2">Fat2</option>
+                            <option value="Fat3">Fat3</option>
+                            <option value="0">0</option>
+                        </FormControl>
+                    </>
+                )}
             </div>
             <div className={classes.tableresponsive}>
                 <Table className={classes.tabella} bordered hover>
