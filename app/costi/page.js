@@ -176,21 +176,21 @@ function DataEntry() {
                             <option value="altro">Altro</option>
                         </FormControl>
                     </InputGroup>
-                    {categoria && categoria !== 'dispacciamento' && categoria && categoria !== 'penali' &&(
+                    {categoria && categoria !== 'dispacciamento' && categoria && categoria !== 'penali' && (
                         <InputGroup className="mb-3">
                             <FormControl
                                 as="select"
                                 name="tipoDiTensione"
                                 className={classes.formUnitadimisura}
                             >
-                                <option value="">Seleziona Tipo di Tensione</option>
-                                <option value="altaTensione">Alta Tensione</option>
-                                <option value="mediaTensione">Media Tensione</option>
-                                <option value="bassaTensione">Bassa Tensione</option>
+                                <option value="">Seleziona Intervallo Potenza</option>
+                                <option value=">500KW">+500KW</option>
+                                <option value="100-500KW">100-500KW</option>
+                                <option value="<100KW"> -100KW</option>
                             </FormControl>
                         </InputGroup>
                     )}
-                    {categoria && categoria !== 'dispacciamento' && categoria !== 'trasporti' && categoria && categoria !== 'penali' &&(
+                    {categoria && categoria !== 'dispacciamento' && categoria !== 'trasporti' && categoria && categoria !== 'penali' && (
                         <InputGroup className="mb-3">
                             <FormControl
                                 as="select"
@@ -201,7 +201,11 @@ function DataEntry() {
                                 <option value="Val1">Val1</option>
                                 <option value="Val2">Val2</option>
                                 <option value="Val3">Val3</option>
+                                <option value="Val4">Val4</option>
                                 <option value="Fat1">Fat1</option>
+                                <option value="Fat2">Fat2</option>
+                                <option value="Fat3">Fat3</option>
+                                <option value="0">0</option>
                             </FormControl>
                         </InputGroup>
                     )}
