@@ -99,6 +99,7 @@ function DataEntry() {
                         <th>Trimestre</th>
                         <th>Anno</th>
                         <th>Valore</th>
+                        <th>Categoria</th>
                         <th>Tensione</th>
                         <th>Classe di agevolazione</th>
                         {data.length > 0 && <th>Azioni</th>}
@@ -112,6 +113,7 @@ function DataEntry() {
                             <td>{costo.trimestre}</td>
                             <td>{costo.anno}</td>
                             <td>{costo.costo}</td>
+                            <td>{costo.categoria}</td>
                             <td></td>
                             <td></td>
                             <td>
