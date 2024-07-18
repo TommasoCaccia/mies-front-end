@@ -34,5 +34,6 @@
 }
 
 .email{
-    text-decoration: underline;
+    text-decoration: underline!important;
+    color: black;
 }

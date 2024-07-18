@@ -9,6 +9,7 @@ function DataEntry() {
     const [showFilter, setShowFilter] = useState(false);
     const [filterName, setFilterName] = useState('');
     const [categoria, setCategoria] = useState('');
+    const [filterCategoria, setFilterCategoria] = useState('');
 
     useEffect(() => {
         const fetchCosti = async () => {
@@ -69,6 +70,12 @@ function DataEntry() {
         });
     }
 
+    const handleFilterCategoria = (e) => {
+        setFilterCategoria(e.target.value);
+    }
+
+    const filteredData = filterCategoria ? data.filter(costo => costo.categoria === filterCategoria) : data;
+
     return (
         <div className={`${classes.container} container`}>
             {showFilter && (
@@ -81,6 +88,20 @@ function DataEntry() {
                     />
                 </div>
             )}
+            <div className="mb-3">
+                <FormControl
+                    as="select"
+                    value={filterCategoria}
+                    onChange={handleFilterCategoria}
+                    className={classes.formUnitadimisura}
+                >
+                    <option value="">Filtra per Categoria</option>
+                    <option value="dispacciamento">Dispacciamento</option>
+                    <option value="trasporti">Trasporti</option>
+                    <option value="penali">Penali</option>
+                    <option value="altro">Altro</option>
+                </FormControl>
+            </div>
             <div className={classes.tableresponsive}>
                 <Table className={classes.tabella} bordered hover>
                     <thead>
@@ -102,11 +123,11 @@ function DataEntry() {
                         <th>Categoria</th>
                         <th>Tensione</th>
                         <th>Classe di agevolazione</th>
-                        {data.length > 0 && <th>Azioni</th>}
+                        {filteredData.length > 0 && <th>Azioni</th>}
                     </tr>
                     </thead>
                     <tbody>
-                    {data.map((costo, index) => (
+                    {filteredData.map((costo, index) => (
                         <tr key={index}>
                             <td>{costo.descrizione}</td>
                             <td>{costo.unitaMisura}</td>
@@ -114,14 +135,14 @@ function DataEntry() {
                             <td>{costo.anno}</td>
                             <td>{costo.costo}</td>
                             <td>{costo.categoria}</td>
-                            <td></td>
-                            <td></td>
+                            <td>{costo.tipoTensione}</td>
+                            <td>{costo.classeAgevolazione}</td>
                             <td>
                                 <Button variant="danger">Elimina</Button>
                             </td>
                         </tr>
                     ))}
-                    {data.length === 0 && (<tr>
+                    {filteredData.length === 0 && (<tr>
                         <td colSpan="8">Dati non trovati</td>
                     </tr>)}
                     </tbody>
