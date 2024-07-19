@@ -47,10 +47,10 @@ function DataEntry() {
         const categoria = event.target.categoria ? event.target.categoria.value : undefined;
         const costoS = event.target.valore ? event.target.valore.value : undefined;
         const costo = costoS ? parseFloat(costoS) : undefined;
-        const tipoTensione = event.target.tipoDiTensione ? event.target.tipoDiTensione.value : undefined;
+        const intervalloPotenza = event.target.intervalloDiPotenza ? event.target.intervalloDiPotenza.value : undefined;
         const classeAgevolazione = event.target.classeDiAgevolazione ? event.target.classeDiAgevolazione.value : undefined;
 
-        console.log(descrizione, unitaMisura, trimestre, anno, categoria, costo);
+        console.log(descrizione, unitaMisura, trimestre, anno, categoria, costo, intervalloPotenza, classeAgevolazione);
 
         const response = await fetch('http://localhost:8080/costi/aggiungi', {
             method: 'POST',
@@ -65,7 +65,7 @@ function DataEntry() {
                 anno,
                 costo,
                 categoria,
-                tipoTensione,
+                intervalloPotenza,
                 classeAgevolazione
             }),
         });
@@ -104,7 +104,7 @@ function DataEntry() {
                     <option value="dispacciamento">Dispacciamento</option>
                     <option value="trasporti">Trasporti</option>
                     <option value="penali">Penali</option>
-                    <option value="altro">Altro</option>
+                    <option value="oneri">Oneri</option>
                 </FormControl>
                 {filterCategoria === 'trasporti' && (
                     <FormControl
@@ -238,15 +238,15 @@ function DataEntry() {
                             <option value="">Seleziona Categoria</option>
                             <option value="dispacciamento">Dispacciamento</option>
                             <option value="trasporti">Trasporti</option>
-                            <option value="penali">penali</option>
-                            <option value="altro">Altro</option>
+                            <option value="penali">Penali</option>
+                            <option value="oneri">Oneri</option>
                         </FormControl>
                     </InputGroup>
                     {categoria && categoria !== 'dispacciamento' && categoria && categoria !== 'penali' && (
                         <InputGroup className="mb-3">
                             <FormControl
                                 as="select"
-                                name="tipoDiTensione"
+                                name="intervalloDiPotenza"
                                 className={classes.formUnitadimisura}
                             >
                                 <option value="">Seleziona Intervallo Potenza</option>
