@@ -7,7 +7,6 @@ import classes from '@/app/costi/page.module.css';
 function DataEntry() {
     const [data, setData] = useState([]);
     const [showFilter, setShowFilter] = useState(false);
-    const [filterName, setFilterName] = useState('');
     const [categoria, setCategoria] = useState('');
     const [filterCategoria, setFilterCategoria] = useState('');
     const [filterPotenza, setFilterPotenza] = useState('');
@@ -94,16 +93,6 @@ function DataEntry() {
 
     return (
         <div className={`${classes.container} container`}>
-            {showFilter && (
-                <div className="mb-3">
-                    <FormControl
-                        placeholder="Filtra per nome"
-                        aria-label="Filtra per nome"
-                        value={filterName}
-                        onChange={(e) => setFilterName(e.target.value)}
-                    />
-                </div>
-            )}
             <div className="mb-3 d-flex">
                 <FormControl
                     as="select"
@@ -169,16 +158,7 @@ function DataEntry() {
                 <Table className={classes.tabella} bordered hover>
                     <thead>
                     <tr>
-                        <th>
-                            Descrizione
-                            <Button
-                                variant="link"
-                                className="p-0 ml-2"
-                                onClick={() => setShowFilter(!showFilter)}
-                            >
-                                <FaFilter className={classes.icona}/>
-                            </Button>
-                        </th>
+                        <th>Descrizione</th>
                         <th>Unità di Misura</th>
                         <th>Trimestre</th>
                         <th>Anno</th>
