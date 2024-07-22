@@ -1,0 +1,93 @@
+.imgDiagnosi{
+    width: 100%;
+}
+
+/* styles/globals.css */
+.container{
+    width: 100%;
+    margin-top: 100px;
+    font-family: "Montserrat", sans-serif;
+}
+
+
+
+.textContainer{
+    margin-top: 50px!important;
+    font-family: "Montserrat", sans-serif;
+    background-color: #ffffff;
+    padding: 50px;
+}
+
+.titoloServizi{
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color:#616161;
+}
+
+.paragrafoServizi{
+    font-weight: 400;
+    color: #616161;
+    font-size: 15px;
+}
+
+
+.strong{
+    color:#6d6d6d;
+    font-weight: 600;
+}
+
+
+.ciao{
+    width: 100%;
+}
+
+
+
+
+.cardsContainer{
+    margin-top:50px
+}
+
+
+.imageTextSection {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; /* Spazio tra le sezioni */
+}
+
+.textSide {
+    flex: 1;
+    padding: 10px;
+}
+
+.sectionImage {
+    flex: 1;
+    max-width: 30%;
+    height: auto;
+}
+
+.sectionTitle {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.sectionText {
+    font-size: 15px
+}
+
+.imageTextSection:nth-child(odd) .textSide {
+    order: 2; /* Testo a sinistra */
+}
+
+.imageTextSection:nth-child(odd) .sectionImage {
+    order: 1; /* Immagine a destra */
+}
+
+.imageTextSection:nth-child(even) .textSide {
+    order: 1; /* Testo a destra */
+}
+
+.imageTextSection:nth-child(even) .sectionImage {
+    order: 2; /* Immagine a sinistra */
+}

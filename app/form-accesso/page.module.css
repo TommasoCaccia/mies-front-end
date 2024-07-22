@@ -3,14 +3,12 @@
     background-color: white;
     font-family: "Montserrat", sans-serif;
     border-radius: 5px;
-    max-width: 400px; /* Massima larghezza del form */
+    max-width: 600px; /* Increased width for two columns */
     margin-top: 150px;
     margin-bottom: 54.06px;
     box-shadow: var(--bs-box-shadow) !important;
     padding: 50px 50px 50px 50px;
-
 }
-
 
 .titoloCreazioneUtente {
     margin-bottom: 50px;
@@ -23,23 +21,24 @@
     text-align: center;
 }
 
-.formUsername {
+.formRow {
+    display: flex;
+    justify-content: space-between;
+}
+
+.formSedeLegale, .formPIva, .formEmail, .formTelefono, .formStato, .formClasseAgevolazione {
     margin-bottom: 25px;
     font-size: 15px;
+    flex: 1;
+    margin-right: 40px; /* Space between columns */
 }
 
-.formPassword {
-    margin-bottom: 25px;
-    font-size: 15px;
-}
-
-.username, .password {
-    border-radius: 5px;
-    padding: 6px 10px 6px 10px;
+.formSedeLegale:last-child, .formPIva:last-child, .formEmail:last-child, .formTelefono:last-child, .formStato:last-child, .formClasseAgevolazione:last-child {
+    margin-right: 0; /* Remove margin from the last element */
 }
 
 
-.creaUtente {
+.invia {
     background-color: #2C4D79;
     color: white;
     border: none;
@@ -49,7 +48,6 @@
     font-size: 15px;
     padding: 10px 16px 10px 16px;
     display: block;
-
     width: 100%;
     margin-top: 50px;
 }
@@ -58,7 +56,6 @@
     background-color: #1d3b5e;
     color: white;
 }
-
 
 .login:focus {
     background-color: #1d3b5e;
@@ -70,10 +67,8 @@
     color: white;
 }
 
-.username:focus , .password:focus{
+.username:focus, .password:focus {
     border-color: #2C4D79;
     outline: 0;
     box-shadow: 0 0 0 .25rem rgba(44, 77, 121, 0.51);
 }
-
-

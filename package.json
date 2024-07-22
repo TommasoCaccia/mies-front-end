@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.3",
+    "aos": "^2.3.4",
     "axios": "^1.7.2",
     "better-sqlite3": "^11.1.2",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.3",
     "express": "^4.19.2",
+    "framer-motion": "^11.3.8",
     "next": "14.2.4",
     "powerbi-client": "^2.23.1",
     "react": "^18",

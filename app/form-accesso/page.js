@@ -4,19 +4,39 @@ export default function Register() {
 
     return (
         <div className={`${classes.loginContainer} container`}>
-            <h2 className={`active ${classes.titoloCreazioneUtente}`}>Creazione Utente</h2>
+            <h2 className={`active ${classes.titoloCreazioneUtente}`}>Info Utente</h2>
             <form>
-                <div className={`form-group ${classes.formUsername}`}>
-                    <input type="text" className={`form-control ${classes.username}`} id="username" name="username"
-                           required/>
-                    <span className={classes.Username}>Username</span>
+                <div className={classes.formRow}>
+                    <div className={`form-group ${classes.formSedeLegale}`}>
+                        <input type="text" className={`form-control ${classes.sedeLegale}`} id="sedeLegale" name="sedeLegale" required/>
+                        <span className={classes.SedeLegale}>Sede Legale</span>
+                    </div>
+                    <div className={`form-group ${classes.formPIva}`}>
+                        <input type="text" className={`form-control ${classes.pIva}`} id="pIva" name="pIva" required/>
+                        <span className={classes.PIva}>P.IVA</span>
+                    </div>
                 </div>
-                <div className={`form-group ${classes.formPassword}`}>
-                    <input type="password" className={`form-control ${classes.password}`} id="password" name="password"
-                           required/>
-                    <span className={classes.Password}>Password</span>
+                <div className={classes.formRow}>
+                    <div className={`form-group ${classes.formEmail}`}>
+                        <input type="email" className={`form-control ${classes.email}`} id="email" name="email" required/>
+                        <span className={classes.Email}>Email</span>
+                    </div>
+                    <div className={`form-group ${classes.formTelefono}`}>
+                        <input type="tel" className={`form-control ${classes.telefono}`} id="telefono" name="telefono" required/>
+                        <span className={classes.Telefono}>Telefono</span>
+                    </div>
                 </div>
-                <button type="submit" className={`${classes.creaUtente}`}>Crea Utente</button>
+                <div className={classes.formRow}>
+                    <div className={`form-group ${classes.formStato}`}>
+                        <input type="text" className={`form-control ${classes.stato}`} id="stato" name="stato" required/>
+                        <span className={classes.Stato}>Stato</span>
+                    </div>
+                    <div className={`form-group ${classes.formClasseAgevolazione}`}>
+                        <input type="text" className={`form-control ${classes.classeAgevolazione}`} id="classeAgevolazione" name="classeAgevolazione" required/>
+                        <span className={classes.ClasseAgevolazione}>Classe di Agevolazione</span>
+                    </div>
+                </div>
+                <button type="submit" className={`${classes.invia}`}>Invia</button>
             </form>
         </div>
     );
