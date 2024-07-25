@@ -1,8 +1,34 @@
 'use client'
 import classes from '@/app/page.module.css';
 import HomeCarousel from '@/Components/carosello/carosello'
+import {useEffect} from "react";
 
 export default function Home() {
+
+    const handleAccesso = async () => {
+        const response = await fetch('http://localhost:8080/cliente', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+            if(data.loginEffettuato === 0){
+                window.location.href = "/form-accesso";
+            }
+        } else {
+            const text = await response.text();
+            console.error('Errore durante il recupero dei dati:', text);
+        }
+    }
+
+    useEffect(() => {
+        handleAccesso();
+    }, []);
     return (
         <main className={classes.main}>
             <HomeCarousel/>
