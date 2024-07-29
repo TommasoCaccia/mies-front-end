@@ -6,11 +6,13 @@ export default function Home() {
     return (
         <>
             <div className={`container ${classes.container}`}>
+                <img src="/Diagnosi.jpg" className={`${classes.imgServizi} d-block`} alt="Logo"/>
                 <div className={classes.textContainer}>
                     <h1 className={classes.titoloServizi}>I SERVIZI DI MIES</h1>
                     <p className={classes.paragrafoServizi}>
                         Il successo di un’impresa passa attraverso la riduzione dei costi e <strong
-                        className={classes.strong}>l'ottimizzazione dei processi.</strong> È sempre più evidente, infatti, come
+                        className={classes.strong}>l'ottimizzazione dei processi.</strong> È sempre più evidente,
+                        infatti, come
                         l’adozione di soluzioni e sistemi efficienti per
                         un’azienda non solo porti a un <strong className={classes.strong}>contenimento dei
                         costi</strong>,

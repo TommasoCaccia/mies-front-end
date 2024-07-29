@@ -5,15 +5,17 @@
     z-index: 1000;
 }
 
+
 .button {
-    background-color: #56607d;
+    background-color: #2C4D79;
+    border-color: #2a4c77;
+    border-radius: 1px!important;
     color: #ffffff;
-    border: none;
     padding: 5px 15px;
     font-size: 25px;
     cursor: pointer;
-    transition: opacity 0.3s, visibility 0.3s;
-    opacity: 0.8;
+    transition: opacity 5s, visibility 5s!important;
+    opacity: 1;
     font-family: "Montserrat", sans-serif;
 
 }
