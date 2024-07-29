@@ -1,5 +1,6 @@
 "use client";
 import classes from '@/app/login/page.module.css';
+import {useEffect} from "react";
 
 const LoginForm = () => {
     const handleLogin = async (event) => {
@@ -18,11 +19,33 @@ const LoginForm = () => {
 
         if (response.ok) {
             localStorage.setItem("accessoEffettuato", true);
-            const data = await response; // Cambiato da response a response.json()
+            const data = await response;
+            handlePrimoAccesso();
         } else {
             const text = await response.text();
         }
     };
+
+    const handlePrimoAccesso = async () => {
+        const response = await fetch('http://localhost:8080/cliente', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+            if (data.loginEffettuato === 0) {
+                window.location.href = "/form-accesso";
+            }
+        } else {
+            const text = await response.text();
+            console.error('Errore durante il recupero dei dati:', text);
+        }
+    }
 
     return (
         <div className={`${classes.loginContainer} container`}>

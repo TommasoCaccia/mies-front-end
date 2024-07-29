@@ -1,3 +1,4 @@
+"use client";
 import classes from "@/app/creazione-utente/page.module.css";
 
 export default function Register() {

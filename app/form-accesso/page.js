@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import classes from "@/app/form-accesso/page.module.css";
 
