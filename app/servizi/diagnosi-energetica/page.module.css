@@ -23,7 +23,6 @@
     margin-bottom: 20px;
     font-weight: 600;
     color:#616161;
-    text-transform: uppercase;
 }
 
 .paragrafoServizi{
@@ -44,15 +43,17 @@
 }
 
 
+
+
 .cardsContainer{
-    margin-top:50px;
+    margin-top:50px
 }
 
 
 .imageTextSection {
     display: flex;
     align-items: center;
-    margin-bottom: 100px; /* Spazio tra le sezioni */
+    margin-bottom: 50px; /* Spazio tra le sezioni */
 }
 
 .textSideRight {

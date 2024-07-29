@@ -6,7 +6,7 @@
     flex-wrap: wrap;
 }
 
-.logo{
+.logo {
     width: 1500px;
 
 }
@@ -19,12 +19,19 @@
     justify-items: center;
     align-items: center;
     height: 400px;
-    margin-top: 50px;
     box-shadow: 0 6px 30px 0 rgba(0, 0, 0, .12);
     overflow: hidden;
     max-width: 370px;
     font-family: "Montserrat", sans-serif;
+    margin-top: 50px;
+    margin-bottom: 0;
 }
+
+
+.cardSettima {
+    margin-bottom: 50px;
+}
+
 
 
 .shapeBoxHalf {
@@ -88,7 +95,7 @@
     font-weight: 700;
     font-size: 24px;
     text-transform: uppercase;
-    color: #292b2c;
+    color: #333333;
 }
 
 .cardContent {

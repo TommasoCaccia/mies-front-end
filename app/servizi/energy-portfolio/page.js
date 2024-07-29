@@ -1,62 +1,65 @@
 import classes from '@/app/servizi/energy-portfolio/page.module.css';
 
-export default function Home() {
+export default function EnergyPortfolio() {
     return (
         <>
             <div className={`container ${classes.container}`}>
-                <img src="/Diagnosi.jpg" className={`${classes.imgDiagnosi} d-block`} alt="Logo"/>
+                <img src="/EnergyPortfolio.jpg" className={`${classes.imgDiagnosi} d-block`} alt="Logo"/>
                 <div className={classes.textContainer}>
                     <h1 className={classes.titoloServizi}>
-                        LA DIAGNOSI ENERGETICA <br></br>
-                        SVELA LE REALI OPPORTUNITÀ DI RISPARMIO
+                        ENERGY PORTFOLIO<br></br>
+                        IL PREZZO ENERGIA SU MISURA PER TE
                     </h1>
                     <p className={classes.paragrafoServizi}>
-                        La <strong>Diagnosi Energetica</strong> permette di avere una chiara e completa definizione dei
-                        consumi e delle prestazioni energetiche della propria azienda, e consente di individuare e
-                        quantificare le reali opportunità di risparmio.<br></br><br></br>
-                        Attraverso la mappatura delle utenze aziendali ed all’analisi costi-benefici l’Azienda dispone
-                        di un potente strumento decisionale. La conoscenza completa della propria azienda sotto il
-                        profilo energetico, infatti, permette una concreta pianificazione degli interventi di
-                        miglioramento.
+                        Attraverso il servizio <strong>Energy Portfolio</strong>, MIES svolge un’attività specifica di
+                        ottimizzazione dei
+                        contratti di acquisto dell’energia, grazie alla quale le aziende riducono i costi di
+                        approvvigionamento energetico. L’energia infatti non va percepita come una tassa su cui si è
+                        convinti di non potere intervenire in alcun modo, ma una risorsa da ottimizzare per aumentare la
+                        propria competitività.<br></br><br></br>
+                        MIES offre il servizio <strong>Energy Portfolio</strong> a tutte le aziende che vogliono
+                        rimanere concentrate sul
+                        proprio core business, senza rinunciare all’ottimizzazione del prezzo energia.
                     </p>
                 </div>
                 <div className={classes.cardsContainer}>
                     <div className={classes.imageTextSection}>
-                        <div className={classes.textSide}>
-                            <h2 className={classes.sectionTitle}>Non un obbligo, ma un’opportunità</h2>
+                        <div className={classes.textSideRight}>
+                            <h2 className={classes.sectionTitle}>Gestione Prezzo Energia</h2>
                             <p className={classes.sectionText}>
-                                Il recepimento della Direttiva Europea 2012/27/UE, attraverso il Dlgs 102/2014, ha
-                                portato ad un obbligo di Diagnosi Energetica per le aziende Energivore e per le Grandi
-                                Imprese. L’Audit Energetico, se condotto su misura e a partire dai dati provenienti dal
-                                campo, assumerà il significato di risorsa e fonte di opportunità.
-                                <br></br> <br></br>
-                                Un giusto approccio all’efficienza energetica non nasce da obblighi o emergenze, ma da
-                                azioni programmate nel tempo che permettano alle azienda di consumare meno energia a
-                                parità di servizi offerti.
+                                Il servizio di <strong>Energy Portfolio</strong> prevede un’analisi preliminare
+                                gratuita per valutare in
+                                maniera chiara e oggettiva se il prezzo pagato per la fornitura di energia è ottimale
+                                rispetto al proprio profilo consumi e ai valori medi di mercato. Attraverso l’analisi
+                                del profilo storico dei consumi aziendali, è possibile studiare la migliore formula
+                                contrattuale e ottimizzare il prezzo di fornitura. MIES, inoltre, informa con analisi
+                                periodiche il cliente sull’andamento del prezzo contrattato rispetto ai valori medi di
+                                mercato ed altri trend significativi.
                             </p>
                         </div>
-                        <img src="/Opportunita.jpg" className={classes.sectionImage} alt="Immagine 1"/>
+                        <img src="/EPGestionePrezzoEnergia.jpg" className={classes.sectionImage} alt="Immagine 1"/>
                     </div>
 
                     <div className={classes.imageTextSection}>
-                        <img src="/Strumenti.jpg" className={classes.sectionImage} alt="Immagine 2"/>
-                        <div className={classes.textSide}>
-                            <h2 className={classes.sectionTitle}>Strumenti e soluzioni</h2>
+                        <img
+                            src="/EPVerificaFatture.jpg" className={classes.sectionImage} alt="Immagine degli Strumenti"
+                        />
+                        <div className={classes.textSideLeft}>
+                            <h2 className={classes.sectionTitle}>Verifica Fatture</h2>
                             <p className={classes.sectionText}>
-                                MIES mette a disposizione strumenti e soluzioni personalizzate:
-
-                                <li>Soluzioni ad alta efficienza energetica con possibilità di contratti a garanzia di
-                                    risultato (EPC)</li>
-                                <li>Miglioramento delle modalità di gestione e manutenzione degli impianti e buone
-                                    pratiche</li>
-                                    <li> Sistemi di monitoraggio dei consumi energetici</li>
-                                        <li> Ottimizzazione dei contratti di fornitura energetica</li>
-                                            <li> Ottenimento ISO 50001</li>
+                                All’interno del servizio <strong>Energy Portfolio</strong>, MIES verifica mensilmente le
+                                fatture
+                                energetiche, controllando la correttezza dell’attribuzione del prezzo energia;
+                                verificando i corrispettivi riferiti a perdite di rete, dispacciamento, trasporto, oneri
+                                e imposte; accertando eventuali storni o addebiti.<br></br><br></br>
+                                Infine, MIES informa costantemente i propri clienti sui cambiamenti normativi e le
+                                novità inerenti il mercato dell’energia, la fatturazione e le eventuali variazioni delle
+                                voci presenti in fattura (oneri, penali…).
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
         </>
-);
+    );
 }
