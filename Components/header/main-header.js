@@ -6,6 +6,8 @@ import {Button} from "react-bootstrap";
 
 export default function MainHeader() {
     const accessoEffetuato = localStorage.getItem("accessoEffettuato");
+    const categoriaUtente = localStorage.getItem("tipologia");
+    console.log(accessoEffetuato)
 
     const handleLogout = async () => {
         const response = await fetch('http://localhost:8080/Autentication/logout', {
@@ -62,7 +64,7 @@ export default function MainHeader() {
                                            rel="noopener noreferrer">Oneview</a></li>
                                 </ul>
                             </li>
-                            {categoriaUtente === 'admin' && (
+                            {categoriaUtente === 'Admin' && (
                                 <li className={`nav-item dropdown ${classes.navDrop}`}>
                                     <a className={`dropdown-toggle ${classes.link3}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Admin
@@ -75,7 +77,7 @@ export default function MainHeader() {
                             )}
                         </>
                     )}
-                    {!accessoEffetuato ?
+                    {accessoEffetuato != null ?
                         <li className={`nav-item ${classes.navItem}`}>
                             <Button onClick={handleLogout} className={classes.loginPulsante}>Logout</Button>
                         </li>

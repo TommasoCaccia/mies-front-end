@@ -31,27 +31,8 @@ export default function Register() {
         });
 
         if (response.ok) {
-            const primoAccessoResponse = await fetch('http://localhost:8080/cliente/primoAccesso', {
-                method: 'PUT',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    primoAccesso: 1
-                })
-            });
-
-            if (primoAccessoResponse.ok) {
-                window.location.href = "/";
-            } else {
-                const text = await primoAccessoResponse.text();
-                console.error('Errore durante l\'aggiornamento di primo accesso:', text);
-            }
-        } else {
-            const text = await response.text();
-            console.error('Errore durante l\'aggiornamento del cliente:', text);
-        }
+            window.location.href = "/";
+        }else{}
     }
 
     return (

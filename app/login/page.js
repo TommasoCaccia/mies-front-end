@@ -1,6 +1,5 @@
 "use client";
 import classes from '@/app/login/page.module.css';
-import {useEffect} from "react";
 
 const LoginForm = () => {
     const handleLogin = async (event) => {
@@ -38,6 +37,7 @@ const LoginForm = () => {
         if (response.ok) {
             const data = await response.json();
             console.log(data);
+            localStorage.setItem("tipologia", data.tipologia);
             if (data.loginEffettuato === 0) {
                 window.location.href = "/form-accesso";
             }
