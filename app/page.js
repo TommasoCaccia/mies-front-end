@@ -3,6 +3,8 @@ import classes from '@/app/page.module.css';
 import HomeCarousel from '@/Components/carosello/carosello'
 
 export default function Home() {
+
+
     return (
         <main className={classes.main}>
             <HomeCarousel/>

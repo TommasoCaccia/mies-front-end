@@ -120,7 +120,7 @@ function DataEntry() {
                         <option value="<100KW">-100KW</option>
                     </FormControl>
                 )}
-                {filterCategoria === 'altro' && (
+                {filterCategoria === 'oneri' && (
                     <>
                         <FormControl
                             as="select"
@@ -142,10 +142,7 @@ function DataEntry() {
                             style={{ marginLeft: '15px' }}
                         >
                             <option value="">Seleziona Classe di Agevolazione</option>
-                            <option value="Val1">Val1</option>
-                            <option value="Val2">Val2</option>
-                            <option value="Val3">Val3</option>
-                            <option value="Val4">Val4</option>
+                            <option value="Val">Val1</option>
                             <option value="Fat1">Fat1</option>
                             <option value="Fat2">Fat2</option>
                             <option value="Fat3">Fat3</option>
@@ -164,7 +161,7 @@ function DataEntry() {
                         <th>Anno</th>
                         <th>Valore</th>
                         <th>Categoria</th>
-                        <th>Tensione</th>
+                        <th>Intevallo di Potenza </th>
                         <th>Classe di agevolazione</th>
                         {filteredData.length > 0 && <th>Azioni</th>}
                     </tr>
@@ -178,7 +175,7 @@ function DataEntry() {
                             <td>{costo.anno}</td>
                             <td>{costo.costo}</td>
                             <td>{costo.categoria}</td>
-                            <td>{costo.tipoTensione}</td>
+                            <td>{costo.intervalloPotenza}</td>
                             <td>{costo.classeAgevolazione}</td>
                             <td>
                                 <Button variant="danger">Elimina</Button>
@@ -264,10 +261,7 @@ function DataEntry() {
                                 className={classes.formUnitadimisura}
                             >
                                 <option value="">Seleziona Classe di Agevolazione</option>
-                                <option value="Val1">Val1</option>
-                                <option value="Val2">Val2</option>
-                                <option value="Val3">Val3</option>
-                                <option value="Val4">Val4</option>
+                                <option value="Val">Val</option>
                                 <option value="Fat1">Fat1</option>
                                 <option value="Fat2">Fat2</option>
                                 <option value="Fat3">Fat3</option>
