@@ -161,7 +161,7 @@ function DataEntry() {
                         <th>Anno</th>
                         <th>Valore</th>
                         <th>Categoria</th>
-                        <th>Tensione</th>
+                        <th>Intevallo di Potenza </th>
                         <th>Classe di agevolazione</th>
                         {filteredData.length > 0 && <th>Azioni</th>}
                     </tr>
@@ -175,7 +175,7 @@ function DataEntry() {
                             <td>{costo.anno}</td>
                             <td>{costo.costo}</td>
                             <td>{costo.categoria}</td>
-                            <td>{costo.tipoTensione}</td>
+                            <td>{costo.intervalloPotenza}</td>
                             <td>{costo.classeAgevolazione}</td>
                             <td>
                                 <Button variant="danger">Elimina</Button>
