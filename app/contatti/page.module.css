@@ -2,3 +2,29 @@
     width: 100%;
     margin-top: 100px;
 }
+
+/* styles/Layout.module.css */
+
+.container {
+    display: flex;
+    padding: 20px;
+    min-height: 100vh; /* Assicurati che la pagina occupi tutta l'altezza */
+    box-sizing: border-box; /* Considera padding e bordo nel calcolo delle dimensioni */
+}
+
+.mainContent {
+    flex: 3; /* La parte principale occupa più spazio */
+    padding: 20px;
+    border-right: 1px solid #ddd; /* Aggiungi una linea di separazione tra la parte principale e la sidebar */
+}
+
+.sidebar {
+    flex: 1; /* La sidebar occupa meno spazio rispetto al contenuto principale */
+    padding: 20px;
+}
+
+.sedeLegale{
+    text-transform: uppercase;
+    background-color: #931010;
+}
+
