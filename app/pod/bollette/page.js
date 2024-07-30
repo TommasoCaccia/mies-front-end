@@ -67,7 +67,7 @@ export default function Bollette() {
     }, []);
 
     return (
-        <div className={classes.container}>
+        <div className={`container ${classes.container}`}>
             <table>
                 <thead>
                 <tr>
