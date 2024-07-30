@@ -79,7 +79,7 @@ export default function MainHeader() {
                     )}
                     {accessoEffetuato != null ?
                         <li className={`nav-item ${classes.navItem}`}>
-                            <Button onClick={handleLogout} className={classes.loginPulsante}>Logout</Button>
+                            <button onClick={handleLogout} className={classes.logoutPulsante}>Logout</button>
                         </li>
                         :
                         <div className="cta-wrapper d-flex flex">

@@ -76,6 +76,27 @@
     margin-left: 25px;
 }
 
+.logoutPulsante{
+    background-color: #2C4D79;
+    border-radius: 0;
+    color: white;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 2rem;
+    font-family: "Montserrat", sans-serif;
+    cursor: pointer;
+    margin-left: 25px;
+    border:none !important;
+}
+
+.loginPulsante:hover, .logoutPulsante:hover {
+    background-color: #214168;
+}
+
 
 .navDrop:hover .dropMenu {
     display: block;

@@ -40,6 +40,8 @@ const LoginForm = () => {
             localStorage.setItem("tipologia", data.tipologia);
             if (data.loginEffettuato === 0) {
                 window.location.href = "/form-accesso";
+            }else{
+                window.location.href = "/";
             }
         } else {
             const text = await response.text();
