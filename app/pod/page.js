@@ -63,7 +63,7 @@ export default function Pod() {
         formData.append('fileData', file);
 
         try {
-            const response = await fetch('http://localhost:8080/upload', {
+            const response = await fetch('http://localhost:8080/files/upload', {
                 method: 'POST',
                 body: formData,
                 credentials: 'include'
