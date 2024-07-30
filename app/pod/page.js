@@ -79,7 +79,7 @@ export default function Pod() {
             setMessage('Errore nel caricamento della bolletta.');
         }
         setUploading(false);
-       // window.location.href = '/pod';
+        // window.location.href = '/pod';
     };
 
 
@@ -135,6 +135,12 @@ export default function Pod() {
             return pod;
         }));
     };
+
+    const handleViewBillsClick = (podId) => {
+        localStorage.setItem('selectedPodId', podId);
+        window.location.href = '/pod/bollette';
+    };
+
 
     return (
         <div className={`${classes.container} container mt-5`}>
@@ -194,10 +200,14 @@ export default function Pod() {
                                 <button onClick={() => handleUpdateClick(pod.id)}>Inserisci</button>
                             )}
                         </td>
+                        <td>
+                            <button onClick={() => handleViewBillsClick(pod.id)}>Vedi bollette</button>
+                        </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
+
         </div>
     );
 }
