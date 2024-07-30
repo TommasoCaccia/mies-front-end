@@ -1,4 +1,4 @@
-.mappa{
+.mappa {
     width: 100%;
     margin-top: 100px;
 }
@@ -10,21 +10,62 @@
     padding: 20px;
     min-height: 100vh; /* Assicurati che la pagina occupi tutta l'altezza */
     box-sizing: border-box; /* Considera padding e bordo nel calcolo delle dimensioni */
+    color: #616161;
+    font-family: "Montserrat", sans-serif;
 }
 
 .mainContent {
     flex: 3; /* La parte principale occupa più spazio */
     padding: 20px;
     border-right: 1px solid #ddd; /* Aggiungi una linea di separazione tra la parte principale e la sidebar */
+    text-align: center;
 }
 
-.sidebar {
+/* New CSS for sidebarContainer to ensure vertical stacking */
+.sidebarContainer {
     flex: 1; /* La sidebar occupa meno spazio rispetto al contenuto principale */
+    display: flex;
+    flex-direction: column; /* Stack sidebars vertically */
     padding: 20px;
 }
 
-.sedeLegale{
-    text-transform: uppercase;
-    background-color: #931010;
+.sidebar {
+    margin-bottom: 30px; /* Add some spacing between the two sidebar sections */
 }
 
+.sedeLegale {
+    display: inline-block;
+    padding: 15px 76px;
+    border: 2px solid #00b1d7;
+    color: #2C4D79;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.sedeOperativa {
+    display: inline-block;
+    padding: 15px 56px;
+    border: 2px solid #00b1d7;
+    color: #2C4D79;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 80px;
+}
+
+.strong {
+    color: #6d6d6d;
+}
+
+.paragrafiSedeLegale {
+    margin-bottom: 0;
+    margin-top: 25px;
+}
+
+.titoloPrincipale{
+    color: #2C4D79;
+    font-weight: 600;
+}
