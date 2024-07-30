@@ -1,6 +1,7 @@
 "use client"
 import axios from "axios";
 import {useState} from "react";
+import classes from "@/app/pod/bollette/page.module.css";
 
 export default function bollette() {
     const id = localStorage.getItem('selectedPodId');
@@ -50,7 +51,7 @@ export default function bollette() {
     };
 
     return (
-        <div>
+        <div className={classes.container}>
             <table>
                 <thead>
                 <th>Nome file</th>
