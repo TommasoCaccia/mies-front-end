@@ -71,11 +71,6 @@ const HomePage = () => {
                     <Button href="/" className={`nav-link ${classes.esteroPulsante}`}>Estero</Button>
                 </div>
             </div>
-            {/*<div className={`${classes.paragrafo2} d-flex justify-content-between`}>
-                <Link href="/upload-file"><Button className={classes.controlloPulsante}>Controllo</Button></Link>
-                <Link href="/pod"><Button className={classes.budgetPulsante}>Budget</Button></Link>
-                <Link href="/dashboard/futures"><Button className={classes.futuresPulsante}>Futures</Button></Link>
-            </div>*/}
             <div className={`${classes.annomese} d-flex justify-content-between mb-4`}>
                 <Dropdown>
                     <Dropdown.Toggle as={CustomToggle} id="dropdown-anno" className={classes.annoPulsante}>
@@ -108,6 +103,14 @@ const HomePage = () => {
                     <Line data={dataKwh}/>
                 </div>
             </div>
+
+            <iframe
+                title="mies_13_6_24"
+                width="1140"
+                height="541.25"
+                src="https://app.powerbi.com/reportEmbed?reportId=e9de65d8-c498-4cd0-90d2-02461019efde&autoAuth=true&ctid=69da13af-78cb-4dd9-b20c-087550f2b912"
+                allowFullScreen={true}> 
+            </iframe>
         </div>
     );
 };

@@ -27,48 +27,6 @@
     color: white !important;
 }
 
-
-.bottoneAggiungi {
-    background-color: #2C4D79;
-    color: white;
-    margin-top: 20px;
-    border: none;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 15px;
-    padding: 10px 20px 10px 20px;
-}
-
-.bottoneAggiungi:hover {
-    background-color: #1d3b5e !important;
-    color: #ffffff;
-}
-
-.bottoneAggiungi:active {
-    background-color: #1d3b5e !important;
-    color: #ffffff;
-}
-
-.formNome:focus, .formUnitadimisura:focus, .formTrimestriAnno:focus {
-    border-color: #2C4D79;
-    outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(44, 77, 121, 0.51);
-}
-
-.formTrimestre2, .formTrimestre3 {
-    margin-right: 10px;
-    margin-left: 10px;
-}
-
-.formTrimestre1 {
-    margin-right: 10px;
-}
-
-.formTrimestre4 {
-    margin-left: 10px;
-}
-
 .bottoneModifica {
     background-color: #2C4D79;
     color: white;
@@ -110,13 +68,67 @@
     padding-bottom: 5px;
 }
 
-.customDropdownButton {
-    background-color: #931010!important;
-    color: #000;
-    /* Altri stili qui */
+.formContainer {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
+.h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+}
 
+.fileInput {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+}
 
+.fileLabel {
+    background-color: #2C4D79;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 0.9rem;
+}
 
+.file {
+    display: none;
+}
+
+.fileName {
+    color: #2C4D79;
+}
+
+.fileName:hover{
+    color: #2C4D79;
+}
+
+.uploadButton {
+    background-color: #2C4D79;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.uploadButton:hover {
+    background-color: #1d3b5e;
+}
 

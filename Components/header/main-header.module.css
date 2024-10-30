@@ -76,7 +76,7 @@
     margin-left: 25px;
 }
 
-.logoutPulsante{
+.logoutPulsante {
     background-color: #2C4D79;
     border-radius: 0;
     color: white;
@@ -90,7 +90,7 @@
     font-family: "Montserrat", sans-serif;
     cursor: pointer;
     margin-left: 25px;
-    border:none !important;
+    border: none !important;
 }
 
 .loginPulsante:hover, .logoutPulsante:hover {
@@ -149,11 +149,6 @@
 }
 
 
-.dropdownsubMenu {
-
-}
-
-
 .dropMenuu {
     display: none; /* Nascondi il submenu */
     position: absolute;
@@ -178,8 +173,46 @@
     display: block;
 }
 
+/*Menu Hamburgher */
 
 
+.hamburger {
+    display: none; /* Nascondi il pulsante di default */
+    flex-direction: column;
+    cursor: pointer;
+}
 
+.bar {
+    height: 3px;
+    width: 25px;
+    background-color: #333; /* Colore delle barre */
+    margin: 2px 0;
+}
 
+.nav {
+    display: flex;
+    flex-direction: column;
+    position: absolute; /* Posizionamento assoluto per il menu */
+    top: 60px; /* Regola in base all'altezza dell'header */
+    right: 0;
+    background-color: white; /* Colore di sfondo del menu */
+    width: 100%;
+    max-height: 0; /* Nascondi il menu */
+    overflow: hidden; /* Nascondi gli elementi in eccesso */
+    transition: max-height 0.3s ease; /* Transizione per l'apertura */
+}
 
+.show {
+    max-height: 300px; /* Altezza massima quando aperto (regola in base al contenuto) */
+}
+
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex; /* Mostra il pulsante su schermi piccoli */
+    }
+
+    .nav {
+        display: flex; /* Mostra il menu come colonna */
+        flex-direction: column;
+    }
+}
