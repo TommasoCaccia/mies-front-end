@@ -4,7 +4,8 @@ import "./globals.css";
 import MainHeader from '@/Components/header/main-header';
 import MainFooter from '@/Components/footer/main-footer';
 import BackToTop from "@/Components/backtotop/backtotop";
-
+import Loading from "@/app/loading";
+import {Suspense} from "react";
 
 
 const inter = Inter({subsets: ["latin"]});
@@ -20,7 +21,9 @@ export default function RootLayout({children}) {
         <body className={inter.className}>
         <MainHeader/>
         <BackToTop/>
-        {children}
+        <Suspense fallback={<Loading/>}>
+            {children}
+        </Suspense>
         <MainFooter/>
         </body>
         </html>

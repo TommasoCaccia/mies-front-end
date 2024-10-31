@@ -1,53 +1,82 @@
-.imgDiagnosi{
+.imgDiagnosi {
+    margin-top: 100px;
     width: 100%;
 }
 
-/* styles/globals.css */
-.container{
+
+.container {
     width: 100%;
     margin-top: 100px;
+    margin-bottom: 50px;
     font-family: "Montserrat", sans-serif;
 }
 
 
-
-.textContainer{
-    margin-top: 50px!important;
+.textContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
     font-family: "Montserrat", sans-serif;
-    background-color: #ffffff;
-    padding: 50px;
 }
 
-.titoloServizi{
+
+.textTitle {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px !important;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: "Montserrat", sans-serif;
+}
+
+
+.cardsContainer {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardsContainerRev {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+}
+
+.titoloServizi {
     text-align: center;
     margin-bottom: 20px;
     font-weight: 600;
-    color:#616161;
+    color: #616161;
     text-transform: uppercase;
 }
 
-.paragrafoServizi{
+
+.paragrafoServizi {
     font-weight: 400;
     color: #616161;
     font-size: 15px;
 }
 
 
-.strong{
-    color:#6d6d6d;
+.strong {
+    color: #6d6d6d;
     font-weight: 600;
 }
 
 
-.ciao{
+.ciao {
     width: 100%;
 }
-
-
-.cardsContainer{
-    margin-top:50px;
-}
-
 
 .imageTextSection {
     display: flex;
@@ -56,18 +85,18 @@
 }
 
 .textSideRight {
-    flex: 1;
+    order: 1;
     padding-left: 100px;
 }
 
 .textSideLeft {
-    flex: 1;
+    order: 1;
     padding-right: 100px;
 }
 
 .sectionImage {
-    flex: 1;
-    max-width: 30%;
+    order: 1;
+    max-width: 40%;
     height: auto;
 }
 
@@ -81,21 +110,19 @@
 
 .sectionText {
     font-size: 15px;
-    color:#616161;
+    color: #616161;
 }
 
-.imageTextSection:nth-child(odd) .textSideRight {
-    order: 2; /* Testo a sinistra */
-}
+@media (max-width: 900px) {
+    .cardsContainer {
+        flex-direction: column;
+    }
 
-.imageTextSection:nth-child(odd) .sectionImage {
-    order: 1; /* Immagine a destra */
-}
+    .cardsContainerRev {
+        flex-direction: column;
+    }
 
-.imageTextSection:nth-child(even) .textSideRight {
-    order: 1; /* Testo a destra */
-}
-
-.imageTextSection:nth-child(even) .sectionImage {
-    order: 2; /* Immagine a sinistra */
+    .sectionImage {
+        max-width: 100%;
+    }
 }

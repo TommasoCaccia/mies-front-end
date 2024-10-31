@@ -27,19 +27,15 @@ export default function MainHeader() {
     };
 
     const [isOpen, setIsOpen] = useState(false);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [adminDropdownOpen, setAdminDropdownOpen] = useState(false);
 
     const handleToggle = () => {
         setIsOpen(!isOpen);
-    };
 
-    const handleDropdownToggle = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
-
-    const handleAdminDropdownToggle = () => {
-        setAdminDropdownOpen(!adminDropdownOpen);
+        // Toggle active class on hamburger button
+        const hamburgerButton = document.querySelector(`.${classes.hamburger}`);
+        if (hamburgerButton) {
+            hamburgerButton.classList.toggle(classes.active);
+        }
     };
 
 
@@ -51,14 +47,14 @@ export default function MainHeader() {
                     <img src="/Logo.png" className={`${classes.logo} d-block`} alt="Logo"/>
                 </Link>
 
-                <button className={classes.hamburger} onClick={handleToggle}>
+                <button className={`${classes.hamburger}`} onClick={handleToggle}>
                     <span className={classes.bar}></span>
                     <span className={classes.bar}></span>
                     <span className={classes.bar}></span>
                 </button>
 
                 <nav className={`${classes.nav} ${isOpen ? classes.show : ''}`}>
-                    <ul className={`nav nav-pills ${classes.navItem} ${classes.menu}`}>
+                    <ul className={`nav nav-pills ${classes.navItem}`}>
                         <li className={`nav-item ${classes.navItem}`}>
                             <Link href="/servizi" className={classes.link1}>Servizi</Link>
                         </li>
@@ -69,9 +65,11 @@ export default function MainHeader() {
                             <>
                                 {/* Dropdown Tools */}
                                 <Tools/>
-
                                 {/* Dropdown Admin */}
-                                <Admin/>
+                                {categoriaUtente === "Admin" && (<>
+                                        <Admin/>
+                                    </>
+                                )}
                             </>
                         )}
                         {accessoEffetuato ? (

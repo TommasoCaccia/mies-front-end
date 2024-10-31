@@ -25,16 +25,16 @@ const Tools = () => {
                         <Dropdown className={classes.submenu} closeOnSelect={false}>
                             <DropdownTrigger className={classes.dropdownTrigger}>
                                 <Button className={classes.dropdownTrigger} isIconOnly>
-                                    Energy<br/>Portfolio
+                                    Energy Portfolio
                                     <ChevronDownIcon/>
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu className={classes.submenu}>
                                 <DropdownItem className={classes.dropdownItem}>
-                                    <Link href="/pod">Carica Bolletta</Link>
+                                    <Link href="/energy-portfolio" className={classes.link}>Energy Portfolio</Link>
                                 </DropdownItem>
                                 <DropdownItem className={classes.dropdownItem}>
-                                    <Link href="/energy-portfolio">Energy Portfolio</Link>
+                                    <Link href="/pod" className={classes.link}>Carica Bolletta</Link>
                                 </DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
@@ -42,11 +42,12 @@ const Tools = () => {
                 </DropdownItem>
 
                 <DropdownItem className={classes.dropdownItem}>
-                    <Link href="/iso500001">Iso 500001</Link>
+                    <Link href="/iso500001" className={classes.link}>Iso 500001</Link>
                 </DropdownItem>
 
                 <DropdownItem className={classes.dropdownItem}>
-                    <Link href="https://oneview.miesgroup.it/" target="_blank" rel="noopener noreferrer">
+                    <Link href="https://oneview.miesgroup.it/" target="_blank" rel="noopener noreferrer"
+                          className={classes.link}>
                         Oneview
                     </Link>
                 </DropdownItem>

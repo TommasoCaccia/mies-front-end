@@ -18,14 +18,6 @@
     align-items: center;
 }
 
-.navDrop {
-    position: relative;
-    min-height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 
 .logo {
     max-width: 100px;
@@ -59,23 +51,6 @@
     color: #9c9c9c;
 }
 
-
-.loginPulsante {
-    background-color: #2C4D79;
-    border-radius: 0;
-    color: white;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 2rem;
-    font-family: "Montserrat", sans-serif;
-    cursor: pointer;
-    margin-left: 25px;
-}
-
 .logoutPulsante {
     background-color: #2C4D79;
     border-radius: 0;
@@ -98,88 +73,15 @@
 }
 
 
-.navDrop:hover .dropMenu {
-    display: block;
-}
-
-.dropMenu {
-    display: none;
-    position: absolute;
-    background-color: #2C4D79 !important;
-    color: white !important;
-    min-width: 135px !important;
-    background-clip: padding-box;
-    border: 0 !important;
-    border-radius: 0 !important;
-    font-family: "Montserrat", sans-serif;
-    font-size: 12px !important;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin: 0 !important;
-    --bs-dropdown-padding-y: 0 !important;
-    align-items: center !important;
-    left: 50%; /* Centra il dropdown rispetto al genitore */
-    transform: translateX(-50%); /* Sposta il dropdown indietro di metà della sua larghezza */
-    top: 100px; /* Posiziona il dropdown giusto sotto il pulsante */
-}
-
-.energyPortfolio {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-
-.dropMenu a {
-    color: #ffffff;
-    padding: 12px 20px 12px 20px;
-    text-decoration: none;
-    display: block;
-    text-align: center;
-}
-
-.dropMenu a:hover {
-    background-color: #00b1d7;
-    border-radius: 0 !important;
-    border: none !important;
-    color: #f8f8f8;
-    border: 0 !important;
-    border-radius: 0 !important;
-    --bs-dropdown-padding-y: 0 !important;
-
-}
-
-
-.dropMenuu {
-    display: none; /* Nascondi il submenu */
-    position: absolute;
-    left: 100%; /* Posiziona il submenu a destra dell'elemento padre */
-    top: 0;
-    background-color: #2C4D79 !important;
-    min-width: 135px !important;
-    z-index: 1;
-    background-clip: padding-box;
-    border: 0 !important;
-    border-radius: 0 !important;
-    font-family: "Montserrat", sans-serif;
-    font-size: 12px !important;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin: 0 !important;
-    --bs-dropdown-padding-y: 0 !important;
-    align-items: center !important;
-}
-
-.dropdownsubMenu:hover .dropMenuu {
-    display: block;
-}
-
 /*Menu Hamburgher */
-
 
 .hamburger {
     display: none; /* Nascondi il pulsante di default */
     flex-direction: column;
     cursor: pointer;
+    border-color: transparent;
+    background-color: transparent;
+    transition: transform 0.3s ease; /* Smooth transition for transform */
 }
 
 .bar {
@@ -187,23 +89,41 @@
     width: 25px;
     background-color: #333; /* Colore delle barre */
     margin: 2px 0;
+    transition: all 0.3s ease; /* Smooth transition for all properties */
+}
+
+/* Active state styles */
+.hamburger.active .bar:nth-child(1) {
+    transform: translateY(5px) rotate(45deg); /* Move and rotate the first bar */
+}
+
+.hamburger.active .bar:nth-child(2) {
+    opacity: 0; /* Hide the middle bar */
+}
+
+.hamburger.active .bar:nth-child(3) {
+    transform: translateY(-5px) rotate(-45deg); /* Move and rotate the third bar */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex; /* Show hamburger on small screens */
+    }
 }
 
 .nav {
     display: flex;
     flex-direction: column;
-    position: absolute; /* Posizionamento assoluto per il menu */
-    top: 60px; /* Regola in base all'altezza dell'header */
     right: 0;
     background-color: white; /* Colore di sfondo del menu */
-    width: 100%;
-    max-height: 0; /* Nascondi il menu */
     overflow: hidden; /* Nascondi gli elementi in eccesso */
     transition: max-height 0.3s ease; /* Transizione per l'apertura */
 }
 
 .show {
-    max-height: 300px; /* Altezza massima quando aperto (regola in base al contenuto) */
+    max-height: 300px !important; /* Altezza massima quando aperto (regola in base al contenuto) */
+
 }
 
 @media (max-width: 768px) {
@@ -214,5 +134,8 @@
     .nav {
         display: flex; /* Mostra il menu come colonna */
         flex-direction: column;
+        top: 95px; /* Regola in base all'altezza dell'header */
+        width: 100%;
+        max-height: 0; /* Nascondi il menu */
     }
 }

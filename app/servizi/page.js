@@ -32,7 +32,7 @@ export default function Home() {
                         direttive di <strong className={classes.strong}>Industry 4.0</strong>.
                     </p>
                 </div>
-                <div className={classes.cardsContainer}>
+                <div className={classes.containerCard}>
                     <CardComponent/>
                 </div>
             </div>

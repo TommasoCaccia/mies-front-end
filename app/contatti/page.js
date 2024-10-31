@@ -1,4 +1,5 @@
 import classes from '@/app/contatti/page.module.css';
+import Dipendenti from '@/Components/dipendenti/dipendenti'
 
 const Contatti = () => (
     <div>
@@ -6,18 +7,18 @@ const Contatti = () => (
             <iframe
                 width="100%"
                 height="300px"
-                frameBorder="0"
                 allowFullScreen
                 allow="geolocation"
                 src="//umap.openstreetmap.fr/it/map/mappa-senza-nome_1098870?scaleControl=false&miniMap=false&scrollWheelZoom=false&zoomControl=true&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false"
                 title="Mappa Semplificata"
             ></iframe>
         </div>
-        <div className={`container ${classes.container}`}>
+        <div className={classes.container}>
             <div className={classes.mainContent}>
                 <h1 className={classes.titoloPrincipale}>LA SEDE MIES</h1>
                 <p>Ti diamo il benvenuto in MIES. <br></br>
                     Mettiti in contatto senza alcun impegno, ti risponderemo al più presto!</p>
+                <Dipendenti/>
             </div>
             <div className={classes.sidebarContainer}>
                 <div className={classes.sidebar}>

@@ -1,7 +1,6 @@
 "use client"
 import React, {useEffect, useState} from 'react';
-import {Table, Form, Button, InputGroup, FormControl, Alert} from 'react-bootstrap';
-import {FaFilter} from 'react-icons/fa';
+import {Table, Button, FormControl} from 'react-bootstrap';
 import classes from '@/app/costi/page.module.css';
 
 function DataEntry() {
@@ -69,30 +68,6 @@ function DataEntry() {
 
         fetchCosti();
     }, []);
-
-    const aggiungiCosto = async (event) => {
-        event.preventDefault(); // Prevenire il comportamento predefinito del form
-
-        const descrizione = event.target.nome ? event.target.nome.value : undefined;
-        const unitaMisura = event.target.unitaDiMisura ? event.target.unitaDiMisura.value : undefined;
-        const trimestre = event.target.trimestre ? event.target.trimestre.value : undefined;
-        const anno = event.target.anno ? event.target.anno.value : undefined;
-        const categoria = event.target.categoria ? event.target.categoria.value : undefined;
-        const costoS = event.target.valore ? event.target.valore.value : undefined;
-        const costo = costoS ? parseFloat(costoS) : undefined;
-        const intervalloPotenza = event.target.intervalloDiPotenza ? event.target.intervalloDiPotenza.value : undefined;
-        const classeAgevolazione = event.target.classeDiAgevolazione ? event.target.classeDiAgevolazione.value : undefined;
-
-        console.log(descrizione, unitaMisura, trimestre, anno, categoria, costo, intervalloPotenza, classeAgevolazione);
-
-        const response = await fetch('http://localhost:8080/costi/aggiungi', {
-            method: 'POST', credentials: 'include', headers: {
-                'Content-Type': 'application/json'
-            }, body: JSON.stringify({
-                descrizione, unitaMisura, trimestre, anno, costo, categoria, intervalloPotenza, classeAgevolazione
-            }),
-        });
-    }
 
     const handleFilterCategoria = (e) => {
         setFilterCategoria(e.target.value);
@@ -209,7 +184,8 @@ function DataEntry() {
                     <label htmlFor="file-upload" className={classes.fileLabel}>
                         Scegli file
                     </label>
-                    <input onChange={handleFileChange} type="file" accept=".xlsx,.xls" id="file-upload" className={classes.file}/>
+                    <input onChange={handleFileChange} type="file" accept=".xlsx,.xls" id="file-upload"
+                           className={classes.file}/>
                     <span className="fileName">Nessun file selezionato</span>
                 </div>
                 <button type="submit" className={classes.uploadButton}>UPLOAD</button>

@@ -1,16 +1,15 @@
 /* Styles for the Admin dropdown button */
 .adminButton {
-    background-color: #0070f3; /* Primary button color */
-    color: white; /* Text color */
+    background-color: transparent; /* Primary button color */
+    color: black; /* Text color */
     border: none; /* Remove default border */
-    padding: 10px 20px; /* Padding for the button */
     font-size: 16px; /* Font size */
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s ease; /* Smooth transition */
 }
 
 .adminButton:hover {
-    background-color: #005bb5; /* Darker shade on hover */
+    color: lightgrey; /* Darker shade on hover */
 }
 
 /* Styles for the dropdown menu */
@@ -27,6 +26,7 @@
     color: #333; /* Text color for items */
     text-decoration: none; /* Remove underline from links */
     transition: background-color 0.2s ease; /* Smooth transition for hover effect */
+    list-style: none;
 }
 
 .dropdownItem:hover {
@@ -37,4 +37,11 @@
 .dropdownItem a {
     display: block; /* Make links fill the dropdown item area */
     width: 100%; /* Full width for easier clicking */
+}
+
+.link{
+    color: black;
+    text-decoration: none;
+    display: block;
+    text-align: center;
 }

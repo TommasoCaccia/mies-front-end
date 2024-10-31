@@ -4,6 +4,10 @@
     margin-top: 100px;
 }
 
+.containerCard{
+    margin: 30px;
+}
+
 .textContainer {
     margin-top: 50px !important;
     font-family: "Montserrat", sans-serif;

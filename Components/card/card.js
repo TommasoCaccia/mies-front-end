@@ -4,9 +4,8 @@ import classes from "@/Components/card/card.module.css";
 
 const Card = ({number, title, content, imgSrc, imgStyle, link, extraClass}) => {
     return (
-        <figure
-            className={`${classes.card} ${classes.shapeBoxHalf} ${extraClass || ""}`}
-        >
+
+        <figure className={`${classes.card} ${classes.shapeBoxHalf} ${extraClass || ""}`}>
             <img
                 src={imgSrc}
                 className={`${classes.logo} d-block`}
