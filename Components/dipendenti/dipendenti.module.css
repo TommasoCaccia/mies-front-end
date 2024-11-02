@@ -71,16 +71,6 @@
     color: rgba(0, 0, 0, 0.5);
 }
 
-/*.button {
-    text-decoration: none;
-    background-color: #1468BF;
-    color: white;
-    padding: 5px 20px;
-    border-radius: 5px;
-    border: 1px solid white;
-    transition: all 0.5s ease;
-}*/
-
 .card:hover::before {
     width: 350px;
     height: 300px;
@@ -97,11 +87,6 @@
 .card:hover .image {
     transform: scale(2) translate(-60%, -40%);
 }
-
-/*.button:hover {
-    background-color: #FF6844;
-    transform: scale(1.1);
-}*/
 
 @media (max-width: 1000px) {
     .container {

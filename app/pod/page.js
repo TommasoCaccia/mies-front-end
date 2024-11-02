@@ -1,6 +1,7 @@
 "use client"
 import {useEffect, useState} from 'react';
 import classes from "@/app/pod/page.module.css";
+import {Table, TableHeader, TableBody, TableColumn, TableRow, TableCell} from "@nextui-org/react";
 
 export default function Pod() {
     const [file, setFile] = useState(null);
@@ -143,9 +144,9 @@ export default function Pod() {
 
 
     return (
-        <div className={`${classes.container} container mt-5`}>
-            <h1 className={`${classes.titoloBolletta} mb-4 text-center`}>Carica la Bolletta</h1>
-            <form onSubmit={handleSubmit} className={`shadow p-3 mb-5 ${classes.formBolletta}`}>
+        <div className={classes.container}>
+            <h1 className={classes.titoloBolletta}>Carica la Bolletta</h1>
+            <form onSubmit={handleSubmit} className={classes.formBolletta}>
                 <input type="file" accept="application/pdf" onChange={handleFileChange} className="form-control"/>
                 <button type="submit" disabled={uploading} className={`btn btn-primary mt-3 ${classes.bottoneCarica}`}>
                     {uploading ? 'Caricamento in corso...' : 'Carica'}
@@ -154,60 +155,63 @@ export default function Pod() {
             {message &&
                 <p className={`alert ${uploading ? 'alert-danger' : 'alert-success'}`}>{message}</p>}
             <h2 className={`${classes.titoloPod} mb-4 text-center`}>Elenco dei Pod</h2>
-            <table className={`${classes.tabellaPod} table table-hover`}>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Potenza Disponibile</th>
-                    <th>Potenza Impegnata</th>
-                    <th>Tensione di Alimentazione</th>
-                    <th>Sede</th>
-                    <th>Nazione</th>
-                    <th>Azioni</th>
-                </tr>
-                </thead>
-                <tbody>
-                {pods.map(pod => (
-                    <tr key={pod.id}>
-                        <td>{pod.id}</td>
-                        <td>{pod.potenza_Disponibile}</td>
-                        <td>{pod.potenza_Impegnata}</td>
-                        <td>{pod.tensione_Alimentazione}</td>
-                        <td>
-                            {isEditable[pod.id] && isEditable[pod.id].sede ? (
-                                <input
-                                    type="text"
-                                    value={pod.sede}
-                                    onChange={e => handleInputChange(pod.id, 'sede', e.target.value)}
-                                />
-                            ) : (
-                                pod.sede
-                            )}
-                        </td>
-                        <td>
-                            {isEditable[pod.id] && isEditable[pod.id].nazione ? (
-                                <input
-                                    type="text"
-                                    value={pod.nazione}
-                                    onChange={e => handleInputChange(pod.id, 'nazione', e.target.value)}
-                                />
-                            ) : (
-                                pod.nazione
-                            )}
-                        </td>
-                        <td>
-                            {(!pod.sede || !pod.nazione) && (
-                                <button onClick={() => handleUpdateClick(pod.id)}>Inserisci</button>
-                            )}
-                        </td>
-                        <td>
-                            <button onClick={() => handleViewBillsClick(pod.id)}>Vedi bollette</button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
 
+            <div className={classes.tableContainer}>
+                <div className={classes.scrollableTable}>
+                    <Table className={classes.tabellaBolletta}>
+                        <TableHeader>
+                            <TableColumn>ID</TableColumn>
+                            <TableColumn>Potenza Disponibile</TableColumn>
+                            <TableColumn>Potenza Impegnata</TableColumn>
+                            <TableColumn>Tensione di Alimentazione</TableColumn>
+                            <TableColumn>Sede</TableColumn>
+                            <TableColumn>Nazione</TableColumn>
+                            <TableColumn>Azioni</TableColumn>
+                            <TableColumn>Bollette</TableColumn>
+                        </TableHeader>
+                        <TableBody emptyContent={"No rows to display."}>
+                            {pods.map(pod => (
+                                <TableRow key={pod.id}>
+                                    <TableCell>{pod.id}</TableCell>
+                                    <TableCell>{pod.potenza_Disponibile}</TableCell>
+                                    <TableCell>{pod.potenza_Impegnata}</TableCell>
+                                    <TableCell>{pod.tensione_Alimentazione}</TableCell>
+                                    <TableCell>
+                                        {isEditable[pod.id] && isEditable[pod.id].sede ? (
+                                            <input
+                                                type="text"
+                                                value={pod.sede}
+                                                onChange={e => handleInputChange(pod.id, 'sede', e.target.value)}
+                                            />
+                                        ) : (
+                                            pod.sede
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        {isEditable[pod.id] && isEditable[pod.id].nazione ? (
+                                            <input
+                                                type="text"
+                                                value={pod.nazione}
+                                                onChange={e => handleInputChange(pod.id, 'nazione', e.target.value)}
+                                            />
+                                        ) : (
+                                            pod.nazione
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        {(!pod.sede || !pod.nazione) && (
+                                            <button onClick={() => handleUpdateClick(pod.id)}>Inserisci</button>
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        <button onClick={() => handleViewBillsClick(pod.id)}>Vedi bollette</button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </div>
         </div>
     );
 }

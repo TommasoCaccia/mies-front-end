@@ -1,5 +1,6 @@
 .container {
     display: flex;
+    flex-direction: row;
     margin-top: 95.94px;
     font-family: Montserrat, sans-serif;
     user-select: none;
@@ -7,22 +8,24 @@
 
 .sidebar {
     margin-top: 85px;
-    background-color: #f0f0f0;
+    background-color: white;
     overflow-y: auto;
     position: fixed;
     width: 200px;
     height: calc(100vh - 350px);
     padding-left: 15px;
-    z-index: 0;
     border-radius: 5px;
     font-weight: 600;
 }
 
 
 .mainContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     flex-grow: 1;
-    margin-left: 250px;
-    padding: 20px 100px 20px 100px;
+    margin-left: 213px;
 }
 
 .navLink {
@@ -48,15 +51,17 @@
 }
 
 
-
-
 .section {
     margin-bottom: 20px;
 }
 
+.section h1 {
+    margin-top: 25px;
+}
+
 /* Aggiungi questo al tuo file CSS esistente */
 .section p {
-    margin-bottom: 50px; /* Aggiungi margine inferiore a tutti i paragrafi all'interno delle sezioni */
+    margin-bottom: 25px; /* Aggiungi margine inferiore a tutti i paragrafi all'interno delle sezioni */
 }
 
 
@@ -66,12 +71,17 @@
 }
 
 
-.powerbi{
- margin-bottom: 50px;
+.powerbi {
+    margin-bottom: 50px;
 }
 
+.PBI {
+    width: 100%;
+    height: 500px;
+    border: none;
+}
 
-.bottonePowerbi{
+.bottonePowerbi {
     background-color: #2C4D79;
     color: white;
     margin-top: 20px;
@@ -84,13 +94,74 @@
 }
 
 
+/* Styles for the hamburger button */
+.hamburger {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 20px;
+    margin-left: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.divMenu {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-right: 20px;
+    height: 100%;
+    background: white;
+}
+
+/* Show hamburger button only on screens smaller than 1050px */
+@media (max-width: 1050px) {
+    .mainContent {
+        margin-left: 0;
+    }
 
 
+    .hamburger {
+        display: flex; /* Show hamburger button */
+        position: fixed;
+        margin-top: 15px;
 
+    }
 
+    .bar {
+        height: 3px;
+        width: 100%;
+        background-color: #333; /* Color of the hamburger lines */
+        transition: all 0.3s ease; /* Smooth transition */
+    }
 
+    .sidebar {
+        display: none; /* Hide sidebar by default */
+    }
 
+    .sidebar.show {
+        display: block; /* Show sidebar when toggled */
+        position: fixed; /* Position as needed */
+        top: 60px; /* Adjust based on your layout */
+        left: 0;
+        right: 0;
+        background-color: white; /* Sidebar background */
+        z-index: 1000; /* Ensure it appears above other content */
+    }
+}
 
+/* Styles for larger screens */
+@media (min-width: 1051px) {
+    .hamburger {
+        display: none; /* Hide hamburger button */
+    }
+}
 
-
+@media (max-height: 450px) {
+    .sidebar {
+        height: calc(100vh - 300px); /* Adjust height based on screen height */
+    }
+}
 

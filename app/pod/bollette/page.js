@@ -2,6 +2,8 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
 import classes from "@/app/pod/bollette/page.module.css";
+import {Table, TableHeader, TableBody, TableColumn, TableRow, TableCell} from "@nextui-org/react";
+
 
 export default function Bollette() {
     const [data, setData] = useState([]);
@@ -33,7 +35,6 @@ export default function Bollette() {
             console.error('Error downloading file', error);
         }
     };
-
 
     const getFiles = async () => {
         const id = localStorage.getItem('selectedPodId');
@@ -67,25 +68,28 @@ export default function Bollette() {
     }, []);
 
     return (
-        <div className={`container ${classes.container}`}>
-            <table>
-                <thead>
-                <tr>
-                    <th>Nome file</th>
-                    <th>Download</th>
-                </tr>
-                </thead>
-                <tbody>
-                {data.map((file, index) => (
-                    <tr key={index}>
-                        <td>{file.file_Name}</td>
-                        <td>
-                            <button onClick={() => downloadFile(file.id_File, file.file_Name)}>Download</button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+        <div className={classes.container}>
+            <div className={classes.tableContainer}>
+                <div className={classes.scrollableTable}>
+                    <Table className={classes.tabellaBolletta}>
+                        <TableHeader>
+                            <TableColumn>Nome file</TableColumn>
+                            <TableColumn>Download</TableColumn>
+                        </TableHeader>
+                        <TableBody>
+                            {data.map((file, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>{file.file_Name}</TableCell>
+                                    <TableCell>
+                                        <button onClick={() => downloadFile(file.id_File, file.file_Name)}>Download
+                                        </button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </div>
         </div>
     );
 }

@@ -21,7 +21,7 @@ const Contatti = () => (
                 <Dipendenti/>
             </div>
             <div className={classes.sidebarContainer}>
-                <div className={classes.sidebar}>
+                <div>
                     <h2 className={classes.sedeLegale}>Sede Legale</h2>
                     <p className={classes.paragrafiSedeLegale}>
                         <strong className={classes.strong}>Indirizzo</strong>
@@ -37,7 +37,7 @@ const Contatti = () => (
                         <br></br>Lun-Ven: 9:00-18:00
                     </p>
                 </div>
-                <div className={classes.sidebar}>
+                <div>
                     <h2 className={classes.sedeOperativa}>Sede Operativa</h2>
                     <p className={classes.paragrafiSedeLegale}>
                         <strong className={classes.strong}>Indirizzo</strong>

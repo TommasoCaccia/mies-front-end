@@ -1,7 +1,14 @@
 "use client";
 import classes from "@/app/creazione-utente/page.module.css";
+import React from "react";
+import {EyeFilledIcon} from "./EyeFilledIcon";
+import {EyeSlashFilledIcon} from "./EyeSlashFilledIcon"
 
 export default function Register() {
+
+    const [isVisible, setIsVisible] = React.useState(false);
+
+    const toggleVisibility = () => setIsVisible(!isVisible);
 
     const creaUtente = async () => {
         event.preventDefault();
@@ -26,21 +33,39 @@ export default function Register() {
     }
 
     return (
-        <div className={`${classes.loginContainer} container`}>
-            <h2 className={`active ${classes.titoloCreazioneUtente}`}>Creazione Utente</h2>
-            <form onSubmit={creaUtente}>
-                <div className={`form-group ${classes.formUsername}`}>
-                    <input type="text" className={`form-control ${classes.username}`} id="username" name="username"
-                           required/>
-                    <span className={classes.Username}>Username</span>
-                </div>
-                <div className={`form-group ${classes.formPassword}`}>
-                    <input type="password" className={`form-control ${classes.password}`} id="password" name="password"
-                           required/>
-                    <span className={classes.Password}>Password</span>
-                </div>
-                <button type="submit" className={`${classes.creaUtente}`}>Crea Utente</button>
-            </form>
+        <div className={classes.container}>
+            <div className={classes.loginContainer}>
+                <h2 className={`active ${classes.titoloCreazioneUtente}`}>Creazione Utente</h2>
+                <form onSubmit={creaUtente}>
+                    <div className={classes.inputContainer}>
+                        <input type="email" id="email" required placeholder=" "/>
+                        <label htmlFor="email">Email</label>
+                    </div>
+                    <div className={classes.inputContainer}>
+                        <input
+                            type={isVisible ? "text" : "password"}
+                            placeholder=" "
+                            id="password"
+                            className={classes.passwordInput}
+                            required
+                        />
+                        <label htmlFor="password" className={classes.inputLabel}>Password</label>
+                        <button
+                            className={classes.visibilitytoggle}
+                            type="button"
+                            onClick={toggleVisibility}
+                            aria-label="toggle password visibility"
+                        >
+                            {isVisible ? (
+                                <EyeSlashFilledIcon/>
+                            ) : (
+                                <EyeFilledIcon/>
+                            )}
+                        </button>
+                    </div>
+                    <button type="submit" className={classes.creaUtente}>Crea Utente</button>
+                </form>
+            </div>
         </div>
     );
 }

@@ -1,3 +1,37 @@
-.container{
-    margin-top: 100px;
+.container {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 125px;
+    margin-bottom: 125px;
+    font-family: "Montserrat", sans-serif;
+}
+
+.tableContainer {
+    width: 100%; /* Ensure container takes full width */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Montserrat", sans-serif;
+}
+
+
+
+.tabellaBolletta th, .tabellaBolletta td {
+    padding: 10px; /* Add padding for better readability */
+    border: 1px solid #ddd; /* Optional: add borders */
+}
+
+.tabellaBolletta th {
+    background-color: #2C4D79 !important;
+    color: white !important;
+    border-color: #000000 !important;
+}
+
+.tabellaBolletta td {
+    border-color: #000000 !important;
+    border-width: 0.8px;
 }

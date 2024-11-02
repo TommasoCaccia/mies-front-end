@@ -11,7 +11,6 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    min-height: 100vh; /* Assicurati che la pagina occupi tutta l'altezza */
     box-sizing: border-box; /* Considera padding e bordo nel calcolo delle dimensioni */
     color: #616161;
     font-family: "Montserrat", sans-serif;

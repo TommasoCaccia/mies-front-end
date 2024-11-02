@@ -1,14 +1,113 @@
+.container {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .loginContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     color: #616161;
     background-color: white;
     font-family: "Montserrat", sans-serif;
     border-radius: 5px;
     max-width: 400px; /* Massima larghezza del form */
     margin-top: 150px;
-    margin-bottom: 54.06px;
+    margin-bottom: 54px;
     box-shadow: var(--bs-box-shadow) !important;
     padding: 50px 50px 50px 50px;
 
+}
+
+
+/*animazione email*/
+.inputContainer {
+    position: relative; /* Position relative for absolute positioning of label */
+    margin: 20px 0; /* Margin for spacing */
+}
+
+.inputContainer input {
+    width: 100%; /* Full width */
+    padding: 15px; /* Padding inside the input */
+    border: 2px solid #2C4D79; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    outline: none; /* Remove outline */
+    transition: border-color 0.3s ease; /* Transition for border color */
+}
+
+.inputContainer label {
+    position: absolute; /* Position absolute to move it inside the input */
+    top: 50%; /* Center vertically */
+    left: 15px; /* Padding from left */
+    transform: translateY(-50%); /* Center vertically */
+    font-size: 16px; /* Initial font size */
+    color: #2C4D79; /* Initial color */
+    transition: all 0.3s ease; /* Transition for all properties */
+}
+
+/* Focus and filled state styles */
+.inputContainer input:focus {
+    border-color: #A3C1E0; /* Change border color on focus */
+}
+
+.inputContainer input:focus + label,
+.inputContainer input:not(:placeholder-shown) + label {
+    top: -10px; /* Move label up */
+    left: 15px; /* Keep it aligned from left */
+    font-size: 12px; /* Smaller font size */
+    color: #A3C1E0; /* Change label color on focus or filled state */
+}
+
+.input-container {
+    position: relative;
+    max-width: 300px; /* Imposta la larghezza massima desiderata */
+}
+
+/*animazione password*/
+
+.passwordInput {
+    width: 100%;
+    padding: 10px 40px 10px 12px; /* Spazio per l'icona */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.2s ease;
+}
+
+.passwordInput:focus {
+    border-color: #007bff; /* Colore del bordo al focus */
+}
+
+.inputLabel {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa; /* Colore del placeholder */
+    transition: all 0.2s ease;
+}
+
+.passwordInput:focus + .inputLabel,
+.passwordInput:not(:placeholder-shown) + .inputLabel {
+    top: -8px; /* Sposta in alto quando attivo */
+    left: 12px; /* Mantieni a sinistra */
+    color: #007bff; /* Colore dell'etichetta attiva */
+}
+
+.visibilitytoggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 
@@ -17,10 +116,6 @@
     font-weight: 600;
     text-transform: uppercase;
     font-size: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
 }
 
 .formUsername {
@@ -54,6 +149,11 @@
     margin-top: 50px;
 }
 
+.creaUtente:hover {
+    background-color: #1d3b5e;
+    color: white;
+}
+
 .login:hover {
     background-color: #1d3b5e;
     color: white;
@@ -70,7 +170,7 @@
     color: white;
 }
 
-.username:focus , .password:focus{
+.username:focus, .password:focus {
     border-color: #2C4D79;
     outline: 0;
     box-shadow: 0 0 0 .25rem rgba(44, 77, 121, 0.51);

@@ -1,9 +1,9 @@
 "use client"
 import React, {useEffect, useState, useRef} from 'react';
 import classes from '@/app/energy-portfolio/page.module.css';
-import Link from "next/link";
 
 export default function Home() {
+    const [isOpen, setIsOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('section1');
     const [manualNavigation, setManualNavigation] = useState(false);
     const sectionRefs = useRef({
@@ -77,156 +77,215 @@ export default function Home() {
         }
     };
 
-    return (<div className={`${classes.container} container`}>
-        <nav className={classes.sidebar}>
-            <ul className="nav flex-column">
-                {Object.keys(sectionRefs.current).map((key) => (<li key={key} className="nav-item">
-                    <a
-                        className={`${classes.navLink} ${activeSection === key ? classes.active : ''}`}
-                        href={`#${key}`}
-                        onClick={(e) => handleNavigation(e, key)}
-                    >
-                        {key.replace('section', 'Section ')}
-                    </a>
-                </li>))}
-            </ul>
-        </nav>
-        <main className={classes.mainContent}>
-            <div id="section1" ref={sectionRefs.current.section1} className={classes.section}>
-                <h1 className={classes.sectionTitle}>Sales Funnel Power BI Dashboard</h1>
-                <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum
-                    è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo
-                    prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non
-                    solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                    sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                    caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
-                    software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+    return (
+        <div className={classes.container}>
+            {/* Hamburger Menu Button */}
+            <div>
+                <button className={classes.hamburger} onClick={() => setIsOpen(!isOpen)}>
+                    <span className={classes.bar}></span>
+                    <span className={classes.bar}></span>
+                    <span className={classes.bar}></span>
+                </button>
 
-                <iframe width="800" height="485"
-                        src="https://app.powerbi.com/reportEmbed?reportId=92de7c0c-f0f4-4307-a2e9-6f0512b178b9&ctid=552bed02-4512-450c-858d-84cfe2b4186d&filterPaneEnabled=false&embedToken=YOUR_EMBED_TOKEN_HERE">
-                </iframe>
+                {/* Sidebar Navigation */}
+                <nav className={`${classes.sidebar} ${isOpen ? classes.show : ''}`}>
+                    <ul className="nav flex-column">
+                        {Object.keys(sectionRefs.current).map((key) => (
+                            <li key={key} className="nav-item">
+                                <a
+                                    className={`${classes.navLink} ${activeSection === key ? classes.active : ''}`}
+                                    href={`#${key}`}
+                                    onClick={(e) => handleNavigation(e, key)}
+                                >
+                                    {key.replace('section', 'Section ')}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
+            </div>
+            <main className={classes.mainContent}>
+                <div id="section1" ref={sectionRefs.current.section1} className={classes.section}>
+                    <h1 className={classes.sectionTitle}>Sales Funnel Power BI Dashboard</h1>
+                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
+                        Ipsum
+                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
+                        tipografo
+                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
+                        non
+                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
+                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
+                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                        da
+                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+
+                    <iframe className={classes.PBI}
+                            src="https://app.powerbi.com/reportEmbed?reportId=92de7c0c-f0f4-4307-a2e9-6f0512b178b9&ctid=552bed02-4512-450c-858d-84cfe2b4186d&filterPaneEnabled=false&embedToken=YOUR_EMBED_TOKEN_HERE">
+                    </iframe>
 
 
-                <div className="cta-wrapper d-flex flex">
-                    <a href="/energyportfolio/powerbi" target="_blank" className={classes.bottonePowerbi}>Visualizza
-                        PowerBI</a>
+                    <div className="cta-wrapper d-flex flex">
+                        <a href="/energyportfolio/powerbi" target="_blank" className={classes.bottonePowerbi}>Visualizza
+                            PowerBI</a>
+                    </div>
+
+
                 </div>
-
-
-            </div>
-            <div id="section2" ref={sectionRefs.current.section2} className={classes.section}>
-                <h1 className={classes.sectionTitle}>Sales Dashboard in Power BI</h1>
-                <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum
-                    è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo
-                    prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non
-                    solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                    sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                    caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
-                    software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-            </div>
-            <div id="section3" ref={sectionRefs.current.section3} className={classes.section}>
-                <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
-                <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum
-                    è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo
-                    prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non
-                    solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                    sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                    caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
-                    software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-            </div>
-            <div id="section4" ref={sectionRefs.current.section4} className={classes.section}>
-                <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
-                <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum
-                    è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo
-                    prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non
-                    solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                    sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                    caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
-                    software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-            </div>
-            <div id="section5" ref={sectionRefs.current.section5} className={classes.section}>
-                <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
-                <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum
-                    è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo
-                    prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non
-                    solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                    sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                    caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
-                    software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-            </div>
-            <div id="section6" ref={sectionRefs.current.section6} className={classes.section}>
-                <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
-                <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum
-                    è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo
-                    prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non
-                    solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                    sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                    caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
-                    software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-            </div>
-            <div id="section7" ref={sectionRefs.current.section7} className={classes.section}>
-                <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
-                <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum
-                    è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo
-                    prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non
-                    solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                    sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                    caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
-                    software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-            </div>
-            <div id="section8" ref={sectionRefs.current.section8} className={classes.section}>
-                <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
-                <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum
-                    è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo
-                    prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non
-                    solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                    sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                    caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
-                    software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-            </div>
-            <div id="section9" ref={sectionRefs.current.section9} className={classes.section}>
-                <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
-                <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum
-                    è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo
-                    prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non
-                    solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                    sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                    caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
-                    software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-            </div>
-            <div id="section10" ref={sectionRefs.current.section10} className={classes.section}>
-                <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
-                <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum
-                    è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo
-                    prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non
-                    solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                    sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                    caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
-                    software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-            </div>
-            <div id="section11" ref={sectionRefs.current.section11} className={classes.section}>
-                <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
-                <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum
-                    è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo
-                    prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non
-                    solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                    sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                    caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
-                    software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-            </div>
-            <div id="section12" ref={sectionRefs.current.section12} className={classes.section}>
-                <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
-                <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum
-                    è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo
-                    prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non
-                    solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                    sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                    caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da
-                    software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-            </div>
-        </main>
-
-
-    </div>);
-
+                <div id="section2" ref={sectionRefs.current.section2} className={classes.section}>
+                    <h1 className={classes.sectionTitle}>Sales Dashboard in Power BI</h1>
+                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
+                        Ipsum
+                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
+                        tipografo
+                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
+                        non
+                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
+                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
+                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                        da
+                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                </div>
+                <div id="section3" ref={sectionRefs.current.section3} className={classes.section}>
+                    <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
+                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
+                        Ipsum
+                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
+                        tipografo
+                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
+                        non
+                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
+                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
+                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                        da
+                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                </div>
+                <div id="section4" ref={sectionRefs.current.section4} className={classes.section}>
+                    <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
+                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
+                        Ipsum
+                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
+                        tipografo
+                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
+                        non
+                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
+                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
+                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                        da
+                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                </div>
+                <div id="section5" ref={sectionRefs.current.section5} className={classes.section}>
+                    <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
+                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
+                        Ipsum
+                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
+                        tipografo
+                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
+                        non
+                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
+                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
+                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                        da
+                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                </div>
+                <div id="section6" ref={sectionRefs.current.section6} className={classes.section}>
+                    <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
+                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
+                        Ipsum
+                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
+                        tipografo
+                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
+                        non
+                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
+                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
+                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                        da
+                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                </div>
+                <div id="section7" ref={sectionRefs.current.section7} className={classes.section}>
+                    <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
+                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
+                        Ipsum
+                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
+                        tipografo
+                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
+                        non
+                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
+                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
+                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                        da
+                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                </div>
+                <div id="section8" ref={sectionRefs.current.section8} className={classes.section}>
+                    <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
+                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
+                        Ipsum
+                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
+                        tipografo
+                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
+                        non
+                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
+                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
+                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                        da
+                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                </div>
+                <div id="section9" ref={sectionRefs.current.section9} className={classes.section}>
+                    <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
+                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
+                        Ipsum
+                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
+                        tipografo
+                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
+                        non
+                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
+                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
+                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                        da
+                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                </div>
+                <div id="section10" ref={sectionRefs.current.section10} className={classes.section}>
+                    <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
+                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
+                        Ipsum
+                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
+                        tipografo
+                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
+                        non
+                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
+                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
+                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                        da
+                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                </div>
+                <div id="section11" ref={sectionRefs.current.section11} className={classes.section}>
+                    <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
+                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
+                        Ipsum
+                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
+                        tipografo
+                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
+                        non
+                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
+                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
+                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                        da
+                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                </div>
+                <div id="section12" ref={sectionRefs.current.section12} className={classes.section}>
+                    <h1 className={classes.sectionTitle}>Daily Sales Flash Power BI Dashboard</h1>
+                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
+                        Ipsum
+                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
+                        tipografo
+                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
+                        non
+                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
+                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
+                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
+                        da
+                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                </div>
+            </main>
+        </div>
+    );
 }
