@@ -17,9 +17,11 @@ const LoginForm = () => {
         });
 
         if (response.ok) {
-            localStorage.setItem("accessoEffettuato", true);
+            if (typeof window !== "undefined") {
+                localStorage.setItem("accessoEffettuato", true);
+            }
             const data = await response;
-            handlePrimoAccesso();
+            await handlePrimoAccesso();
         } else {
             const text = await response.text();
         }
@@ -37,10 +39,12 @@ const LoginForm = () => {
         if (response.ok) {
             const data = await response.json();
             console.log(data);
-            localStorage.setItem("tipologia", data.tipologia);
+            if (typeof window !== "undefined") {
+                localStorage.setItem("tipologia", data.tipologia);
+            }
             if (data.loginEffettuato === 0) {
                 window.location.href = "/form-accesso";
-            }else{
+            } else {
                 window.location.href = "/";
             }
         } else {

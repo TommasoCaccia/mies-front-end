@@ -138,7 +138,9 @@ export default function Pod() {
     };
 
     const handleViewBillsClick = (podId) => {
-        localStorage.setItem('selectedPodId', podId);
+        if (typeof window !== "undefined") {
+            localStorage.setItem('selectedPodId', podId);
+        }
         window.location.href = '/pod/bollette';
     };
 

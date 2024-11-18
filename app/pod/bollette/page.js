@@ -36,8 +36,16 @@ export default function Bollette() {
         }
     };
 
+    const [id, setId] = useState(null);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedId = localStorage.getItem('selectedPodId');
+            setId(storedId);
+        }
+    }, []);
+
     const getFiles = async () => {
-        const id = localStorage.getItem('selectedPodId');
         try {
             const response = await fetch(`http://localhost:8080/pod/${id}/bollette`, {
                 method: 'GET',

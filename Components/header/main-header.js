@@ -1,13 +1,21 @@
 "use client";
 import Link from 'next/link';
 import classes from '@/Components/header/main-header.module.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Tools from "@/Components/header/tools/Tools";
 import Admin from "@/Components/header/admin/admin";
 
 export default function MainHeader() {
-    const accessoEffetuato = localStorage.getItem("accessoEffettuato");
-    const categoriaUtente = localStorage.getItem("tipologia");
+
+    const [accessoEffettuato, setAccessoEffettuato] = useState(null);
+    const [categoriaUtente, setCategoriaUtente] = useState(null);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setAccessoEffettuato(localStorage.getItem("accessoEffettuato"));
+            setCategoriaUtente(localStorage.getItem("tipologia"));
+        }
+    }, []); // Esegui solo una volta al montaggio
 
     const handleLogout = async () => {
         const response = await fetch('http://localhost:8080/Autentication/logout', {
@@ -61,7 +69,7 @@ export default function MainHeader() {
                         <li className={`nav-item ${classes.navItem}`}>
                             <Link href="/contatti" className={classes.link2}>Contatti</Link>
                         </li>
-                        {accessoEffetuato && (
+                        {accessoEffettuato && (
                             <>
                                 {/* Dropdown Tools */}
                                 <Tools/>
@@ -72,7 +80,7 @@ export default function MainHeader() {
                                 )}
                             </>
                         )}
-                        {accessoEffetuato ? (
+                        {accessoEffettuato ? (
                             <li className={`nav-item ${classes.navItem}`}>
                                 <button onClick={handleLogout} className={classes.logoutPulsante}>Logout</button>
                             </li>
