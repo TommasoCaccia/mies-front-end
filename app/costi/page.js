@@ -145,7 +145,7 @@ function DataEntry() {
                     </>
                 )}
             </div>
-            <div className={classes.tableContainer}>
+            <div>
                 <Table className={classes.tabella}>
                     <TableHeader>
                         <TableColumn>Descrizione</TableColumn>

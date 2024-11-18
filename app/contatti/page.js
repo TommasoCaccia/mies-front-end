@@ -1,5 +1,4 @@
 import classes from '@/app/contatti/page.module.css';
-import Dipendenti from '@/Components/dipendenti/dipendenti'
 
 const Contatti = () => (
     <div>
@@ -18,7 +17,6 @@ const Contatti = () => (
                 <h1 className={classes.titoloPrincipale}>LA SEDE MIES</h1>
                 <p>Ti diamo il benvenuto in MIES. <br></br>
                     Mettiti in contatto senza alcun impegno, ti risponderemo al più presto!</p>
-                <Dipendenti/>
             </div>
             <div className={classes.sidebarContainer}>
                 <div>
