@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
-import classes from './backToTop.module.css';
+import classes from './backtotop.module.css';
 
 const BackToTop = () => {
     const [isVisible, setIsVisible] = useState(false);
