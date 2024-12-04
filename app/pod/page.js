@@ -137,8 +137,7 @@ export default function Pod() {
         }));
     };
 
-    const handleViewBillsClick = (podId) => {
-        localStorage.setItem('selectedPodId', podId);
+    const handleViewBillsClick = () => {
         window.location.href = '/pod/bollette';
     };
 
@@ -204,7 +203,7 @@ export default function Pod() {
                                         )}
                                     </TableCell>
                                     <TableCell>
-                                        <button onClick={() => handleViewBillsClick(pod.id)}>Vedi bollette</button>
+                                        <button onClick={() => handleViewBillsClick()}>Vedi bollette</button>
                                     </TableCell>
                                 </TableRow>
                             ))}

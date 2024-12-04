@@ -24,7 +24,6 @@ export default function Register() {
         });
 
         if (response.ok) {
-            localStorage.setItem("accessoEffettuato", true);
             const data = await response;
         } else {
             const text = await response.text();

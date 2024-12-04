@@ -36,10 +36,10 @@ export default function Bollette() {
         }
     };
 
+
     const getFiles = async () => {
-        const id = localStorage.getItem('selectedPodId');
         try {
-            const response = await fetch(`http://localhost:8080/pod/${id}/bollette`, {
+            const response = await fetch(`http://localhost:8080/pod/bollette`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -48,15 +48,8 @@ export default function Bollette() {
             });
 
             if (response.ok) {
-                const text = await response.text();
-                if (text) {
-                    const data = JSON.parse(text);
-                    setData(data);
-                } else {
-                    console.error('Errore durante il recupero delle bollette: nessun dato ricevuto.');
-                }
-            } else {
-                console.error(`Errore durante il recupero delle bollette: ${response.statusText}`);
+                const data = await response.json();
+                setData(data);
             }
         } catch (error) {
             console.error('Errore durante la chiamata fetch:', error);
@@ -74,12 +67,14 @@ export default function Bollette() {
                     <Table className={classes.tabellaBolletta}>
                         <TableHeader>
                             <TableColumn>Nome file</TableColumn>
+                            <TableColumn>POD</TableColumn>
                             <TableColumn>Download</TableColumn>
                         </TableHeader>
                         <TableBody>
                             {data.map((file, index) => (
                                 <TableRow key={index}>
                                     <TableCell>{file.file_Name}</TableCell>
+                                    <TableCell>{file.id_pod}</TableCell>
                                     <TableCell>
                                         <button onClick={() => downloadFile(file.id_File, file.file_Name)}>Download
                                         </button>

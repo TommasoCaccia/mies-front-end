@@ -1,7 +1,10 @@
 "use client";
 import classes from '@/app/login/page.module.css';
+import {useState} from "react";
 
 const LoginForm = () => {
+
+    const [error, setError] = useState('');
     const handleLogin = async (event) => {
         event.preventDefault();
         const username = event.target.username ? event.target.username.value : undefined;
@@ -17,37 +20,14 @@ const LoginForm = () => {
         });
 
         if (response.ok) {
-            localStorage.setItem("accessoEffettuato", true);
             const data = await response;
-            handlePrimoAccesso();
+            console.log(data);
+            window.location.href = "/";
         } else {
-            const text = await response.text();
+            setError('errore durante il login ');
         }
     };
 
-    const handlePrimoAccesso = async () => {
-        const response = await fetch('http://localhost:8080/cliente', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log(data);
-            localStorage.setItem("tipologia", data.tipologia);
-            if (data.loginEffettuato === 0) {
-                window.location.href = "/form-accesso";
-            }else{
-                window.location.href = "/";
-            }
-        } else {
-            const text = await response.text();
-            console.error('Errore durante il recupero dei dati:', text);
-        }
-    }
 
     return (
         <div className={`${classes.loginContainer} container`}>
@@ -65,6 +45,7 @@ const LoginForm = () => {
                 </div>
                 <button type="submit" className={`${classes.login}`}>Login</button>
             </form>
+            {error && <div className={classes.error}>{error}</div>}
         </div>
 
     );

@@ -1,13 +1,51 @@
 "use client";
 import Link from 'next/link';
 import classes from '@/Components/header/main-header.module.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Tools from "@/Components/header/tools/Tools";
 import Admin from "@/Components/header/admin/admin";
 
 export default function MainHeader() {
-    const accessoEffetuato = localStorage.getItem("accessoEffettuato");
-    const categoriaUtente = localStorage.getItem("tipologia");
+    const [accessoEffetuato, setAccessoEffetuato] = useState(false);
+    const [error, setError] = useState('');
+    const [categoriaUtente, setCategoriaUtente] = useState('');
+
+
+    const checkAccesso = async () => {
+        const response = await fetch('http://localhost:8080/Autentication/check', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.ok) {
+            setAccessoEffetuato(true);
+        } else {
+            setError('errore durante il controllo dell\'accesso');
+        }
+    }
+
+    const checkCategoria = async () => {
+        const response = await fetch('http://localhost:8080/Autentication/checkCategoria', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            setCategoriaUtente(data.tipologia);
+        } else {
+            setError('errore durante il controllo dell\'accesso');
+        }
+    }
+
+    console.log('Categoria utente:', categoriaUtente);
+
+    console.log('Accesso effettuato   ' + accessoEffetuato);
+
 
     const handleLogout = async () => {
         const response = await fetch('http://localhost:8080/Autentication/logout', {
@@ -18,7 +56,6 @@ export default function MainHeader() {
             }
         });
         if (response.ok) {
-            localStorage.removeItem("accessoEffetuato");
             window.location.href = "/";
         } else {
             const text = await response.text();
@@ -38,6 +75,11 @@ export default function MainHeader() {
         }
     };
 
+
+    useEffect(() => {
+        checkAccesso();
+        checkCategoria();
+    }, []);
 
     return (
         <header className={`${classes.Header} flex flex-wrap justify-content-between align-items-center w-100`}>
