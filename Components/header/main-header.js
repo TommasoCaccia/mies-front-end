@@ -12,9 +12,11 @@ export default function MainHeader() {
     const [accessoEffetuato, setAccessoEffetuato] = useState(false);
     const [error, setError] = useState('');
     const [categoriaUtente, setCategoriaUtente] = useState('');
+    const PATH = 'localhost:8080';
+
 
     const checkAccesso = async () => {
-        const response = await fetch('http://localhost:8080/Autentication/check', {
+        const response = await fetch('http://' + PATH + '/Autentication/check', {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -29,7 +31,7 @@ export default function MainHeader() {
     }
 
     const checkCategoria = async () => {
-        const response = await fetch('http://localhost:8080/Autentication/checkCategoria', {
+        const response = await fetch('http://' + PATH + '/Autentication/checkCategoria', {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -45,7 +47,7 @@ export default function MainHeader() {
     }
 
     const handleLogout = async () => {
-        const response = await fetch('http://localhost:8080/Autentication/logout', {
+        const response = await fetch('http://' + PATH + '/Autentication/logout', {
             method: 'DELETE',
             credentials: 'include',
             headers: {
@@ -107,7 +109,7 @@ export default function MainHeader() {
                             </>
                         )}
 
-{/*                        {accessoEffetuato && (
+                        {/*                        {accessoEffetuato && (
                             <li className={`nav-item ${classes.navItem}`}>
                                 <Link href="/profilo" className={classes.link3}>
                                     <Image src={avatar} alt="avatar" className={classes.avatar}/>

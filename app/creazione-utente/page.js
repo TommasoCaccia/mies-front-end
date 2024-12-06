@@ -8,6 +8,7 @@ export default function Register() {
 
     const [isVisible, setIsVisible] = React.useState(false);
     const [message, setMessage] = React.useState('');
+    const PATH = 'localhost:8080';
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -15,7 +16,7 @@ export default function Register() {
         event.preventDefault();
         const username = event.target.username.value ? event.target.username.value : null;
         const password = event.target.password.value ? event.target.password.value : null;
-        const response = await fetch("http://localhost:8080/Autentication/Register", {
+        const response = await fetch('http://' + PATH + '/Autentication/Register', {
             method: 'POST',
             credentials: 'include',
             headers: {

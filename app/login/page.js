@@ -4,13 +4,16 @@ import {useState} from "react";
 
 const LoginForm = () => {
 
+    const PATH = 'localhost:8080';
+
     const [error, setError] = useState('');
+
     const handleLogin = async (event) => {
         event.preventDefault();
         const username = event.target.username ? event.target.username.value : undefined;
         const password = event.target.password ? event.target.password.value : undefined;
 
-        const response = await fetch('http://localhost:8080/Autentication/login', {
+        const response = await fetch('http://'+PATH+'/Autentication/login', {
             method: 'POST',
             credentials: 'include',
             headers: {

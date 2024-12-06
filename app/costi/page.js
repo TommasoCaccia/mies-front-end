@@ -11,6 +11,8 @@ function DataEntry() {
     const [filterClasse, setFilterClasse] = useState('');
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState('');
+    const PATH = 'localhost:8080';
+
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -29,7 +31,7 @@ function DataEntry() {
         formData.append('fileName', file.name);
 
         try {
-            const response = await fetch('http://localhost:8080/costi/upload', {
+            const response = await fetch('http://' + PATH + '/costi/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -45,7 +47,7 @@ function DataEntry() {
         setMessage('');
         const fetchCosti = async () => {
             try {
-                const response = await fetch('http://localhost:8080/costi', {
+                const response = await fetch('http://' + PATH + '/costi', {
                     method: 'GET',
                     credentials: 'include',
                     headers: {'Content-Type': 'application/json'}

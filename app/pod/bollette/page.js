@@ -8,9 +8,11 @@ export default function Bollette() {
     const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
+
     const downloadFile = async (id, name) => {
         try {
-            const response = await axios.get(`http://localhost:8080/files/${id}/download`, {
+            const PATH = `localhost:8080`;
+            const response = await axios.get(`http://${PATH}/files/${id}/download`, {
                 responseType: 'blob',
             });
 
@@ -34,7 +36,7 @@ export default function Bollette() {
 
     const getFiles = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/pod/bollette`, {
+            const response = await fetch(`http://${PATH}/pod/bollette`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {

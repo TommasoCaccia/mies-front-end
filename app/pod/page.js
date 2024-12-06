@@ -13,7 +13,7 @@ export default function Pod() {
     useEffect(() => {
         const fetchPods = async () => {
             try {
-                const response = await fetch('http://localhost:8080/pod/all', {
+                const response = await fetch('http://' + PATH + '/pod/all', {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -64,7 +64,7 @@ export default function Pod() {
         formData.append('fileData', file);
 
         try {
-            const response = await fetch('http://localhost:8080/files/upload', {
+            const response = await fetch('http://PATH/files/upload', {
                 method: 'POST',
                 body: formData,
                 credentials: 'include'
@@ -92,7 +92,7 @@ export default function Pod() {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/pod/sedeNazione', {
+            const response = await fetch('http://PATH/pod/sedeNazione', {
                 method: 'PUT',
                 credentials: 'include',
                 headers: {

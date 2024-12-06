@@ -3,6 +3,8 @@ import React from 'react';
 import classes from "@/app/form-accesso/page.module.css";
 
 export default function Register() {
+    
+    const PATH = 'localhost:8080';
 
     const updateUtente = async (event) => {
         event.preventDefault(); // Prevenire il comportamento predefinito del form
@@ -14,7 +16,7 @@ export default function Register() {
         const stato = event.target.stato ? event.target.stato.value : null;
         const classeAgevolazione = event.target.classeAgevolazione ? event.target.classeAgevolazione.value : null;
 
-        const response = await fetch('http://localhost:8080/cliente/update', {
+        const response = await fetch('http://' + PATH + '/cliente/update', {
             method: 'PUT',
             credentials: 'include',
             headers: {
