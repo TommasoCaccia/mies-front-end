@@ -13,7 +13,7 @@ const LoginForm = () => {
         const username = event.target.username ? event.target.username.value : undefined;
         const password = event.target.password ? event.target.password.value : undefined;
 
-        const response = await fetch('http://'+PATH+'/Autentication/login', {
+        const response = await fetch('http://localhost:8081/Autentication/login', {
             method: 'POST',
             credentials: 'include',
             headers: {

@@ -16,7 +16,7 @@ export default function Register() {
         event.preventDefault();
         const username = event.target.username.value ? event.target.username.value : null;
         const password = event.target.password.value ? event.target.password.value : null;
-        const response = await fetch('http://' + PATH + '/Autentication/Register', {
+        const response = await fetch('http://localhost:8081/Autentication/Register', {
             method: 'POST',
             credentials: 'include',
             headers: {

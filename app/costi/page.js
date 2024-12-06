@@ -31,7 +31,7 @@ function DataEntry() {
         formData.append('fileName', file.name);
 
         try {
-            const response = await fetch('http://' + PATH + '/costi/upload', {
+            const response = await fetch('http://localhost:8081/costi/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -47,7 +47,7 @@ function DataEntry() {
         setMessage('');
         const fetchCosti = async () => {
             try {
-                const response = await fetch('http://' + PATH + '/costi', {
+                const response = await fetch('http://localhost:8081/costi', {
                     method: 'GET',
                     credentials: 'include',
                     headers: {'Content-Type': 'application/json'}

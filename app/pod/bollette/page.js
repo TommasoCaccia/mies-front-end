@@ -12,7 +12,7 @@ export default function Bollette() {
     const downloadFile = async (id, name) => {
         try {
             const PATH = `localhost:8081`;
-            const response = await axios.get(`http://${PATH}/files/${id}/download`, {
+            const response = await axios.get(`http://localhost:8081/files/${id}/download`, {
                 responseType: 'blob',
             });
 

@@ -13,7 +13,7 @@ export default function MainHeader() {
 
 
     const checkAccesso = async () => {
-        const response = await fetch('http://' + PATH + '/Autentication/check', {
+        const response = await fetch(`http://localhost:8081/Autentication/check`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -28,7 +28,7 @@ export default function MainHeader() {
     }
 
     const checkCategoria = async () => {
-        const response = await fetch('http://' + PATH + '/Autentication/checkCategoria', {
+        const response = await fetch(`http://localhost:8081/Autentication/checkCategoria`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -44,7 +44,7 @@ export default function MainHeader() {
     }
 
     const handleLogout = async () => {
-        const response = await fetch('http://' + PATH + '/Autentication/logout', {
+        const response = await fetch('http://localhost:8081/Autentication/logout', {
             method: 'DELETE',
             credentials: 'include',
             headers: {
