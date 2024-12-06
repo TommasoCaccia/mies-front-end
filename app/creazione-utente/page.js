@@ -8,7 +8,7 @@ export default function Register() {
 
     const [isVisible, setIsVisible] = React.useState(false);
     const [message, setMessage] = React.useState('');
-    const PATH = 'localhost:8080';
+    const PATH = 'localhost:8081';
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 

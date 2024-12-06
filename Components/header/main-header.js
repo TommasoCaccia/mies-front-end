@@ -5,14 +5,11 @@ import {useEffect, useState} from "react";
 import Tools from "@/Components/header/tools/Tools";
 import Admin from "@/Components/header/admin/admin";
 
-import avatar from '../../public/avatar.png';
-import Image from "next/image";
-
 export default function MainHeader() {
     const [accessoEffetuato, setAccessoEffetuato] = useState(false);
     const [error, setError] = useState('');
     const [categoriaUtente, setCategoriaUtente] = useState('');
-    const PATH = 'localhost:8080';
+    const PATH = 'localhost:8081';
 
 
     const checkAccesso = async () => {

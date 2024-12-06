@@ -4,7 +4,7 @@ import classes from "@/app/form-accesso/page.module.css";
 
 export default function Register() {
     
-    const PATH = 'localhost:8080';
+    const PATH = 'localhost:8081';
 
     const updateUtente = async (event) => {
         event.preventDefault(); // Prevenire il comportamento predefinito del form

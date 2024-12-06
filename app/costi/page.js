@@ -11,7 +11,7 @@ function DataEntry() {
     const [filterClasse, setFilterClasse] = useState('');
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState('');
-    const PATH = 'localhost:8080';
+    const PATH = 'localhost:8081';
 
 
     const handleFileChange = (e) => {
