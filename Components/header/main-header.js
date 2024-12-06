@@ -5,11 +5,13 @@ import {useEffect, useState} from "react";
 import Tools from "@/Components/header/tools/Tools";
 import Admin from "@/Components/header/admin/admin";
 
+import avatar from '../../public/avatar.png';
+import Image from "next/image";
+
 export default function MainHeader() {
     const [accessoEffetuato, setAccessoEffetuato] = useState(false);
     const [error, setError] = useState('');
     const [categoriaUtente, setCategoriaUtente] = useState('');
-
 
     const checkAccesso = async () => {
         const response = await fetch('http://localhost:8080/Autentication/check', {
@@ -42,11 +44,6 @@ export default function MainHeader() {
         }
     }
 
-    console.log('Categoria utente:', categoriaUtente);
-
-    console.log('Accesso effettuato   ' + accessoEffetuato);
-
-
     const handleLogout = async () => {
         const response = await fetch('http://localhost:8080/Autentication/logout', {
             method: 'DELETE',
@@ -68,13 +65,11 @@ export default function MainHeader() {
     const handleToggle = () => {
         setIsOpen(!isOpen);
 
-        // Toggle active class on hamburger button
         const hamburgerButton = document.querySelector(`.${classes.hamburger}`);
         if (hamburgerButton) {
             hamburgerButton.classList.toggle(classes.active);
         }
     };
-
 
     useEffect(() => {
         checkAccesso();
@@ -105,15 +100,21 @@ export default function MainHeader() {
                         </li>
                         {accessoEffetuato && (
                             <>
-                                {/* Dropdown Tools */}
                                 <Tools/>
-                                {/* Dropdown Admin */}
-                                {categoriaUtente === "Admin" && (<>
-                                        <Admin/>
-                                    </>
+                                {categoriaUtente === "Admin" && (
+                                    <Admin/>
                                 )}
                             </>
                         )}
+
+{/*                        {accessoEffetuato && (
+                            <li className={`nav-item ${classes.navItem}`}>
+                                <Link href="/profilo" className={classes.link3}>
+                                    <Image src={avatar} alt="avatar" className={classes.avatar}/>
+                                </Link>
+                            </li>
+                        )}*/}
+
                         {accessoEffetuato ? (
                             <li className={`nav-item ${classes.navItem}`}>
                                 <button onClick={handleLogout} className={classes.logoutPulsante}>Logout</button>

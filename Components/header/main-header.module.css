@@ -10,6 +10,12 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.avatar {
+    margin-top: 10px;
+    width: 70px;
+    height: 70px;
+}
+
 .navItem {
     position: relative;
     min-height: 100px;
@@ -52,6 +58,23 @@
 }
 
 .logoutPulsante {
+    background-color: #2C4D79;
+    border-radius: 0;
+    color: white;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 2rem;
+    font-family: "Montserrat", sans-serif;
+    cursor: pointer;
+    margin-left: 25px;
+    border: none !important;
+}
+
+.loginPulsante{
     background-color: #2C4D79;
     border-radius: 0;
     color: white;

@@ -4,9 +4,9 @@ import {useEffect, useState} from "react";
 import classes from "@/app/pod/bollette/page.module.css";
 import {Table, TableHeader, TableBody, TableColumn, TableRow, TableCell} from "@nextui-org/react";
 
-
 export default function Bollette() {
     const [data, setData] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const downloadFile = async (id, name) => {
         try {
@@ -14,28 +14,23 @@ export default function Bollette() {
                 responseType: 'blob',
             });
 
-            // Extract the filename from the Content-Disposition header
             const contentDisposition = response.headers['content-disposition'];
             const fileName = contentDisposition ? contentDisposition.split('filename=')[1].replace(/"/g, '') : name;
 
-            // Create a URL for the blob data
             const url = window.URL.createObjectURL(new Blob([response.data]));
 
-            // Create a link element and simulate a click to trigger the download
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', fileName); // Use the exact filename from the server
+            link.setAttribute('download', fileName);
             document.body.appendChild(link);
             link.click();
 
-            // Clean up by removing the link element and revoking the object URL
             link.remove();
             window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error('Error downloading file', error);
         }
     };
-
 
     const getFiles = async () => {
         try {
@@ -60,8 +55,22 @@ export default function Bollette() {
         getFiles();
     }, []);
 
+    const filteredData = data.filter(file => file.id_pod.includes(searchTerm));
+
+    const handleAddBillClick = () => {
+        window.location.href = '/pod';
+    };
+
     return (
         <div className={classes.container}>
+            <h1 className={classes.title}>Elenco Bollette</h1>
+            <input
+                type="text"
+                placeholder="Cerca per ID POD"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                className={classes.searchBar}
+            />
             <div className={classes.tableContainer}>
                 <div className={classes.scrollableTable}>
                     <Table className={classes.tabellaBolletta}>
@@ -71,13 +80,12 @@ export default function Bollette() {
                             <TableColumn>Download</TableColumn>
                         </TableHeader>
                         <TableBody>
-                            {data.map((file, index) => (
+                            {filteredData.map((file, index) => (
                                 <TableRow key={index}>
                                     <TableCell>{file.file_Name}</TableCell>
                                     <TableCell>{file.id_pod}</TableCell>
                                     <TableCell>
-                                        <button onClick={() => downloadFile(file.id_File, file.file_Name)}>Download
-                                        </button>
+                                        <button onClick={() => downloadFile(file.id_File, file.file_Name)}>Download</button>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -85,6 +93,9 @@ export default function Bollette() {
                     </Table>
                 </div>
             </div>
+            <button onClick={handleAddBillClick} className={classes.addBolletteButton}>
+                Aggiungi Bolletta
+            </button>
         </div>
     );
 }

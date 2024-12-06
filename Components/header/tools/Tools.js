@@ -30,20 +30,20 @@ const Tools = () => {
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu className={classes.submenu}>
-                                <DropdownItem className={classes.dropdownItem}>
+{/*                                <DropdownItem className={classes.dropdownItem}>
                                     <Link href="/energy-portfolio" className={classes.link}>Energy Portfolio</Link>
-                                </DropdownItem>
+                                </DropdownItem>*/}
                                 <DropdownItem className={classes.dropdownItem}>
-                                    <Link href="/pod" className={classes.link}>Carica Bolletta</Link>
+                                    <Link href="/pod/bollette" className={classes.link}>Bollette</Link>
                                 </DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </ButtonGroup>
                 </DropdownItem>
 
-                <DropdownItem className={classes.dropdownItem}>
+{/*                <DropdownItem className={classes.dropdownItem}>
                     <Link href="/iso500001" className={classes.link}>Iso 500001</Link>
-                </DropdownItem>
+                </DropdownItem>*/}
 
                 <DropdownItem className={classes.dropdownItem}>
                     <Link href="https://oneview.miesgroup.it/" target="_blank" rel="noopener noreferrer"

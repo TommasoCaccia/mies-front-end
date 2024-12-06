@@ -19,7 +19,6 @@
 }
 
 
-
 .tabellaBolletta th, .tabellaBolletta td {
     padding: 10px; /* Add padding for better readability */
     border: 1px solid #ddd; /* Optional: add borders */
@@ -34,4 +33,20 @@
 .tabellaBolletta td {
     border-color: #000000 !important;
     border-width: 0.8px;
+}
+
+.addBolletteButton {
+    background-color: #2C4D79;
+    color: white;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 10px 20px 10px 20px;
+}
+
+.addBolletteButton:hover {
+    background-color: #1e3c5f;
 }

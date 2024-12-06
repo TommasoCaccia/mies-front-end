@@ -80,7 +80,7 @@ export default function Pod() {
             setMessage('Errore nel caricamento della bolletta.');
         }
         setUploading(false);
-        // window.location.href = '/pod';
+        window.location.href = '/pod';
     };
 
 
@@ -166,7 +166,6 @@ export default function Pod() {
                             <TableColumn>Sede</TableColumn>
                             <TableColumn>Nazione</TableColumn>
                             <TableColumn>Azioni</TableColumn>
-                            <TableColumn>Bollette</TableColumn>
                         </TableHeader>
                         <TableBody emptyContent={"No rows to display."}>
                             {pods.map(pod => (
@@ -202,15 +201,15 @@ export default function Pod() {
                                             <button onClick={() => handleUpdateClick(pod.id)}>Inserisci</button>
                                         )}
                                     </TableCell>
-                                    <TableCell>
-                                        <button onClick={() => handleViewBillsClick()}>Vedi bollette</button>
-                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </div>
             </div>
+            <button onClick={handleViewBillsClick} className={classes.bottoneCarica}>
+                Visualizza Bollette
+            </button>
         </div>
     );
 }

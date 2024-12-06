@@ -7,10 +7,11 @@ import {EyeSlashFilledIcon} from "./EyeSlashFilledIcon"
 export default function Register() {
 
     const [isVisible, setIsVisible] = React.useState(false);
+    const [message, setMessage] = React.useState('');
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
-    const creaUtente = async () => {
+    const creaUtente = async (event) => {
         event.preventDefault();
         const username = event.target.username.value ? event.target.username.value : null;
         const password = event.target.password.value ? event.target.password.value : null;
@@ -25,9 +26,9 @@ export default function Register() {
 
         if (response.ok) {
             const data = await response;
+            setMessage("Utente creato con successo");
         } else {
-            const text = await response.text();
-            console.error('Errore durante la creazione dell\'utente:', text);
+            setMessage("Errore nella creazione dell'utente");
         }
     }
 
@@ -37,14 +38,15 @@ export default function Register() {
                 <h2 className={`active ${classes.titoloCreazioneUtente}`}>Creazione Utente</h2>
                 <form onSubmit={creaUtente}>
                     <div className={classes.inputContainer}>
-                        <input type="email" id="email" required placeholder=" "/>
-                        <label htmlFor="email">Email</label>
+                        <input type="text" id="username" name="username" required placeholder=" "/>
+                        <label htmlFor="username">UserName</label>
                     </div>
                     <div className={classes.inputContainer}>
                         <input
                             type={isVisible ? "text" : "password"}
                             placeholder=" "
                             id="password"
+                            name="password"
                             className={classes.passwordInput}
                             required
                         />
@@ -63,6 +65,7 @@ export default function Register() {
                         </button>
                     </div>
                     <button type="submit" className={classes.creaUtente}>Crea Utente</button>
+                    <p>{message}</p>
                 </form>
             </div>
         </div>
