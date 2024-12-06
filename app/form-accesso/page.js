@@ -16,7 +16,7 @@ export default function Register() {
         const stato = event.target.stato ? event.target.stato.value : null;
         const classeAgevolazione = event.target.classeAgevolazione ? event.target.classeAgevolazione.value : null;
 
-        const response = await fetch('http://localhost:8081/cliente/update', {
+        const response = await fetch('http://91.108.112.165:8081/cliente/update', {
             method: 'PUT',
             credentials: 'include',
             headers: {
