@@ -4,16 +4,17 @@ import classes from '@/Components/header/main-header.module.css';
 import {useEffect, useState} from "react";
 import Tools from "@/Components/header/tools/Tools";
 import Admin from "@/Components/header/admin/admin";
+import Image from "next/image";
+import avatar from "@/public/avatar.png";
 
 export default function MainHeader() {
     const [accessoEffetuato, setAccessoEffetuato] = useState(false);
     const [error, setError] = useState('');
     const [categoriaUtente, setCategoriaUtente] = useState('');
-    const PATH = 'localhost:8081';
 
 
     const checkAccesso = async () => {
-        const response = await fetch(`http://91.108.112.165:8081/Autentication/check`, {
+        const response = await fetch(`http://localhost:8080/Autentication/check`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -28,7 +29,7 @@ export default function MainHeader() {
     }
 
     const checkCategoria = async () => {
-        const response = await fetch(`http://91.108.112.165:8081/Autentication/checkCategoria`, {
+        const response = await fetch(`http://localhost:8080/Autentication/checkCategoria`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -43,21 +44,6 @@ export default function MainHeader() {
         }
     }
 
-    const handleLogout = async () => {
-        const response = await fetch('http://91.108.112.165:8081/Autentication/logout', {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        if (response.ok) {
-            window.location.href = "/";
-        } else {
-            const text = await response.text();
-            console.error('Errore durante il logout:', text);
-        }
-    };
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -106,18 +92,16 @@ export default function MainHeader() {
                             </>
                         )}
 
-                        {/*                        {accessoEffetuato && (
+                        {accessoEffetuato && (
                             <li className={`nav-item ${classes.navItem}`}>
-                                <Link href="/profilo" className={classes.link3}>
+                                <Link href="/impostazioniUtente" className={classes.link3}>
                                     <Image src={avatar} alt="avatar" className={classes.avatar}/>
                                 </Link>
                             </li>
-                        )}*/}
+                        )}
 
                         {accessoEffetuato ? (
-                            <li className={`nav-item ${classes.navItem}`}>
-                                <button onClick={handleLogout} className={classes.logoutPulsante}>Logout</button>
-                            </li>
+                            <></>
                         ) : (
                             <div className="cta-wrapper d-flex flex">
                                 <Link href="/login" className={classes.loginPulsante}>Login</Link>

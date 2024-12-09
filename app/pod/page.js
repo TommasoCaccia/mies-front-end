@@ -3,6 +3,9 @@ import {useEffect, useState} from 'react';
 import classes from "@/app/pod/page.module.css";
 import {Table, TableHeader, TableBody, TableColumn, TableRow, TableCell} from "@nextui-org/react";
 
+
+//da inserire prima di mandare in produzione nelle fetch 91.108.112.165:8081
+
 export default function Pod() {
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
@@ -13,7 +16,7 @@ export default function Pod() {
     useEffect(() => {
         const fetchPods = async () => {
             try {
-                const response = await fetch('http://91.108.112.165:8081/pod/all', {
+                const response = await fetch('http://localhost:8080/pod/all', {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -64,7 +67,7 @@ export default function Pod() {
         formData.append('fileData', file);
 
         try {
-            const response = await fetch('http://91.108.112.165:8081/files/upload', {
+            const response = await fetch('http://localhost:8080/files/upload', {
                 method: 'POST',
                 body: formData,
                 credentials: 'include'
@@ -92,7 +95,7 @@ export default function Pod() {
         }
 
         try {
-            const response = await fetch('http://91.108.112.165:8081/pod/sedeNazione', {
+            const response = await fetch('http://localhost:8080/pod/sedeNazione', {
                 method: 'PUT',
                 credentials: 'include',
                 headers: {

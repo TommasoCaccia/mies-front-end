@@ -1,0 +1,136 @@
+.container {
+    max-width: 800px;
+    margin: 150px auto;
+    padding: 20px;
+    background-color: #f0f4fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.container h1 {
+    color: #2C4D79;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 15px;
+    border: 1px solid #d9e3f1;
+    border-radius: 6px;
+    background-color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+.field:hover {
+    background-color: #eaf0f8;
+}
+
+.field span {
+    font-weight: bold;
+    color: #2C4D79;
+    margin-bottom: 5px;
+}
+
+.modifyButton {
+    align-self: flex-end;
+    background-color: #2C4D79;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modifyButton:hover {
+    background-color: #1f3658;
+}
+
+.editField {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.editField input {
+    border: 1px solid #d9e3f1;
+    border-radius: 4px;
+    padding: 6px;
+    outline: none;
+    font-size: 14px;
+    width: 100%;
+}
+
+.editField input:focus {
+    border-color: #2C4D79;
+    box-shadow: 0 0 4px rgba(44, 77, 121, 0.6);
+}
+
+.editField button {
+    background-color: #2C4D79;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100px;
+}
+
+.editField button:hover {
+    background-color: #1f3658;
+}
+
+.btnLogout {
+    margin-top: 20px;
+    display: block;
+    background-color: #2C4D79;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    width: 100%;
+}
+
+.btnLogout:hover {
+    background-color: #1f3658;
+}
+
+/* Responsività */
+@media (min-width: 768px) {
+    .info {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .field {
+        flex: 1 1 calc(50% - 20px); /* Due colonne su tablet */
+        max-width: calc(50% - 20px);
+    }
+}
+
+@media (min-width: 1024px) {
+    .field {
+        flex: 1 1 calc(33.33% - 20px); /* Tre colonne su schermi grandi */
+        max-width: calc(33.33% - 20px);
+    }
+}

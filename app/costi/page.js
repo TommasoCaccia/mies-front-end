@@ -1,17 +1,69 @@
 "use client";
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Button, FormControl} from 'react-bootstrap';
 import classes from '@/app/costi/page.module.css';
 import {Table, TableHeader, TableBody, TableColumn, TableRow, TableCell} from "@nextui-org/react";
 
-function DataEntry() {
+export default function DataEntry() {
     const [data, setData] = useState([]);
     const [filterCategoria, setFilterCategoria] = useState('');
     const [filterPotenza, setFilterPotenza] = useState('');
     const [filterClasse, setFilterClasse] = useState('');
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState('');
-    const PATH = 'localhost:8081';
+
+    const [isFormVisible, setIsFormVisible] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(null); // Indice della riga selezionata
+    const [editRowData, setEditRowData] = useState({
+        id: "",
+        descrizione: "",
+        unitaMisura: "",
+        trimestre: "",
+        anno: "",
+        costo: "",
+        categoria: "",
+        intervalloPotenza: "",
+        classeAgevolazione: "",
+    });
+
+    const formRef = useRef(null); // Riferimento al form
+
+
+    const handleSelectRow = (index) => {
+        setIsFormVisible(true)
+        const rowData = filteredData[index];
+        setSelectedIndex(index);
+        setEditRowData({...rowData});
+        // Scorri verso il form
+        formRef.current.scrollIntoView({behavior: "smooth"});
+    };
+
+    const handleCancel = () => {
+        setSelectedIndex(null);
+        setIsFormVisible(false); // Nascondi il form quando si annulla
+    };
+
+    const handleSaveChanges = async () => {
+        try {
+            const updatedData = [...filteredData];
+            updatedData[selectedIndex] = editRowData; // Update the selected row
+            const response = await fetch("http://localhost:8080/costi/update", {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(editRowData)
+            });
+
+            if (response.ok) {
+                setSelectedIndex(null); // Exit edit mode
+                setEditRowData({}); // Reset form data
+                setIsFormVisible(false); // Hide the form after saving
+                fetchCosti();
+                window.location.href = '/costi';
+            }
+        } catch (error) {
+            console.error('Error during fetch:', error);
+        }
+    };
 
 
     const handleFileChange = (e) => {
@@ -31,7 +83,7 @@ function DataEntry() {
         formData.append('fileName', file.name);
 
         try {
-            const response = await fetch('http://91.108.112.165:8081/costi/upload', {
+            const response = await fetch('http://localhost:8080/costi/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -43,27 +95,42 @@ function DataEntry() {
         }
     };
 
+    const fetchCosti = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/costi', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'}
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setData(data);
+                console.log(data);
+            } else {
+                console.error('Errore durante il fetch:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Errore di rete:', error);
+        }
+    };
+
+    const deleteCosto = async (id) => {
+        const response = await fetch(`http://localhost:8080/costi/delete/${id}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {'Content-Type': 'application/json'},
+        });
+
+        if (response.ok) {
+            fetchCosti();
+        } else {
+            console.error('Errore durante il fetch:', response.statusText);
+        }
+    }
+
     useEffect(() => {
         setMessage('');
-        const fetchCosti = async () => {
-            try {
-                const response = await fetch('http://91.108.112.165:8081/costi', {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {'Content-Type': 'application/json'}
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setData(data);
-                } else {
-                    console.error('Errore durante il fetch:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Errore di rete:', error);
-            }
-        };
-
         fetchCosti();
     }, []);
 
@@ -150,6 +217,7 @@ function DataEntry() {
             <div>
                 <Table className={classes.tabella}>
                     <TableHeader>
+                        <TableColumn>N.riga</TableColumn>
                         <TableColumn>Descrizione</TableColumn>
                         <TableColumn>Unità di Misura</TableColumn>
                         <TableColumn>Trimestre</TableColumn>
@@ -158,11 +226,13 @@ function DataEntry() {
                         <TableColumn>Categoria</TableColumn>
                         <TableColumn>Intevallo di Potenza</TableColumn>
                         <TableColumn>Classe di agevolazione</TableColumn>
-                        <TableColumn>Azioni</TableColumn>
+                        <TableColumn></TableColumn>
+                        <TableColumn></TableColumn>
                     </TableHeader>
                     <TableBody emptyContent={"No rows to display."}>
                         {filteredData.map((costo, index) => (
                             <TableRow key={index}>
+                                <TableCell>{index}</TableCell>
                                 <TableCell>{costo.descrizione}</TableCell>
                                 <TableCell>{costo.unitaMisura}</TableCell>
                                 <TableCell>{costo.trimestre}</TableCell>
@@ -171,12 +241,20 @@ function DataEntry() {
                                 <TableCell>{costo.categoria}</TableCell>
                                 <TableCell>{costo.intervalloPotenza}</TableCell>
                                 <TableCell>{costo.classeAgevolazione}</TableCell>
-                                <TableCell><Button variant="danger">Elimina</Button></TableCell>
+                                <TableCell>
+                                    <Button onClick={() => handleSelectRow(index)}>Modifica</Button>
+                                </TableCell>
+                                <TableCell>
+                                    <Button variant="danger"
+                                            onClick={() => deleteCosto(costo.id)}>Elimina
+                                    </Button>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </div>
+
             <div className={classes.formContainer}>
                 <h2 className={classes.h2}>Upload Excel File</h2>
                 <form onSubmit={handleSubmit}>
@@ -197,8 +275,106 @@ function DataEntry() {
                     <p>{message}</p>
                 </form>
             </div>
-        </div>
-    );
-}
+            {isFormVisible ? (
+                <div ref={formRef} className={classes.containerFormModifica}>
+                    {selectedIndex !== null && (
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleSaveChanges();
+                            }}
+                        >
+                            <label>
+                                Descrizione:
+                                <input
+                                    type="text"
+                                    value={editRowData.descrizione}
+                                    onChange={(e) =>
+                                        setEditRowData({...editRowData, descrizione: e.target.value})
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Unità di Misura:
+                                <input
+                                    type="text"
+                                    value={editRowData.unitaMisura}
+                                    onChange={(e) =>
+                                        setEditRowData({...editRowData, unitaMisura: e.target.value})
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Trimestre:
+                                <input
+                                    type="text"
+                                    value={editRowData.trimestre}
+                                    onChange={(e) =>
+                                        setEditRowData({...editRowData, trimestre: e.target.value})
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Anno:
+                                <input
+                                    type="number"
+                                    value={editRowData.anno}
+                                    onChange={(e) =>
+                                        setEditRowData({...editRowData, anno: e.target.value})
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Valore:
+                                <input
+                                    type="number"
+                                    value={editRowData.costo}
+                                    onChange={(e) =>
+                                        setEditRowData({...editRowData, costo: e.target.value})
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Categoria:
+                                <input
+                                    type="text"
+                                    value={editRowData.categoria}
+                                    onChange={(e) =>
+                                        setEditRowData({...editRowData, categoria: e.target.value})
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Intervallo di Potenza:
+                                <input
+                                    type="text"
+                                    value={editRowData.intervalloPotenza}
+                                    onChange={(e) =>
+                                        setEditRowData({...editRowData, intervalloPotenza: e.target.value})
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Classe di Agevolazione:
+                                <input
+                                    type="text"
+                                    value={editRowData.classeAgevolazione}
+                                    onChange={(e) =>
+                                        setEditRowData({...editRowData, classeAgevolazione: e.target.value})
+                                    }
+                                />
+                            </label>
+                            <button type="submit">Salva modifiche</button>
+                            <button type="button" onClick={handleCancel}>Annulla</button>
+                        </form>
+                    )}
+                </div>
+            ) : (
+                <div ref={formRef}></div>
+            )}
 
-export default DataEntry;
+
+        </div>
+    )
+        ;
+}
