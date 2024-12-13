@@ -66,7 +66,7 @@ export default function DataEntry() {
     const handleSaveChanges = async () => {
         const updatedData = [...filteredData];
         updatedData[selectedIndex] = editRowData; // Update the selected row
-        const response = await fetch(`${PATH_DEV}/costi/update`, {
+        const response = await fetch(`${PATH_PRODUCTION}/costi/update`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(editRowData)
@@ -108,7 +108,7 @@ export default function DataEntry() {
         formData.append('fileName', file.name);
 
 
-        const response = await fetch(`${PATH_DEV}/costi/upload`, {
+        const response = await fetch(`${PATH_PRODUCTION}/costi/upload`, {
             method: 'POST',
             body: formData,
         });
@@ -129,7 +129,7 @@ export default function DataEntry() {
 
     const fetchCosti = async () => {
 
-        const response = await fetch(`${PATH_DEV}/costi`, {
+        const response = await fetch(`${PATH_PRODUCTION}/costi`, {
             method: 'GET',
             credentials: 'include',
             headers: {'Content-Type': 'application/json'}
@@ -145,7 +145,7 @@ export default function DataEntry() {
     };
 
     const deleteCosto = async (id) => {
-        const response = await fetch(`${PATH_DEV}/costi/delete/${id}`, {
+        const response = await fetch(`${PATH_PRODUCTION}/costi/delete/${id}`, {
             method: 'DELETE',
             credentials: 'include',
             headers: {'Content-Type': 'application/json'},

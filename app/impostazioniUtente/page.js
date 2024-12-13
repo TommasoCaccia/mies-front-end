@@ -11,7 +11,7 @@ const ClienteProfilo = () => {
     const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV
 
     const logOut = async () => {
-        const response = await fetch(`${PATH_DEV}/Autentication/logout`, {
+        const response = await fetch(`${PATH_PRODUCTION}/Autentication/logout`, {
             method: 'DELETE',
             credentials: 'include',
             headers: {
@@ -27,7 +27,7 @@ const ClienteProfilo = () => {
     };
 
     const getCliente = async () => {
-        const response = await fetch(`${PATH_DEV}/cliente`, {
+        const response = await fetch(`${PATH_PRODUCTION}/cliente`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -41,7 +41,7 @@ const ClienteProfilo = () => {
     };
 
     const aggiornaDato = async () => {
-        const response = await fetch(`${PATH_DEV}/cliente/update`, {
+        const response = await fetch(`${PATH_PRODUCTION}/cliente/update`, {
             method: 'PUT',
             credentials: 'include',
             headers: {

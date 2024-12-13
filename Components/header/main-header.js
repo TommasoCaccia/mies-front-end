@@ -16,7 +16,7 @@ export default function MainHeader() {
 
 
     const checkAccesso = async () => {
-        const response = await fetch(`${PATH_DEV}/Autentication/check`, {
+        const response = await fetch(`${PATH_PRODUCTION}/Autentication/check`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -31,7 +31,7 @@ export default function MainHeader() {
     }
 
     const checkCategoria = async () => {
-        const response = await fetch(`${PATH_DEV}/Autentication/checkCategoria`, {
+        const response = await fetch(`${PATH_PRODUCTION}/Autentication/checkCategoria`, {
             method: 'GET',
             credentials: 'include',
             headers: {
