@@ -3,12 +3,13 @@ import classes from "@/app/creazione-utente/page.module.css";
 import React from "react";
 import {EyeFilledIcon} from "./EyeFilledIcon";
 import {EyeSlashFilledIcon} from "./EyeSlashFilledIcon"
+import Swal from "sweetalert2";
 
 export default function Register() {
 
     const [isVisible, setIsVisible] = React.useState(false);
-    const [message, setMessage] = React.useState('');
-    const PATH = 'localhost:8081';
+    const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
+    const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -16,7 +17,7 @@ export default function Register() {
         event.preventDefault();
         const username = event.target.username.value ? event.target.username.value : null;
         const password = event.target.password.value ? event.target.password.value : null;
-        const response = await fetch('http://localhost:8080/Autentication/Register', {
+        const response = await fetch(`${PATH_DEV}/Autentication/Register`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -27,9 +28,16 @@ export default function Register() {
 
         if (response.ok) {
             const data = await response;
-            setMessage("Utente creato con successo");
-        } else {
-            setMessage("Errore nella creazione dell'utente");
+            Swal.fire({
+                icon: "success",
+                text: "operazione andata a buon fine",
+                footer: '<a href="#">Why do I have this issue?</a>'
+            });        } else {
+            await Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+            });
         }
     }
 
@@ -66,7 +74,6 @@ export default function Register() {
                         </button>
                     </div>
                     <button type="submit" className={classes.creaUtente}>Crea Utente</button>
-                    <p>{message}</p>
                 </form>
             </div>
         </div>

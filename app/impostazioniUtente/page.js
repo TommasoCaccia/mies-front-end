@@ -7,9 +7,11 @@ const ClienteProfilo = () => {
     const [infoUtente, setInfoUtente] = useState({});
     const [modificaCampo, setModificaCampo] = useState(null); // Campo da modificare
     const [nuovoDato, setNuovoDato] = useState(''); // Valore del nuovo dato
+    const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
+    const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV
 
     const logOut = async () => {
-        const response = await fetch('http://localhost:8080/Autentication/logout', {
+        const response = await fetch(`${PATH_DEV}/Autentication/logout`, {
             method: 'DELETE',
             credentials: 'include',
             headers: {
@@ -20,12 +22,12 @@ const ClienteProfilo = () => {
             window.location.href = "/";
         } else {
             const text = await response.text();
-            console.error('Errore durante il logout:', text);
+            console.log('Errore durante il logout:', text);
         }
     };
 
     const getCliente = async () => {
-        const response = await fetch(`http://localhost:8080/cliente`, {
+        const response = await fetch(`${PATH_DEV}/cliente`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -39,7 +41,7 @@ const ClienteProfilo = () => {
     };
 
     const aggiornaDato = async () => {
-        const response = await fetch(`http://localhost:8080/cliente/update`, {
+        const response = await fetch(`${PATH_DEV}/cliente/update`, {
             method: 'PUT',
             credentials: 'include',
             headers: {
@@ -53,7 +55,7 @@ const ClienteProfilo = () => {
             window.location.href = "/impostazioniUtente";
         } else {
             const text = await response.text();
-            console.error('Errore durante l\'aggiornamento del dato:', text);
+            console.log('Errore durante l\'aggiornamento del dato:', text);
         }
     }
 

@@ -38,6 +38,8 @@
 
 .tableContainer {
     width: 100%; /* Ensure container takes full width */
+    display: flex;
+    justify-content: center; /* Center the table */
 }
 
 .scrollableTable {

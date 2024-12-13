@@ -11,10 +11,12 @@ export default function MainHeader() {
     const [accessoEffetuato, setAccessoEffetuato] = useState(false);
     const [error, setError] = useState('');
     const [categoriaUtente, setCategoriaUtente] = useState('');
+    const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
+    const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV;
 
 
     const checkAccesso = async () => {
-        const response = await fetch(`http://localhost:8080/Autentication/check`, {
+        const response = await fetch(`${PATH_DEV}/Autentication/check`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -29,7 +31,7 @@ export default function MainHeader() {
     }
 
     const checkCategoria = async () => {
-        const response = await fetch(`http://localhost:8080/Autentication/checkCategoria`, {
+        const response = await fetch(`${PATH_DEV}/Autentication/checkCategoria`, {
             method: 'GET',
             credentials: 'include',
             headers: {

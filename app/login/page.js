@@ -4,8 +4,8 @@ import {useState} from "react";
 
 const LoginForm = () => {
 
-    const PATH = 'localhost:8081';
-
+    const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
+    const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV
     const [error, setError] = useState('');
 
     const handleLogin = async (event) => {
@@ -13,7 +13,7 @@ const LoginForm = () => {
         const username = event.target.username ? event.target.username.value : undefined;
         const password = event.target.password ? event.target.password.value : undefined;
 
-        const response = await fetch('http://localhost:8080/Autentication/login', {
+        const response = await fetch(`${PATH_DEV}/Autentication/login`, {
             method: 'POST',
             credentials: 'include',
             headers: {

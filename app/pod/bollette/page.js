@@ -7,12 +7,13 @@ import {Table, TableHeader, TableBody, TableColumn, TableRow, TableCell} from "@
 export default function Bollette() {
     const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
+    const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV;
 
 
     const downloadFile = async (id, name) => {
         try {
-            const PATH = `localhost:8081`;
-            const response = await axios.get(`http://localhost:8081/files/${id}/download`, {
+            const response = await axios.get(`${PATH_DEV}/files/${id}/download`, {
                 responseType: 'blob',
             });
 
@@ -30,13 +31,13 @@ export default function Bollette() {
             link.remove();
             window.URL.revokeObjectURL(url);
         } catch (error) {
-            console.error('Error downloading file', error);
+            console.log('Error downloading file', error);
         }
     };
 
     const getFiles = async () => {
         try {
-            const response = await fetch(`http://${PATH}/pod/bollette`, {
+            const response = await fetch(`${PATH_DEV}/pod/bollette`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -49,7 +50,7 @@ export default function Bollette() {
                 setData(data);
             }
         } catch (error) {
-            console.error('Errore durante la chiamata fetch:', error);
+            console.log('Errore durante la chiamata fetch:', error);
         }
     };
 
@@ -87,7 +88,8 @@ export default function Bollette() {
                                     <TableCell>{file.file_Name}</TableCell>
                                     <TableCell>{file.id_pod}</TableCell>
                                     <TableCell>
-                                        <button onClick={() => downloadFile(file.id_File, file.file_Name)}>Download</button>
+                                        <button onClick={() => downloadFile(file.id_File, file.file_Name)}>Download
+                                        </button>
                                     </TableCell>
                                 </TableRow>
                             ))}

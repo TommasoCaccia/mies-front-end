@@ -3,6 +3,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Button, FormControl} from 'react-bootstrap';
 import classes from '@/app/costi/page.module.css';
 import {Table, TableHeader, TableBody, TableColumn, TableRow, TableCell} from "@nextui-org/react";
+import Swal from "sweetalert2";
 
 export default function DataEntry() {
     const [data, setData] = useState([]);
@@ -10,7 +11,8 @@ export default function DataEntry() {
     const [filterPotenza, setFilterPotenza] = useState('');
     const [filterClasse, setFilterClasse] = useState('');
     const [file, setFile] = useState(null);
-    const [message, setMessage] = useState('');
+    const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
+    const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV;
 
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(null); // Indice della riga selezionata
@@ -38,31 +40,50 @@ export default function DataEntry() {
         formRef.current.scrollIntoView({behavior: "smooth"});
     };
 
+    
+
+    const verificaEliminazione = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteCosto(id);
+            }
+        });
+    }
+
     const handleCancel = () => {
         setSelectedIndex(null);
         setIsFormVisible(false); // Nascondi il form quando si annulla
     };
 
     const handleSaveChanges = async () => {
-        try {
-            const updatedData = [...filteredData];
-            updatedData[selectedIndex] = editRowData; // Update the selected row
-            const response = await fetch("http://localhost:8080/costi/update", {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(editRowData)
-            });
+        const updatedData = [...filteredData];
+        updatedData[selectedIndex] = editRowData; // Update the selected row
+        const response = await fetch(`${PATH_DEV}/costi/update`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(editRowData)
+        });
 
-            if (response.ok) {
-                setSelectedIndex(null); // Exit edit mode
-                setEditRowData({}); // Reset form data
-                setIsFormVisible(false); // Hide the form after saving
-                fetchCosti();
-                window.location.href = '/costi';
-            }
-        } catch (error) {
-            console.error('Error during fetch:', error);
+        if (response.ok) {
+            setSelectedIndex(null); // Exit edit mode
+            setEditRowData({}); // Reset form data
+            setIsFormVisible(false); // Hide the form after saving
+            window.location.href = '/costi';
+        } else {
+            await Swal.fire({
+                icon: "error",
+                text: "Errore durante il salvataggio delle modifiche"
+            });
         }
+
     };
 
 
@@ -74,63 +95,78 @@ export default function DataEntry() {
         e.preventDefault();
 
         if (!file) {
-            setMessage('Please select a file first.');
+            await Swal.fire({
+                icon: "error",
+                text: "Seleziona un file da caricare",
+            });
             return;
         }
+
 
         const formData = new FormData();
         formData.append('file', file);
         formData.append('fileName', file.name);
 
-        try {
-            const response = await fetch('http://localhost:8080/costi/upload', {
-                method: 'POST',
-                body: formData,
-            });
 
-            setMessage(response.ok ? 'File uploaded successfully!' : 'File upload failed.');
-        } catch (error) {
-            console.error('Error uploading file:', error);
-            setMessage('Error occurred during file upload.');
+        const response = await fetch(`${PATH_DEV}/costi/upload`, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            await Swal.fire({
+                icon: "success",
+                text: "Upload dei dati avvenuto con successo",
+            });
+        } else {
+            await Swal.fire({
+                icon: "error",
+                text: "Errore durante l'upload dei dati",
+            });
         }
+
     };
 
     const fetchCosti = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/costi', {
-                method: 'GET',
-                credentials: 'include',
-                headers: {'Content-Type': 'application/json'}
-            });
 
-            if (response.ok) {
-                const data = await response.json();
-                setData(data);
-                console.log(data);
-            } else {
-                console.error('Errore durante il fetch:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Errore di rete:', error);
+        const response = await fetch(`${PATH_DEV}/costi`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            setData(data);
+        } else {
+            console.log('Errore durante il fetch:', response.statusText);
         }
+
     };
 
     const deleteCosto = async (id) => {
-        const response = await fetch(`http://localhost:8080/costi/delete/${id}`, {
+        const response = await fetch(`${PATH_DEV}/costi/delete/${id}`, {
             method: 'DELETE',
             credentials: 'include',
             headers: {'Content-Type': 'application/json'},
         });
 
         if (response.ok) {
-            fetchCosti();
+            await Swal.fire({
+                icon: "success",
+                text: "Costo eliminato con successo, ricarica la pagina per visualizzare i cambiamenti"
+            });
         } else {
-            console.error('Errore durante il fetch:', response.statusText);
+            await Swal.fire({
+                icon: "error",
+                text: "Errore durante l'eliminazione del costo"
+            });
+
         }
+
     }
 
     useEffect(() => {
-        setMessage('');
         fetchCosti();
     }, []);
 
@@ -246,7 +282,7 @@ export default function DataEntry() {
                                 </TableCell>
                                 <TableCell>
                                     <Button variant="danger"
-                                            onClick={() => deleteCosto(costo.id)}>Elimina
+                                            onClick={() => verificaEliminazione(costo.id)}>Elimina
                                     </Button>
                                 </TableCell>
                             </TableRow>
@@ -272,7 +308,6 @@ export default function DataEntry() {
                         <span className="fileName">{file ? file.name : 'Nessun file selezionato'}</span>
                     </div>
                     <button type="submit" className={classes.uploadButton}>UPLOAD</button>
-                    <p>{message}</p>
                 </form>
             </div>
             {isFormVisible ? (
@@ -372,9 +407,6 @@ export default function DataEntry() {
             ) : (
                 <div ref={formRef}></div>
             )}
-
-
         </div>
-    )
-        ;
+    );
 }

@@ -2,21 +2,22 @@
 import {useEffect, useState} from 'react';
 import classes from "@/app/pod/page.module.css";
 import {Table, TableHeader, TableBody, TableColumn, TableRow, TableCell} from "@nextui-org/react";
+import Swal from "sweetalert2";
 
 
 //da inserire prima di mandare in produzione nelle fetch 91.108.112.165:8081
 
 export default function Pod() {
     const [file, setFile] = useState(null);
-    const [uploading, setUploading] = useState(false);
-    const [message, setMessage] = useState('');
     const [pods, setPods] = useState([]);
     const [isEditable, setIsEditable] = useState({});
+    const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
+    const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV;
 
     useEffect(() => {
         const fetchPods = async () => {
             try {
-                const response = await fetch('http://localhost:8080/pod/all', {
+                const response = await fetch(`${PATH_DEV}/pod/all`, {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -40,10 +41,10 @@ export default function Pod() {
                     });
                     setIsEditable(editableStatus);
                 } else {
-                    console.error('Fetch failed:', response.statusText);
+                    console.log('Fetch failed:', response.statusText);
                 }
             } catch (error) {
-                console.error('Error during fetch:', error);
+                console.log('Error during fetch:', error);
             }
         };
 
@@ -57,31 +58,40 @@ export default function Pod() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (!file) {
-            setMessage('Seleziona la bolletta da caricare');
-            return;
+            await Swal.fire({
+                icon: 'error',
+                title: 'Errore',
+                text: 'Seleziona un file da caricare'
+            });
         }
 
-        setUploading(true);
+
         const formData = new FormData();
         formData.append('fileName', file.name);
         formData.append('fileData', file);
 
-        try {
-            const response = await fetch('http://localhost:8080/files/upload', {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            });
+        const response = await fetch(`${PATH_DEV}/files/upload`, {
+            method: 'POST',
+            body: formData,
+            credentials: 'include'
+        });
 
-            if (!response.ok) {
-                throw new Error('Errore nel caricamento del file');
-            }
+        if (!response.ok) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Errore',
+                text: 'Errore durante il caricamento del file'
+            });
+        } else if (response.ok) {
+            await Swal.fire({
+                icon: 'success',
+                title: 'Successo',
+                text: 'Bolletta caricate con successo'
+            });
             const data = await response.text();
-            setMessage('Bolletta caricata con successo: ' + data);
-        } catch (error) {
-            console.error('Error uploading file', error);
-            setMessage('Errore nel caricamento della bolletta.');
+
         }
+
         setUploading(false);
         window.location.href = '/pod';
     };
@@ -90,41 +100,46 @@ export default function Pod() {
     const updatePod = async (podId) => {
         const podToUpdate = pods.find(pod => pod.id === podId);
         if (!podToUpdate) {
-            console.error('Pod non trovato:', podId);
+            await Swal.fire({
+                icon: 'error',
+                title: 'Errore',
+                text: 'Pod non trovato'
+            });
             return;
         }
 
-        try {
-            const response = await fetch('http://localhost:8080/pod/sedeNazione', {
-                method: 'PUT',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    idPod: podToUpdate.id,
-                    sede: podToUpdate.sede,
-                    nazione: podToUpdate.nazione
-                })
+        const response = await fetch(`${PATH_DEV}/pod/sedeNazione`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                idPod: podToUpdate.id,
+                sede: podToUpdate.sede,
+                nazione: podToUpdate.nazione
+            })
+        });
+
+        if (response.ok) {
+            const text = await response.text();
+            if (text) {
+                const data = JSON.parse(text);
+                setPods(prevPods => prevPods.map(p => p.id === podId ? {...p, ...data} : p));
+            } else {
+                setPods(prevPods => prevPods.map(p => p.id === podId ? podToUpdate : p));
+            }
+            window.location.href = '/pod';
+        } else {
+            const text = await response.text();
+            await Swal.fire({
+                icon: 'error',
+                title: 'Errore',
+                text: "Errore durante l'aggiornamento del pod"
             });
 
-            if (response.ok) {
-                const text = await response.text();
-                if (text) {
-                    const data = JSON.parse(text);
-                    setPods(prevPods => prevPods.map(p => p.id === podId ? {...p, ...data} : p));
-                } else {
-                    setPods(prevPods => prevPods.map(p => p.id === podId ? podToUpdate : p));
-                }
-                window.location.href = '/pod';
-            } else {
-                const text = await response.text();
-                console.error('Errore del server:', text);
-                console.error('Errore durante l\'aggiornamento del pod');
-            }
-        } catch (error) {
-            console.error('Errore durante l\'aggiornamento del pod:', error);
         }
+
     };
 
     const handleUpdateClick = (podId) => {
@@ -150,12 +165,10 @@ export default function Pod() {
             <h1 className={classes.titoloBolletta}>Carica la Bolletta</h1>
             <form onSubmit={handleSubmit} className={classes.formBolletta}>
                 <input type="file" accept="application/pdf" onChange={handleFileChange} className="form-control"/>
-                <button type="submit" disabled={uploading} className={`btn btn-primary mt-3 ${classes.bottoneCarica}`}>
-                    {uploading ? 'Caricamento in corso...' : 'Carica'}
+                <button type="submit" className={`btn btn-primary mt-3 ${classes.bottoneCarica}`}>
+                    Carica
                 </button>
             </form>
-            {message &&
-                <p className={`alert ${uploading ? 'alert-danger' : 'alert-success'}`}>{message}</p>}
             <h2 className={`${classes.titoloPod} mb-4 text-center`}>Elenco dei Pod</h2>
 
             <div className={classes.tableContainer}>
