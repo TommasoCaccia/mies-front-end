@@ -18,7 +18,7 @@ export default function Register() {
         const classeAgevolazione = event.target.classeAgevolazione ? event.target.classeAgevolazione.value : null;
 
 
-        const response = await fetch(`${PATH_PRODUCTION}/cliente/update`, {
+        const response = await fetch(`${PATH_DEV}/cliente/update`, {
             method: 'PUT',
             credentials: 'include',
             headers: {

@@ -17,7 +17,7 @@ export default function Pod() {
     useEffect(() => {
         const fetchPods = async () => {
             try {
-                const response = await fetch(`${PATH_PRODUCTION}/pod/all`, {
+                const response = await fetch(`${PATH_DEV}/pod/all`, {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -57,43 +57,60 @@ export default function Pod() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        // Verifica se è stato selezionato un file
         if (!file) {
             await Swal.fire({
                 icon: 'error',
                 title: 'Errore',
                 text: 'Seleziona un file da caricare'
             });
+            return;
         }
 
-
+        // Crea un FormData con il file caricato
         const formData = new FormData();
         formData.append('fileName', file.name);
         formData.append('fileData', file);
 
-        const response = await fetch(`${PATH_PRODUCTION}/files/upload`, {
-            method: 'POST',
-            body: formData,
-            credentials: 'include'
-        });
+        try {
+            // Effettua la richiesta al server
+            const response = await fetch(`${PATH_DEV}/files/upload`, {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
 
-        if (!response.ok) {
+            // Leggi il contenuto della risposta come testo
+            const responseText = await response.text();
+
+            if (response.ok) {
+                // Mostra un messaggio di successo con il contenuto della risposta
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Successo',
+                    text: responseText || 'File caricato e processato con successo.'
+                });
+
+                // Reindirizzamento se necessario
+                window.location.href = '/pod';
+            } else {
+                // Mostra il messaggio di errore dal server
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Errore',
+                    text: responseText || 'Errore durante il caricamento del file.'
+                });
+            }
+        } catch (error) {
+            // Gestione degli errori di rete o di esecuzione
+            console.error("Errore nella richiesta:", error);
             await Swal.fire({
                 icon: 'error',
                 title: 'Errore',
-                text: 'Errore durante il caricamento del file'
+                text: 'Si è verificato un errore imprevisto. Riprova più tardi.'
             });
-        } else if (response.ok) {
-            await Swal.fire({
-                icon: 'success',
-                title: 'Successo',
-                text: 'Bolletta caricate con successo'
-            });
-            const data = await response.text();
-
         }
-
-        setUploading(false);
-        window.location.href = '/pod';
     };
 
 
@@ -108,7 +125,7 @@ export default function Pod() {
             return;
         }
 
-        const response = await fetch(`${PATH_PRODUCTION}/pod/sedeNazione`, {
+        const response = await fetch(`${PATH_DEV}/pod/sedeNazione`, {
             method: 'PUT',
             credentials: 'include',
             headers: {

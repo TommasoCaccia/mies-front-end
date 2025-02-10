@@ -1,7 +1,24 @@
-.carosello{
+.carosello {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
 }
 
-.Immagine1{
-width: 100%;
-display: block;
+.Immagine1 {
+    width: 100%; /* Adatta l'immagine alla larghezza del contenitore */
+    height: auto; /* Mantieni le proporzioni */
+    object-fit: cover; /* Assicura che l'immagine si adatti bene */
+    border-radius: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .carosello {
+        padding: 2rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .carosello {
+        padding: 3rem;
+    }
 }

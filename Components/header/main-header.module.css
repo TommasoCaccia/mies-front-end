@@ -1,13 +1,22 @@
-.Header {
-    min-height: 100px;
+.loginPulsante {
+    background-color: #2C4D79;
+    border-radius: 0;
+    color: white;
+    text-transform: uppercase;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
-    top: 0;
-    position: fixed;
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 2rem;
+    font-family: "Montserrat", sans-serif;
+    cursor: pointer;
+    margin-left: 25px;
+    border: none !important;
+}
+
+.loginPulsante:hover {
+    background-color: #214168;
 }
 
 .avatar {
@@ -16,149 +25,195 @@
     height: 70px;
 }
 
-.navItem {
+.header {
+    background-color: #fff;
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .1);
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+}
+
+.header ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow: hidden;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+}
+
+.header li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.header li a {
+    padding: 20px 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 600;
+    color: black;
+}
+
+.header li a:hover,
+.header .menuBtn:hover {
+    background-color: #f4f4f4;
+}
+
+.header .logo {
+    display: block;
+    float: left;
+    font-size: 2em;
+    padding: 10px 20px;
+    text-decoration: none;
+    max-width: 8rem;
+    margin-top: 1rem;
+}
+
+/* menu */
+
+.header .menu {
+    clear: none;
+}
+
+/* menu icon */
+
+.menuIcon {
+    cursor: pointer;
+    display: none;
+    float: right;
+    padding: 28px 20px;
     position: relative;
-    min-height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    user-select: none;
 }
 
-
-.logo {
-    max-width: 100px;
+.header .menuIcon .navIcon {
+    background: #333;
+    display: block;
+    height: 2px;
+    position: relative;
+    width: 18px;
 }
 
-.link1, .link2 {
-    color: #616161;
-    font-family: "Montserrat", sans-serif;
-    text-transform: uppercase;
-    font-size: 13px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    padding: 12px 20px 12px 20px;
-
+.header .menuIcon .navIcon:before,
+.header .menuIcon .navIcon:after {
+    background: #333;
+    content: '';
+    display: block;
+    height: 100%;
+    position: absolute;
+    width: 100%;
 }
 
-.link3 {
-    color: #616161;
-    font-family: "Montserrat", sans-serif;
-    text-transform: uppercase;
-    font-size: 13px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    padding: 12px 20px 12px 20px;
+.header .menuIcon .navIcon:before {
+    top: 5px;
 }
 
-
-.link1:hover, .link2:hover, .link3:hover {
-    color: #9c9c9c;
+.header .menuIcon .navIcon:after {
+    top: -5px;
 }
 
-.logoutPulsante {
-    background-color: #2C4D79;
-    border-radius: 0;
-    color: white;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 2rem;
-    font-family: "Montserrat", sans-serif;
-    cursor: pointer;
-    margin-left: 25px;
-    border: none !important;
+/* menu btn */
+
+.header .menuBtn {
+    display: none;
 }
 
-.loginPulsante{
-    background-color: #2C4D79;
-    border-radius: 0;
-    color: white;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 2rem;
-    font-family: "Montserrat", sans-serif;
-    cursor: pointer;
-    margin-left: 25px;
-    border: none !important;
+.header .menuBtn:checked ~ .menu {
+    max-height: 333rem;
 }
 
-.loginPulsante:hover, .logoutPulsante:hover {
-    background-color: #214168;
+.header .menuBtn:checked ~ .menuIcon .navIcon {
+    background: transparent;
 }
 
-
-/*Menu Hamburgher */
-
-.hamburger {
-    display: none; /* Nascondi il pulsante di default */
-    flex-direction: column;
-    cursor: pointer;
-    border-color: transparent;
-    background-color: transparent;
-    transition: transform 0.3s ease; /* Smooth transition for transform */
+.header .menuBtn:checked ~ .menuIcon .navIcon:before {
+    transform: rotate(-45deg);
 }
 
-.bar {
-    height: 3px;
-    width: 25px;
-    background-color: #333; /* Colore delle barre */
-    margin: 2px 0;
-    transition: all 0.3s ease; /* Smooth transition for all properties */
+.header .menuBtn:checked ~ .menuIcon .navIcon:after {
+    transform: rotate(45deg);
 }
 
-/* Active state styles */
-.hamburger.active .bar:nth-child(1) {
-    transform: translateY(5px) rotate(45deg); /* Move and rotate the first bar */
+.header .menuBtn:checked ~ .menuIcon:not(.steps) .navIcon:before,
+.header .menuBtn:checked ~ .menuIcon:not(.steps) .navIcon:after {
+    top: 0;
 }
 
-.hamburger.active .bar:nth-child(2) {
-    opacity: 0; /* Hide the middle bar */
-}
+/* Gestione per schermi più piccoli */
 
-.hamburger.active .bar:nth-child(3) {
-    transform: translateY(-5px) rotate(-45deg); /* Move and rotate the third bar */
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .hamburger {
-        display: flex; /* Show hamburger on small screens */
-    }
-}
-
-.nav {
-    display: flex;
-    flex-direction: column;
-    right: 0;
-    background-color: white; /* Colore di sfondo del menu */
-    overflow: hidden; /* Nascondi gli elementi in eccesso */
-    transition: max-height 0.3s ease; /* Transizione per l'apertura */
-}
-
-.show {
-    max-height: 300px !important; /* Altezza massima quando aperto (regola in base al contenuto) */
-
-}
-
-@media (max-width: 1004px) {
-    .hamburger {
-        display: flex; /* Mostra il pulsante su schermi piccoli */
-    }
-
-    .nav {
-        display: flex; /* Mostra il menu come colonna */
+@media (max-width: 75em) {
+    .header ul {
         flex-direction: column;
-        top: 95px; /* Regola in base all'altezza dell'header */
-        width: 100%;
-        max-height: 0; /* Nascondi il menu */
+        align-items: center;
+    }
+
+    .header li {
+        flex-direction: column;
+    }
+
+    .header .menu {
+        flex-direction: column;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height .4s ease-out;
+        clear: both;
+    }
+
+    .header .menuIcon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        user-select: none;
+        margin: 2rem;
+    }
+
+    .header .menuBtn:checked ~ .menu {
+        max-height: 333rem;
+    }
+
+    /* Aggiunta dell'effetto a caselli */
+    .header .menu li {
+        opacity: 0;
+        transform: translateY(-20px); /* Parte leggermente sopra */
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+    /* Quando il menu viene attivato */
+    .header .menuBtn:checked ~ .menu li {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Ritardo per l'effetto cascata */
+    .header .menuBtn:checked ~ .menu li:nth-child(1) {
+        transition-delay: 0.1s;
+    }
+    .header .menuBtn:checked ~ .menu li:nth-child(2) {
+        transition-delay: 0.2s;
+    }
+    .header .menuBtn:checked ~ .menu li:nth-child(3) {
+        transition-delay: 0.3s;
+    }
+    .header .menuBtn:checked ~ .menu li:nth-child(4) {
+        transition-delay: 0.4s;
+    }
+    .header .menuBtn:checked ~ .menu li:nth-child(5) {
+        transition-delay: 0.5s;
+    }
+    .header .menuBtn:checked ~ .menu li:nth-child(6) {
+        transition-delay: 0.6s;
+    }
+    .header .menuBtn:checked ~ .menu li:nth-child(7) {
+        transition-delay: 0.7s;
     }
 }
+

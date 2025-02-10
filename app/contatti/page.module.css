@@ -9,7 +9,7 @@
 .container {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     box-sizing: border-box; /* Considera padding e bordo nel calcolo delle dimensioni */
     color: #616161;
@@ -31,6 +31,7 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
+    gap: 20px;
 }
 
 
@@ -71,14 +72,15 @@
 }
 
 @media (max-width: 1160px) {
-    .container{
+    .container {
         flex-direction: column;
     }
+
     .mainContent {
         border: none;
     }
 
-    .sidebarContainer{
+    .sidebarContainer {
         display: grid;
         grid-template-columns: repeat(2, minmax(370px, 1fr));
         gap: 50px;

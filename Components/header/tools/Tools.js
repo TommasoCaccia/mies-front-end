@@ -31,10 +31,8 @@ const Tools = () => {
                             </DropdownTrigger>
                             <DropdownMenu className={classes.submenu}>
 {/*                                <DropdownItem className={classes.dropdownItem}>
-                                    <Link href="/energy-portfolio" className={classes.link}>Energy Portfolio</Link>
                                 </DropdownItem>*/}
                                 <DropdownItem className={classes.dropdownItem}>
-                                    <Link href="/pod/bollette" className={classes.link}>Bollette</Link>
                                 </DropdownItem>
                             </DropdownMenu>
                         </Dropdown>

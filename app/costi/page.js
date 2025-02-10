@@ -5,6 +5,7 @@ import classes from '@/app/costi/page.module.css';
 import {Table, TableHeader, TableBody, TableColumn, TableRow, TableCell} from "@nextui-org/react";
 import Swal from "sweetalert2";
 
+
 export default function DataEntry() {
     const [data, setData] = useState([]);
     const [filterCategoria, setFilterCategoria] = useState('');
@@ -40,7 +41,6 @@ export default function DataEntry() {
         formRef.current.scrollIntoView({behavior: "smooth"});
     };
 
-    
 
     const verificaEliminazione = (id) => {
         Swal.fire({
@@ -54,6 +54,7 @@ export default function DataEntry() {
         }).then((result) => {
             if (result.isConfirmed) {
                 deleteCosto(id);
+                window.location.href = '/costi';
             }
         });
     }
@@ -66,7 +67,7 @@ export default function DataEntry() {
     const handleSaveChanges = async () => {
         const updatedData = [...filteredData];
         updatedData[selectedIndex] = editRowData; // Update the selected row
-        const response = await fetch(`${PATH_PRODUCTION}/costi/update`, {
+        const response = await fetch(`${PATH_DEV}/costi/update`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(editRowData)
@@ -108,7 +109,7 @@ export default function DataEntry() {
         formData.append('fileName', file.name);
 
 
-        const response = await fetch(`${PATH_PRODUCTION}/costi/upload`, {
+        const response = await fetch(`${PATH_DEV}/costi/upload`, {
             method: 'POST',
             body: formData,
         });
@@ -127,9 +128,56 @@ export default function DataEntry() {
 
     };
 
+
+    const handleDownloadCosti = async () => {
+        try {
+            const response = await fetch(`${PATH_DEV}/costi/downloadExcel`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                },
+            });
+
+            if (response.ok) {
+                // Converti la risposta in un blob
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+
+                // Crea un collegamento temporaneo per il download
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'costi.xlsx'); // Nome del file
+                document.body.appendChild(link);
+                link.click();
+
+                // Rimuovi il collegamento temporaneo
+                link.parentNode.removeChild(link);
+
+                // Mostra il messaggio di successo
+                await Swal.fire({
+                    icon: 'success',
+                    text: 'Download dei dati avvenuto con successo',
+                });
+            } else {
+                // Mostra il messaggio di errore
+                await Swal.fire({
+                    icon: 'error',
+                    text: 'Errore durante il download dei dati',
+                });
+            }
+        } catch (error) {
+            console.error('Errore durante il download:', error);
+            await Swal.fire({
+                icon: 'error',
+                text: 'Si è verificato un errore imprevisto',
+            });
+        }
+    };
+
+
     const fetchCosti = async () => {
 
-        const response = await fetch(`${PATH_PRODUCTION}/costi`, {
+        const response = await fetch(`${PATH_DEV}/costi`, {
             method: 'GET',
             credentials: 'include',
             headers: {'Content-Type': 'application/json'}
@@ -145,7 +193,7 @@ export default function DataEntry() {
     };
 
     const deleteCosto = async (id) => {
-        const response = await fetch(`${PATH_PRODUCTION}/costi/delete/${id}`, {
+        const response = await fetch(`${PATH_DEV}/costi/delete/${id}`, {
             method: 'DELETE',
             credentials: 'include',
             headers: {'Content-Type': 'application/json'},
@@ -308,6 +356,9 @@ export default function DataEntry() {
                         <span className="fileName">{file ? file.name : 'Nessun file selezionato'}</span>
                     </div>
                     <button type="submit" className={classes.uploadButton}>UPLOAD</button>
+                    <button type="button" onClick={handleDownloadCosti} className={classes.uploadButton}>Scarica Excel
+                    </button>
+
                 </form>
             </div>
             {isFormVisible ? (

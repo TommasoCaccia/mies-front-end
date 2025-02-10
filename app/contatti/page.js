@@ -1,4 +1,6 @@
 import classes from '@/app/contatti/page.module.css';
+import Card from '../../Components/cardTeam/cardTeam'
+import SendEmailForm from "@/Components/formEmail/form";
 
 const Contatti = () => (
     <div>
@@ -16,7 +18,15 @@ const Contatti = () => (
             <div className={classes.mainContent}>
                 <h1 className={classes.titoloPrincipale}>LA SEDE MIES</h1>
                 <p>Ti diamo il benvenuto in MIES. <br></br>
-                    Mettiti in contatto senza alcun impegno, ti risponderemo al più presto!</p>
+                    Mettiti in contatto senza alcun impegno, ti risponderemo al più presto!
+                </p>
+                <div>
+                    <Card/>
+                </div>
+                <div>
+                    <h1>Inviaci un email</h1>
+                    <SendEmailForm/>
+                </div>
             </div>
             <div className={classes.sidebarContainer}>
                 <div>

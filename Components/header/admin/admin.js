@@ -20,10 +20,8 @@ const Admin = () => {
             </DropdownTrigger>
             <DropdownMenu className={classes.dropdownMenu}>
                 <DropdownItem className={classes.dropdownItem}>
-                    <Link href="/creazione-utente" className={classes.link}>Creazione Utente</Link>
                 </DropdownItem>
                 <DropdownItem className={classes.dropdownItem}>
-                    <Link href="/costi" className={classes.link}>Costi</Link>
                 </DropdownItem>
             </DropdownMenu>
         </Dropdown>

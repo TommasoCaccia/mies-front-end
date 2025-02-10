@@ -12,8 +12,9 @@ export default function Bollette() {
 
 
     const downloadFile = async (id, name) => {
+        
         try {
-            const response = await axios.get(`${PATH_PRODUCTION}/files/${id}/download`, {
+            const response = await axios.get(`${PATH_DEV}/files/${id}/download`, {
                 responseType: 'blob',
             });
 
@@ -37,7 +38,7 @@ export default function Bollette() {
 
     const getFiles = async () => {
         try {
-            const response = await fetch(`${PATH_PRODUCTION}/pod/bollette`, {
+            const response = await fetch(`${PATH_DEV}/pod/bollette`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
