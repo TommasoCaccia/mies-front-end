@@ -65,49 +65,31 @@ const ClienteProfilo = () => {
 
 
     return (
-        <div>
-            <div className={classes.container}>
-                <title>Info Cliente</title>
-                <h1>Informazioni Cliente</h1>
-                <div className={classes.info}>
-                    {[
-                        'username',
-                        'password',
-                        'sedeLegale',
-                        'pIva',
-                        'stato',
-                        'email',
-                        'telefono',
-                        'classeAgevolazione',
-
-                    ].map((campo) => (
-                        <div key={campo} className={classes.field}>
-                            <p>
-                                <span>{campo.charAt(0).toUpperCase() + campo.slice(1)}:</span>{" "}
-                                {campo === 'password' ? '********' : (infoUtente[campo] || 'Dato mancante')}
-                            </p>
-                            {infoUtente[campo] === null || infoUtente[campo] === "" ? (
-                                modificaCampo === campo ? (
-                                    <div className={classes.editField}>
-                                        <input
-                                            type="text"
-                                            placeholder={`Inserisci ${campo}`}
-                                            value={nuovoDato}
-                                            onChange={(e) => setNuovoDato(e.target.value)}
-                                        />
-                                        <button onClick={() => aggiornaDato(campo)}>Salva</button>
-                                        <button onClick={() => setModificaCampo(null)}>Annulla</button>
-                                    </div>
-                                ) : (
-                                    <button className={classes.modifyButton} onClick={() => setModificaCampo(campo)}>
-                                        Aggiungi
-                                    </button>
-                                )
-                            ) : modificaCampo === campo ? (
+        <div className={classes.container}>
+            <title>Info Cliente</title>
+            <h1>Informazioni Cliente</h1>
+            <div className={classes.info}>
+                {[
+                    'username',
+                    'password',
+                    'sedeLegale',
+                    'pIva',
+                    'stato',
+                    'email',
+                    'telefono',
+                    'classeAgevolazione',
+                ].map((campo) => (
+                    <div key={campo} className={classes.field}>
+                        <p>
+                            <span>{campo.charAt(0).toUpperCase() + campo.slice(1)}:</span>{" "}
+                            {campo === 'password' ? '********' : (infoUtente[campo] || 'Dato mancante')}
+                        </p>
+                        {infoUtente[campo] === null || infoUtente[campo] === "" ? (
+                            modificaCampo === campo ? (
                                 <div className={classes.editField}>
                                     <input
                                         type="text"
-                                        placeholder={`Modifica ${campo}`}
+                                        placeholder={`Inserisci ${campo}`}
                                         value={nuovoDato}
                                         onChange={(e) => setNuovoDato(e.target.value)}
                                     />
@@ -116,18 +98,35 @@ const ClienteProfilo = () => {
                                 </div>
                             ) : (
                                 <button className={classes.modifyButton} onClick={() => setModificaCampo(campo)}>
-                                    Modifica
+                                    Aggiungi
                                 </button>
-                            )}
-                        </div>
-                    ))}
-                </div>
+                            )
+                        ) : modificaCampo === campo ? (
+                            <div className={classes.editField}>
+                                <input
+                                    type="text"
+                                    placeholder={`Modifica ${campo}`}
+                                    value={nuovoDato}
+                                    onChange={(e) => setNuovoDato(e.target.value)}
+                                />
+                                <div className={classes.buttons}>
+                                    <button onClick={() => aggiornaDato(campo)}>Salva</button>
+                                    <button onClick={() => setModificaCampo(null)}>Annulla</button>
+                                </div>
 
-                <button className={classes.btnLogout} onClick={logOut}>
-                    Logout
-                </button>
+                            </div>
+                        ) : (
+                            <button className={classes.modifyButton} onClick={() => setModificaCampo(campo)}>
+                                Modifica
+                            </button>
+                        )}
+                    </div>
+                ))}
             </div>
 
+            <button className={classes.btnLogout} onClick={logOut}>
+                Logout
+            </button>
         </div>
     );
 };

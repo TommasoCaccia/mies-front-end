@@ -59,6 +59,13 @@
     background-color: #1f3658;
 }
 
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
 .editField {
     display: flex;
     flex-direction: column;
@@ -113,8 +120,8 @@
 .btnLogout:hover {
     background-color: #1f3658;
 }
-
-/* Responsività */
+/*
+!* Responsività *!
 @media (min-width: 768px) {
     .info {
         flex-direction: row;
@@ -123,14 +130,14 @@
     }
 
     .field {
-        flex: 1 1 calc(50% - 20px); /* Due colonne su tablet */
+        flex: 1 1 calc(50% - 20px); !* Due colonne su tablet *!
         max-width: calc(50% - 20px);
     }
 }
 
 @media (min-width: 1024px) {
     .field {
-        flex: 1 1 calc(33.33% - 20px); /* Tre colonne su schermi grandi */
+        flex: 1 1 calc(33.33% - 20px); !* Tre colonne su schermi grandi *!
         max-width: calc(33.33% - 20px);
     }
-}
+}*/
