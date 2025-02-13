@@ -9,6 +9,54 @@
     font-family: "Montserrat", sans-serif;
 }
 
+.searchContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #2C4D79;
+}
+
+.searchBar {
+    width: 250px;
+    padding: 10px;
+    font-size: 14px;
+    border: 2px solid #2C4D79;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    color: #333;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.searchBar:hover {
+    border-color: #214168;
+}
+
+.searchBar:focus {
+    border-color: #214168;
+    background-color: #ffffff;
+}
+
+.searchBar option {
+    font-size: 14px;
+    color: #2C4D79;
+    background-color: #ffffff;
+}
+
+.searchBar option:hover {
+    background-color: #2C4D79;
+    color: white;
+}
+
+
 .tableContainer {
     width: 100%; /* Ensure container takes full width */
     display: flex;

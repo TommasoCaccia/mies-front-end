@@ -35,6 +35,7 @@ export default function MainHeader() {
                 credentials: 'include',
                 headers: {'Content-Type': 'application/json'}
             });
+
             if (response.ok) {
                 const data = await response.json();
                 setCategoriaUtente(data.tipologia);
@@ -44,16 +45,18 @@ export default function MainHeader() {
         } catch (error) {
             setError("Errore di rete");
         }
+
     };
 
     useEffect(() => {
         checkAccesso();
         checkCategoria();
+        console.log(categoriaUtente);
     }, []);
 
     return (
         <header className={classes.header}>
-            <Link href="/">
+            <Link href="/" className={classes.logoContainer}>
                 <img src="/Logo.png" className={classes.logo} alt="Logo"/>
             </Link>
 
@@ -61,11 +64,14 @@ export default function MainHeader() {
             <label className={classes.menuIcon} htmlFor="menuBtn"><span className={classes.navIcon}></span></label>
 
             <ul className={classes.menu}>
+                <Link href="/" className={classes.logoContainerElenco}>
+                    <img src="/Logo.png" className={classes.logoElenco} alt="Logo"/>
+                </Link>
                 <li>
-                    <Link href="/servizi" >Servizi</Link>
+                    <Link href="/servizi">Servizi</Link>
                 </li>
                 <li>
-                    <Link href="/contatti" >Contatti</Link>
+                    <Link href="/contatti">Contatti</Link>
                 </li>
                 {accessoEffetuato && (
                     <>
@@ -73,12 +79,12 @@ export default function MainHeader() {
                             <Link href="/energy-portfolio">Energy Portfolio</Link>
                         </li>
                         <li>
-                            <Link href="/pod/bollette" >Bollette</Link>
+                            <Link href="/pod/bollette">Bollette</Link>
                         </li>
                         {categoriaUtente === "Admin" && (
                             <>
                                 <li>
-                                    <Link href="/creazione-utente" className={classes.link}>Creazione Utente</Link>
+                                    <Link href="/creazione-utente">Creazione Utente</Link>
                                 </li>
                                 <li>
                                     <Link href="/costi">Costi</Link>
@@ -95,7 +101,7 @@ export default function MainHeader() {
                     </li>
                 )}
                 {!accessoEffetuato && (
-                    <div className="cta-wrapper d-flex flex">
+                    <div className={classes.loginContainer}>
                         <Link href="/login" className={classes.loginPulsante}>Login</Link>
                     </div>
                 )}

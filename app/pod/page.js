@@ -17,7 +17,7 @@ export default function Pod() {
     useEffect(() => {
         const fetchPods = async () => {
             try {
-                const response = await fetch(`${PATH_DEV}/pod/all`, {
+                const response = await fetch(`${PATH_DEV}/pod`, {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -204,9 +204,9 @@ export default function Pod() {
                             {pods.map(pod => (
                                 <TableRow key={pod.id}>
                                     <TableCell>{pod.id}</TableCell>
-                                    <TableCell>{pod.potenza_Disponibile}</TableCell>
-                                    <TableCell>{pod.potenza_Impegnata}</TableCell>
-                                    <TableCell>{pod.tensione_Alimentazione}</TableCell>
+                                    <TableCell>{pod.potenzaDisponibile}</TableCell>
+                                    <TableCell>{pod.potenzaImpegnata}</TableCell>
+                                    <TableCell>{pod.tensioneAlimentazione}</TableCell>
                                     <TableCell>
                                         {isEditable[pod.id] && isEditable[pod.id].sede ? (
                                             <input

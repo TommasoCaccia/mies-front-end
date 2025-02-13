@@ -1,6 +1,10 @@
+
+.loginContainer {
+    padding: 20px 20px;
+}
+
 .loginPulsante {
     background-color: #2C4D79;
-    border-radius: 0;
     color: white;
     text-transform: uppercase;
     display: flex;
@@ -8,11 +12,10 @@
     align-items: center;
     font-size: 15px;
     font-weight: 600;
-    padding: 10px 2rem;
+    padding: 1rem 2rem;
     font-family: "Montserrat", sans-serif;
     cursor: pointer;
-    margin-left: 25px;
-    border: none !important;
+    border-radius: 1.5rem;
 }
 
 .loginPulsante:hover {
@@ -20,15 +23,16 @@
 }
 
 .avatar {
-    margin-top: 10px;
-    width: 70px;
-    height: 70px;
+    width: 5rem;
+    height: 5rem;
 }
 
 .header {
     background-color: #fff;
     box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .1);
     position: fixed;
+    display: flex;
+    align-items: center;
     width: 100%;
     z-index: 3;
 }
@@ -36,11 +40,12 @@
 .header ul {
     margin: 0;
     padding: 0;
+    width: 100%;
     list-style: none;
     overflow: hidden;
     background-color: #fff;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-end;
     align-items: center;
     flex-direction: row;
 }
@@ -67,13 +72,19 @@
 }
 
 .header .logo {
-    display: block;
-    float: left;
     font-size: 2em;
     padding: 10px 20px;
     text-decoration: none;
     max-width: 8rem;
-    margin-top: 1rem;
+
+}
+
+.header .logoElenco {
+    display: none;
+}
+
+.logoContainerElenco {
+    margin-right: auto;
 }
 
 /* menu */
@@ -91,6 +102,7 @@
     padding: 28px 20px;
     position: relative;
     user-select: none;
+    align-self: start;
 }
 
 .header .menuIcon .navIcon {
@@ -176,6 +188,10 @@
         margin: 2rem;
     }
 
+    .header .logo {
+        display: none;
+    }
+
     .header .menuBtn:checked ~ .menu {
         max-height: 333rem;
     }
@@ -197,21 +213,27 @@
     .header .menuBtn:checked ~ .menu li:nth-child(1) {
         transition-delay: 0.1s;
     }
+
     .header .menuBtn:checked ~ .menu li:nth-child(2) {
         transition-delay: 0.2s;
     }
+
     .header .menuBtn:checked ~ .menu li:nth-child(3) {
         transition-delay: 0.3s;
     }
+
     .header .menuBtn:checked ~ .menu li:nth-child(4) {
         transition-delay: 0.4s;
     }
+
     .header .menuBtn:checked ~ .menu li:nth-child(5) {
         transition-delay: 0.5s;
     }
+
     .header .menuBtn:checked ~ .menu li:nth-child(6) {
         transition-delay: 0.6s;
     }
+
     .header .menuBtn:checked ~ .menu li:nth-child(7) {
         transition-delay: 0.7s;
     }
