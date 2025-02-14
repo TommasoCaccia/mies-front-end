@@ -11,7 +11,7 @@ const ClienteProfilo = () => {
     const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV
 
     const logOut = async () => {
-        const response = await fetch(`${PATH_DEV}/Autentication/logout`, {
+        const response = await fetch(`${PATH_PRODUCTION}/Autentication/logout`, {
             method: 'DELETE',
             credentials: 'include',
             headers: {
@@ -27,7 +27,7 @@ const ClienteProfilo = () => {
     };
 
     const getCliente = async () => {
-        const response = await fetch(`${PATH_DEV}/cliente`, {
+        const response = await fetch(`${PATH_PRODUCTION}/cliente`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -41,7 +41,7 @@ const ClienteProfilo = () => {
     };
 
     const aggiornaDato = async () => {
-        const response = await fetch(`${PATH_DEV}/cliente/update`, {
+        const response = await fetch(`${PATH_PRODUCTION}/cliente/update`, {
             method: 'PUT',
             credentials: 'include',
             headers: {
@@ -74,10 +74,15 @@ const ClienteProfilo = () => {
                     'password',
                     'sedeLegale',
                     'pIva',
-                    'stato',
                     'email',
                     'telefono',
+                    'stato',
                     'classeAgevolazione',
+                    'codiceAteco',
+                    'energivori',
+                    'gassivori',
+                    'consumoAnnuo',
+                    'fatturatoAnnuo'
                 ].map((campo) => (
                     <div key={campo} className={classes.field}>
                         <p>
@@ -87,12 +92,26 @@ const ClienteProfilo = () => {
                         {infoUtente[campo] === null || infoUtente[campo] === "" ? (
                             modificaCampo === campo ? (
                                 <div className={classes.editField}>
-                                    <input
-                                        type="text"
-                                        placeholder={`Inserisci ${campo}`}
-                                        value={nuovoDato}
-                                        onChange={(e) => setNuovoDato(e.target.value)}
-                                    />
+                                    {campo === "energivori" || campo === "gassivori" ? (
+                                        <div className={classes.checkboxContainer}>
+                                            <input
+                                                type="checkbox"
+                                                checked={nuovoDato === "true"}
+                                                onChange={(e) => setNuovoDato(e.target.checked ? "true" : "false")}
+                                                className={classes.customCheckbox}
+                                            />
+                                            <label className={classes.checkboxLabel}>
+                                                {campo.charAt(0).toUpperCase() + campo.slice(1)}
+                                            </label>
+                                        </div>
+                                    ) : (
+                                        <input
+                                            type="text"
+                                            placeholder={`Inserisci ${campo}`}
+                                            value={nuovoDato}
+                                            onChange={(e) => setNuovoDato(e.target.value)}
+                                        />
+                                    )}
                                     <button onClick={() => aggiornaDato(campo)}>Salva</button>
                                     <button onClick={() => setModificaCampo(null)}>Annulla</button>
                                 </div>
@@ -103,17 +122,30 @@ const ClienteProfilo = () => {
                             )
                         ) : modificaCampo === campo ? (
                             <div className={classes.editField}>
-                                <input
-                                    type="text"
-                                    placeholder={`Modifica ${campo}`}
-                                    value={nuovoDato}
-                                    onChange={(e) => setNuovoDato(e.target.value)}
-                                />
+                                {campo === "energivori" || campo === "gassivori" ? (
+                                    <div className={classes.checkboxContainer}>
+                                        <input
+                                            type="checkbox"
+                                            checked={nuovoDato === "true"}
+                                            onChange={(e) => setNuovoDato(e.target.checked ? "true" : "false")}
+                                            className={classes.customCheckbox}
+                                        />
+                                        <label className={classes.checkboxLabel}>
+                                            {campo.charAt(0).toUpperCase() + campo.slice(1)}
+                                        </label>
+                                    </div>
+                                ) : (
+                                    <input
+                                        type="text"
+                                        placeholder={`Modifica ${campo}`}
+                                        value={nuovoDato}
+                                        onChange={(e) => setNuovoDato(e.target.value)}
+                                    />
+                                )}
                                 <div className={classes.buttons}>
                                     <button onClick={() => aggiornaDato(campo)}>Salva</button>
                                     <button onClick={() => setModificaCampo(null)}>Annulla</button>
                                 </div>
-
                             </div>
                         ) : (
                             <button className={classes.modifyButton} onClick={() => setModificaCampo(campo)}>
@@ -128,6 +160,8 @@ const ClienteProfilo = () => {
                 Logout
             </button>
         </div>
+
+
     );
 };
 

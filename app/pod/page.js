@@ -17,7 +17,7 @@ export default function Pod() {
     useEffect(() => {
         const fetchPods = async () => {
             try {
-                const response = await fetch(`${PATH_DEV}/pod`, {
+                const response = await fetch(`${PATH_PRODUCTION}/pod`, {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -75,7 +75,7 @@ export default function Pod() {
 
         try {
             // Effettua la richiesta al server
-            const response = await fetch(`${PATH_DEV}/files/upload`, {
+            const response = await fetch(`${PATH_PRODUCTION}/files/upload`, {
                 method: 'POST',
                 body: formData,
                 credentials: 'include'
@@ -125,7 +125,7 @@ export default function Pod() {
             return;
         }
 
-        const response = await fetch(`${PATH_DEV}/pod/sedeNazione`, {
+        const response = await fetch(`${PATH_PRODUCTION}/pod/sedeNazione`, {
             method: 'PUT',
             credentials: 'include',
             headers: {
