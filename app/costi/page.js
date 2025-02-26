@@ -27,6 +27,7 @@ export default function DataEntry() {
         categoria: "",
         intervalloPotenza: "",
         classeAgevolazione: "",
+        annoRiferimento: "",
     });
 
     const formRef = useRef(null); // Riferimento al form
@@ -67,7 +68,7 @@ export default function DataEntry() {
     const handleSaveChanges = async () => {
         const updatedData = [...filteredData];
         updatedData[selectedIndex] = editRowData; // Update the selected row
-        const response = await fetch(`${PATH_PRODUCTION}/costi/update`, {
+        const response = await fetch(`${PATH_DEV}/costi/update`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(editRowData)
@@ -109,7 +110,7 @@ export default function DataEntry() {
         formData.append('fileName', file.name);
 
 
-        const response = await fetch(`${PATH_PRODUCTION}/costi/upload`, {
+        const response = await fetch(`${PATH_DEV}/costi/upload`, {
             method: 'POST',
             body: formData,
         });
@@ -131,7 +132,7 @@ export default function DataEntry() {
 
     const handleDownloadCosti = async () => {
         try {
-            const response = await fetch(`${PATH_PRODUCTION}/costi/downloadExcel`, {
+            const response = await fetch(`${PATH_DEV}/costi/downloadExcel`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -177,7 +178,7 @@ export default function DataEntry() {
 
     const fetchCosti = async () => {
 
-        const response = await fetch(`${PATH_PRODUCTION}/costi`, {
+        const response = await fetch(`${PATH_DEV}/costi`, {
             method: 'GET',
             credentials: 'include',
             headers: {'Content-Type': 'application/json'}
@@ -193,7 +194,7 @@ export default function DataEntry() {
     };
 
     const deleteCosto = async (id) => {
-        const response = await fetch(`${PATH_PRODUCTION}/costi/delete/${id}`, {
+        const response = await fetch(`${PATH_DEV}/costi/delete/${id}`, {
             method: 'DELETE',
             credentials: 'include',
             headers: {'Content-Type': 'application/json'},
@@ -310,6 +311,7 @@ export default function DataEntry() {
                         <TableColumn>Categoria</TableColumn>
                         <TableColumn>Intevallo di Potenza</TableColumn>
                         <TableColumn>Classe di agevolazione</TableColumn>
+                        <TableColumn>Anno di riferimento</TableColumn>
                         <TableColumn></TableColumn>
                         <TableColumn></TableColumn>
                     </TableHeader>
@@ -325,6 +327,7 @@ export default function DataEntry() {
                                 <TableCell>{costo.categoria}</TableCell>
                                 <TableCell>{costo.intervalloPotenza}</TableCell>
                                 <TableCell>{costo.classeAgevolazione}</TableCell>
+                                <TableCell>{costo.annoRiferimento}</TableCell>
                                 <TableCell>
                                     <Button onClick={() => handleSelectRow(index)}>Modifica</Button>
                                 </TableCell>
@@ -447,6 +450,16 @@ export default function DataEntry() {
                                     value={editRowData.classeAgevolazione}
                                     onChange={(e) =>
                                         setEditRowData({...editRowData, classeAgevolazione: e.target.value})
+                                    }
+                                />
+                            </label>
+                            <label>
+                                Anno di Riferimento:
+                                <input
+                                    type="text"
+                                    value={editRowData.annoRiferimento}
+                                    onChange={(e) =>
+                                        setEditRowData({...editRowData, annoRiferimento: e.target.value})
                                     }
                                 />
                             </label>

@@ -13,7 +13,7 @@ export default function MainHeader() {
 
     const checkAccesso = async () => {
         try {
-            const response = await fetch(`${PATH_PRODUCTION}/Autentication/check`, {
+            const response = await fetch(`${PATH_DEV}/Autentication/check`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {'Content-Type': 'application/json'}
@@ -30,7 +30,7 @@ export default function MainHeader() {
 
     const checkCategoria = async () => {
         try {
-            const response = await fetch(`${PATH_PRODUCTION}/Autentication/checkCategoria`, {
+            const response = await fetch(`${PATH_DEV}/Autentication/checkCategoria`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {'Content-Type': 'application/json'}
