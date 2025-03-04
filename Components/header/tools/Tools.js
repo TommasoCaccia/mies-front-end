@@ -34,6 +34,9 @@ const Tools = () => {
                                 </DropdownItem>*/}
                                 <DropdownItem className={classes.dropdownItem}>
                                 </DropdownItem>
+                                <DropdownItem className={classes.dropdownItem}>
+                                    <Link href="/energy-portfolio/futures" className={classes.link}>Futures</Link>
+                                </DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </ButtonGroup>
