@@ -1,0 +1,251 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 95.94px;
+    font-family: Montserrat, sans-serif;
+    user-select: none;
+    width: 100%; /* Aggiungi questa proprietà per garantirne la larghezza completa */
+}
+.sidebar {
+    margin-top: 85px;
+    background-color: white;
+    overflow-y: auto;
+    position: fixed;
+    width: 200px; /* Mantieni la larghezza della sidebar */
+    height: calc(100vh - 350px); /* L'altezza della sidebar sarà dinamica in base alla finestra */
+    padding-left: 15px;
+    border-radius: 5px;
+    font-weight: 600;
+}
+.errorInput {
+    border: 2px solid red;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+.mainContent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Allinea gli elementi a sinistra */
+    justify-content: flex-start; /* Allinea il contenuto in alto */
+    flex-grow: 1;
+    margin-left: 200px; /* Larghezza della sidebar per evitare sovrapposizione */
+    padding: 20px;
+    width: calc(100% - 200px); /* La larghezza sarà dinamica e si adatterà alla sidebar */
+    height: 100vh; /* L'altezza occupa l'intera finestra */
+    overflow-y: auto; /* Permette lo scroll verticale se necessario */
+}
+
+.navLink {
+    color: #616161;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    position: relative;
+}
+.alertContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Allinea il titolo a sinistra */
+    justify-content: flex-start;
+    position: relative;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-height: 200px; /* Altezza minima per contenere tutto */
+    width: 100%; /* Adatta alla larghezza del contenitore */
+}
+
+.alertTitle {
+    position: absolute; /* Posiziona il titolo assolutamente */
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin: 0; /* Elimina margini aggiuntivi */
+}
+
+.converterContainer {
+    display: flex;
+    flex-direction: row; /* Layout orizzontale */
+    align-items: center;
+    justify-content: space-between;
+    width: 100%; /* Occupa tutto lo spazio disponibile */
+    gap: 15px; /* Spazio tra gli elementi */
+    margin-top: 1%; /* Aggiungi spazio sotto il titolo */
+}
+
+.inputGroupHorizontal {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Cambiato da center a flex-start */
+    min-width: 120px;
+}
+
+.label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: left; /* Per sicurezza */
+}
+
+.h3{
+    margin-top: 2%;
+    font-weight: bold;
+    text-align: left; /* Per sicurezza */
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.convertButton {
+    padding: 15px 20px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 2%;
+}
+
+.navLink.active {
+    color: #2C4D79;
+}
+
+.navLink.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: #2C4D79;
+}
+
+.section {
+    margin-bottom: 20px;
+    width: 100%; /* Assicura che le sezioni occupino tutta la larghezza */
+}
+
+.section h1 {
+    margin-top: 25px;
+}
+
+.section p {
+    margin-bottom: 25px;
+}
+
+.sectionTitle {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.powerbi {
+    margin-bottom: 50px;
+}
+
+.PBI {
+    width: 100%;
+    height: 80vh; /* Altezza dinamica (80% della finestra) */
+    border: none;
+}
+
+.bottonePowerbi {
+    background-color: #2C4D79;
+    color: white;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 10px 16px 10px 16px;
+}
+
+/* Styles for the hamburger button */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 20px;
+    margin-left: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.divMenu {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-right: 20px;
+    height: 100%;
+    background: white;
+}
+
+/* Show hamburger button only on screens smaller than 1050px */
+@media (max-width: 1050px) {
+    .mainContent {
+        margin-left: 0;
+    }
+
+    .hamburger {
+        display: flex;
+        position: fixed;
+        margin-top: 15px;
+    }
+
+    .bar {
+        height: 3px;
+        width: 100%;
+        background-color: #333;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .sidebar.show {
+        display: block;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background-color: white;
+        z-index: 1000;
+    }
+}
+
+/* Styles for larger screens */
+@media (min-width: 1051px) {
+    .hamburger {
+        display: none;
+    }
+}
+
+@media (max-height: 450px) {
+    .sidebar {
+        height: calc(100vh - 300px);
+    }
+}
