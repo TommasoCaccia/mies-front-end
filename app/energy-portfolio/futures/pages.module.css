@@ -143,6 +143,7 @@
 
 .section {
     margin-bottom: 20px;
+    min-height: 90vh; /* Imposta un'altezza minima per ogni sezione */
     width: 100%; /* Assicura che le sezioni occupino tutta la larghezza */
 }
 

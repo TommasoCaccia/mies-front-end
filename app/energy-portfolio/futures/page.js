@@ -2,6 +2,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import classes from '@/app/energy-portfolio/futures/pages.module.css';
 import Swal from "sweetalert2";
+import { motion } from "framer-motion";
+
 
 export default function Home() {
     const [isOpen, setIsOpen] = useState(false);
@@ -72,6 +74,61 @@ export default function Home() {
         Past: useRef(null),
     });
 
+    const sectionVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
+        fadeOut: { opacity: 0, transition: { duration: 2.0, ease: "easeIn" } }
+    };
+    // Nomi leggibili per la sidebar
+    const readableNames = {
+        Futures: "Futures",
+        Alert: "Email Alert",
+        FuturesAnalysis: "Futures Analysis",
+        Past: "Past",
+    };
+
+    // Funzione di navigazione
+    const handleNavigation = (e, section) => {
+        e.preventDefault();
+        setActiveSection(section);
+
+        const sectionElement = sectionRefs.current[section]?.current;
+        if (!sectionElement) return;
+
+        sectionElement.scrollIntoView({ behavior: "smooth", block: "end" });
+    };
+
+    useEffect(() => {
+        const observerOptions = {
+            root: null, // Osserva rispetto al viewport
+            rootMargin: "0px",
+            threshold: 0.5, // Cambia stato quando il 50% della sezione è visibile
+        };
+
+        const observerCallback = (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    setActiveSection(entry.target.id);
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+        Object.keys(sectionRefs.current).forEach((key) => {
+            const section = sectionRefs.current[key].current;
+            if (section) observer.observe(section);
+        });
+
+        return () => {
+            Object.keys(sectionRefs.current).forEach((key) => {
+                const section = sectionRefs.current[key].current;
+                if (section) observer.unobserve(section);
+            });
+        };
+    }, []);
+
+
     const getLimit = () => {
         if (checkModality === 'percentage') {
             return 100; // Limite per la percentuale
@@ -109,45 +166,6 @@ export default function Home() {
         } else {
             setRangeError(false);
         }
-    };
-    const showAlert = () => {
-        alert(`Futures Type: ${futuresType}\n\n` +
-            `Active Alert: ${activeAlert}\n\n` +
-            `General:\n` +
-            `- Minimum Level: ${minimumLevel} ${checkModality ? '%' : ''}\n` +
-            `- Maximum Level: ${maximumLevel} ${checkModality ? '%' : ''}\n` +
-            `- Frequency: ${frequencyAlert}\n\n` +
-            `Yearly:\n` +
-            `- Futures Type: ${futuresYearly}\n` +
-            `- Minimum Level: ${minimumLevelYearly} ${checkModalityYearly ? '%' : ''}\n` +
-            `- Maximum Level: ${maximumLevelYearly} ${checkModalityYearly ? '%' : ''}\n` +
-            `- Frequency: ${frequencyYearly}\n\n` +
-            `Quarterly:\n` +
-            `- Futures Type: ${futuresQuarterly}\n` +
-            `- Minimum Level: ${minimumLevelQuarterly} ${checkModalityQuarterly ? '%' : ''}\n` +
-            `- Maximum Level: ${maximumLevelQuarterly} ${checkModalityQuarterly ? '%' : ''}\n` +
-            `- Frequency: ${frequencyQuarterly}\n\n` +
-            `Monthly:\n` +
-            `- Futures Type: ${futuresMonthly}\n` +
-            `- Minimum Level: ${minimumLevelMonthly} ${checkModalityMonthly ? '%' : ''}\n` +
-            `- Maximum Level: ${maximumLevelMonthly} ${checkModalityMonthly ? '%' : ''}\n` +
-            `- Frequency: ${frequencyMonthly}\n\n` +
-            `Errors:\n` +
-            `- Minimum Level Error: ${minimumLevelError}\n` +
-            `- Maximum Level Error: ${maximumLevelError}\n` +
-            `- Range Error: ${rangeError}\n` +
-            `- Minimum Level Yearly Error: ${minimumLevelYearlyError}\n` +
-            `- Maximum Level Yearly Error: ${maximumLevelYearlyError}\n` +
-            `- Range Yearly Error: ${rangeYearlyError}\n` +
-            `- Minimum Level Quarterly Error: ${minimumLevelQuarterlyError}\n` +
-            `- Maximum Level Quarterly Error: ${maximumLevelQuarterlyError}\n` +
-            `- Range Quarterly Error: ${rangeQuarterlyError}\n` +
-            `- Minimum Level Monthly Error: ${minimumLevelMonthlyError}\n` +
-            `- Maximum Level Monthly Error: ${maximumLevelMonthlyError}\n` +
-            `- Range Monthly Error: ${rangeMonthlyError}\n\n` +
-            `Delete Alert: ${deleteAlert.active ? `Active (${deleteAlert.message})` : 'Inactive'}\n`
-
-        );
     };
 
     useEffect(() => {
@@ -240,7 +258,7 @@ export default function Home() {
             }
 
             const data = await response.json();
-            alert(JSON.stringify(data, null, 2));
+            //alert(JSON.stringify(data, null, 2));
             // Assicuriamoci che `alertData` sia effettivamente un array prima di iterarlo
             if (!data.alertData || !Array.isArray(data.alertData)) {
                 console.error("Errore: alertData non è un array valido", data);
@@ -426,43 +444,6 @@ export default function Home() {
         }
     };
 
-
-
-    // Nomi leggibili per la sidebar
-    const readableNames = {
-        Futures: "Futures",
-        Alert: "Email Alert",
-        FuturesAnalysis: "Futures Analysis",
-        Past: "Past",
-    };
-
-    // Funzione di navigazione
-    const handleNavigation = (e, section) => {
-        e.preventDefault();
-        setManualNavigation(true);
-
-        const sectionElement = sectionRefs[section]?.current;
-        if (!sectionElement) {
-            console.error(`Sezione con ID ${section} non trovata.`);
-            return;
-        }
-
-        const offsetTop = 110;
-
-        window.scrollTo({
-            top: sectionElement.offsetTop - offsetTop,
-            behavior: "smooth",
-        });
-
-        setActiveSection(section);
-
-        const onScroll = () => {
-            setManualNavigation(false);
-            window.removeEventListener("scroll", onScroll);
-        };
-        window.addEventListener("scroll", onScroll);
-    };
-
     const powerBIConfig = {
         baseURL: "https://app.powerbi.com/reportEmbed",
         tenantId: "69da13af-78cb-4dd9-b20c-087550f2b912",
@@ -489,24 +470,49 @@ export default function Home() {
         }
     };
 
+    const [isFullScreen, setIsFullScreen] = useState(false);
+
+    const enterFullScreen = () => {
+        const iframeContainer = document.getElementById("pbi-container");
+        if (iframeContainer.requestFullscreen) {
+            iframeContainer.requestFullscreen();
+        } else if (iframeContainer.mozRequestFullScreen) {
+            iframeContainer.mozRequestFullScreen();
+        } else if (iframeContainer.webkitRequestFullscreen) {
+            iframeContainer.webkitRequestFullscreen();
+        } else if (iframeContainer.msRequestFullscreen) {
+            iframeContainer.msRequestFullscreen();
+        }
+        setIsFullScreen(true);
+    };
+
+    const exitFullScreen = () => {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+        setIsFullScreen(false);
+    };
+
+
 
     return (
         <div className={classes.container}>
-            <nav
-                className={`${classes.sidebar} ${isOpen ? classes.show : ""}`}
-                ref={sidebarRef}
-            >
+            <nav className={`${classes.sidebar}`}>
                 <ul className="nav flex-column">
                     {Object.keys(sectionRefs.current).map((key) => (
                         <li key={key} className="nav-item">
                             <a
-                                className={`${classes.navLink} ${
-                                    activeSection === key ? classes.active : ""
-                                }`}
+                                className={`${classes.navLink} ${activeSection === key ? classes.active : ""}`}
                                 href={`#${key}`}
                                 onClick={(e) => handleNavigation(e, key)}
                             >
-                                {readableNames[key]}
+                                {key}
                             </a>
                         </li>
                     ))}
@@ -514,182 +520,75 @@ export default function Home() {
             </nav>
 
             <main className={classes.mainContent}>
-                <div id="Futures" ref={sectionRefs.current.Futures} className={classes.section}>
+                {/* 🔹 Sezione Futures con animazione */}
+                <motion.div id="Futures" ref={sectionRefs.current.Futures} className={classes.section} initial="hidden" animate={activeSection === "Futures" ? "visible" : "fadeOut"} variants={sectionVariants}>
                     <h1>Futures</h1>
-                    <div style={{position: "relative", width: "100%", height: 0, paddingBottom: "50%"}}>
-
+                    <div style={{ position: "relative", width: "100%", height: 0, paddingBottom: "50%" }}>
                         <iframe ref={iframeRef} title="FuturesVisual" style={{ position: "absolute", width: "100%", height: "100%", top: 0, left: 0 }}
                             src={`${powerBIConfig.baseURL}?reportId=${powerBIConfig.reports.Futures}&autoAuth=true&ctid=${powerBIConfig.tenantId}&filterPaneEnabled=false&navContentPaneEnabled=false`}
                             frameBorder="0" allowFullScreen={true}>
                         </iframe>
-                        <button onClick={goFullScreen} style={{ position: "absolute", top: 10, right: 10, padding: "10px", background: "black", color: "white", border: "none", cursor: "pointer" }}>
-                            Fullscreen
-                        </button>
-                    </div>
-                </div>
-
-
-                <div id="Alert" ref={sectionRefs.current.Alert} className={classes.section}>
-                    <div className={classes.alertContainer}>
-                        {/* Titolo "Email Alert" */}
-                        <h1 className={classes.alertTitle}>Email Alert</h1>
-
-                        {/* Futures type select */}
-                        <div className={classes.inputGroupHorizontal} style={{paddingTop: '5%'}}>
-                            <label className={classes.label}>Futures type</label>
-                            <select className={classes.select} value={futuresType}
-                                onChange={(e) => setFuturesType(e.target.value)}>
-                                <option value="General">General</option>
-                                <option value="All">All</option>
-                                <option value="Yearly">Yearly</option>
-                                <option value="Quarterly">Quarterly</option>
-                                <option value="Monthly">Monthly</option>
-                            </select>
-                        </div>
-
-                        {/* Conditionally render fields based on futuresType */}
-                        {futuresType === "General" && (
-                            <div className={classes.converterContainer}>
-                                {/* Input per il minimo */}
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Minimum level</label>
-                                    <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`} value={minimumLevel}
-                                        onChange={(e) => setMinimumLevel(e.target.value)}
-                                        onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
-                                        className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
-                                    />
-                                    {minimumLevelError && (
-                                        <div className={classes.errorMessage}>
-                                            The value must be between 0 and {getLimit()}!
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Input per il massimo */}
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Maximum level</label>
-                                    <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`} value={maximumLevel}
-                                        onChange={(e) => setMaximumLevel(e.target.value)}
-                                        onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
-                                        className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
-                                    />
-                                    {maximumLevelError && (
-                                        <div className={classes.errorMessage}>
-                                            The value must be between 0 and {getLimit()}!
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Frequency</label>
-                                    <select
-                                        className={classes.select}
-                                        value={frequencyAlert}  // Imposta il valore su quello dello stato
-                                        onChange={(e) => setFrequencyAlert(e.target.value)}
-                                    >
-                                        <option value="Weekly and Monthly">Weekly and Monthly</option>
-                                        <option value="Monthly">Monthly</option>
-                                        <option value="Weekly">Weekly</option>
-                                    </select>
-                                </div>
-
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Modality</label>
-                                    <select className={classes.select} value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                        onChange={(e) => setCheckModality(e.target.value === "Percentage")}>
-                                        <option value="Value">Value</option>
-                                        <option value="Percentage">Percentage</option>
-                                    </select>
-                                </div>
+                        {isFullScreen && (
+                            <div style={{ position: "absolute", bottom: 0, width: "100%", textAlign: "right", background: "#325B72", color: "white", padding: "10px" }}>
+                                <button onClick={exitFullScreen} style={{ padding: "5px 10px", cursor: "pointer", background: "#5198B4", border: "none", color: "white", borderRadius: "20px" }}>Exit Full Screen</button>
                             </div>
                         )}
+                    </div>
 
-                        {futuresType === "All" && (
-                            <>
-                                <h3 className={classes.h3}>Yearly</h3>
+                    {!isFullScreen && (
+                        <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px", background: "#325B72" }}>
+                            <button onClick={enterFullScreen} style={{ padding: "5px 10px", cursor: "pointer", background: "#5198B4", border: "none", color: "white", borderRadius: "20px"}}>Full Screen</button>
+                        </div>
+                    )}
+                </motion.div>
+
+                <motion.div id="Alert" ref={sectionRefs.current.Alert} className={classes.section} initial="hidden" animate={activeSection === "Alert" ? "visible" : "fadeOut"} variants={sectionVariants}>
+
+                    <div id="Alert" ref={sectionRefs.current.Alert} className={classes.section}>
+                        <div className={classes.alertContainer}>
+                            {/* Titolo "Email Alert" */}
+                            <h1 className={classes.alertTitle}>Email Alert</h1>
+
+                            {/* Futures type select */}
+                            <div className={classes.inputGroupHorizontal} style={{paddingTop: '5%'}}>
+                                <label className={classes.label}>Futures type</label>
+                                <select className={classes.select} value={futuresType}
+                                    onChange={(e) => setFuturesType(e.target.value)}>
+                                    <option value="General">General</option>
+                                    <option value="All">All</option>
+                                    <option value="Yearly">Yearly</option>
+                                    <option value="Quarterly">Quarterly</option>
+                                    <option value="Monthly">Monthly</option>
+                                </select>
+                            </div>
+
+                            {/* Conditionally render fields based on futuresType */}
+                            {futuresType === "General" && (
                                 <div className={classes.converterContainer}>
-                                    {/* Input Yearly Minimo */}
+                                    {/* Input per il minimo */}
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Minimum level</label>
-                                        <input type="number" placeholder="Enter minimum level" value={minimumLevelYearly}
-                                            onChange={(e) => setMinimumLevelYearly(e.target.value)}
-                                            onBlur={() => handleMinimumLevelBlur(minimumLevelYearly, setMinimumLevelYearly, setMinimumLevelYearlyError)}
-                                            className={`${classes.input} ${minimumLevelYearlyError ? classes.errorInput : ''}`}
+                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`} value={minimumLevel}
+                                            onChange={(e) => setMinimumLevel(e.target.value)}
+                                            onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
+                                            className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
                                         />
-                                        {minimumLevelYearlyError && (
+                                        {minimumLevelError && (
                                             <div className={classes.errorMessage}>
                                                 The value must be between 0 and {getLimit()}!
                                             </div>
                                         )}
                                     </div>
 
-                                    {/* Input Yearly Massimo */}
+                                    {/* Input per il massimo */}
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Maximum level</label>
-                                        <input type="number" placeholder="Enter maximum level" value={maximumLevelYearly}
-                                            onChange={(e) => setMaximumLevelYearly(e.target.value)}
-                                            onBlur={() => handleMaximumLevelBlur(maximumLevelYearly, setMaximumLevelYearly, setMaximumLevelYearlyError, minimumLevelYearly, setRangeYearlyError)}
-                                            className={`${classes.input} ${maximumLevelYearlyError ? classes.errorInput : ''}`}
+                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`} value={maximumLevel}
+                                            onChange={(e) => setMaximumLevel(e.target.value)}
+                                            onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
+                                            className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
                                         />
-                                        {maximumLevelYearlyError && (
-                                            <div className={classes.errorMessage}>
-                                                The value must be between 0 and {getLimit()}!
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Frequency</label>
-                                        <select className={classes.select} value={frequencyYearly}  // Imposta il valore su quello dello stato
-                                            onChange={(e) => setFrequencyYearly(e.target.value)}>
-                                            <option value="Weekly and Monthly">Weekly and Monthly</option>
-                                            <option value="Monthly">Monthly</option>
-                                            <option value="Weekly">Weekly</option>
-                                        </select>
-                                    </div>
-
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Modality</label>
-                                        <select className={classes.select}
-                                            value={checkModalityYearly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                            onChange={(e) => setCheckModalityYearly(e.target.value === "Percentage")}
-                                        >
-                                            <option value="Value">Value</option>
-                                            <option value="Percentage">Percentage</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                {rangeYearlyError && (
-                                    <div className={classes.errorMessage}>
-                                        The minimum value cannot be greater than the maximum value!
-                                    </div>
-                                )}
-                                <h3 className={classes.h3}>Quarterly</h3>
-                                <div className={classes.converterContainer}>
-                                    {/* Input Quarterly Minimo */}
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Minimum level</label>
-                                        <input type="number" placeholder="Enter minimum level" value={minimumLevelQuarterly}
-                                            onChange={(e) => setMinimumLevelQuarterly(e.target.value)}
-                                            onBlur={() => handleMinimumLevelBlur(minimumLevelQuarterly, setMinimumLevelQuarterly, setMinimumLevelQuarterlyError)}
-                                            className={`${classes.input} ${minimumLevelQuarterlyError ? classes.errorInput : ''}`}
-                                        />
-                                        {minimumLevelQuarterlyError&& (
-                                            <div className={classes.errorMessage}>
-                                                The value must be between 0 and {getLimit()}!
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Input Quarterly Massimo */}
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Maximum level</label>
-                                        <input type="number" placeholder="Enter maximum level" value={maximumLevelQuarterly}
-                                            onChange={(e) => setMaximumLevelQuarterly(e.target.value)}
-                                            onBlur={() => handleMaximumLevelBlur(maximumLevelQuarterly, setMaximumLevelQuarterly, setMaximumLevelQuarterlyError, minimumLevelQuarterly, setRangeQuarterlyError)}
-                                            className={`${classes.input} ${maximumLevelQuarterlyError ? classes.errorInput : ''}`}
-                                        />
-                                        {maximumLevelQuarterlyError && (
+                                        {maximumLevelError && (
                                             <div className={classes.errorMessage}>
                                                 The value must be between 0 and {getLimit()}!
                                             </div>
@@ -700,8 +599,244 @@ export default function Home() {
                                         <label className={classes.label}>Frequency</label>
                                         <select
                                             className={classes.select}
-                                            value={frequencyQuarterly}  // Imposta il valore su quello dello stato
-                                            onChange={(e) => setFrequencyQuarterly(e.target.value)}
+                                            value={frequencyAlert}  // Imposta il valore su quello dello stato
+                                            onChange={(e) => setFrequencyAlert(e.target.value)}
+                                        >
+                                            <option value="Weekly and Monthly">Weekly and Monthly</option>
+                                            <option value="Monthly">Monthly</option>
+                                            <option value="Weekly">Weekly</option>
+                                        </select>
+                                    </div>
+
+                                    <div className={classes.inputGroupHorizontal}>
+                                        <label className={classes.label}>Modality</label>
+                                        <select className={classes.select} value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
+                                            onChange={(e) => setCheckModality(e.target.value === "Percentage")}>
+                                            <option value="Value">Value</option>
+                                            <option value="Percentage">Percentage</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            )}
+
+                            {futuresType === "All" && (
+                                <>
+                                    <h3 className={classes.h3}>Yearly</h3>
+                                    <div className={classes.converterContainer}>
+                                        {/* Input Yearly Minimo */}
+                                        <div className={classes.inputGroupHorizontal}>
+                                            <label className={classes.label}>Minimum level</label>
+                                            <input type="number" placeholder="Enter minimum level" value={minimumLevelYearly}
+                                                onChange={(e) => setMinimumLevelYearly(e.target.value)}
+                                                onBlur={() => handleMinimumLevelBlur(minimumLevelYearly, setMinimumLevelYearly, setMinimumLevelYearlyError)}
+                                                className={`${classes.input} ${minimumLevelYearlyError ? classes.errorInput : ''}`}
+                                            />
+                                            {minimumLevelYearlyError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Input Yearly Massimo */}
+                                        <div className={classes.inputGroupHorizontal}>
+                                            <label className={classes.label}>Maximum level</label>
+                                            <input type="number" placeholder="Enter maximum level" value={maximumLevelYearly}
+                                                onChange={(e) => setMaximumLevelYearly(e.target.value)}
+                                                onBlur={() => handleMaximumLevelBlur(maximumLevelYearly, setMaximumLevelYearly, setMaximumLevelYearlyError, minimumLevelYearly, setRangeYearlyError)}
+                                                className={`${classes.input} ${maximumLevelYearlyError ? classes.errorInput : ''}`}
+                                            />
+                                            {maximumLevelYearlyError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className={classes.inputGroupHorizontal}>
+                                            <label className={classes.label}>Frequency</label>
+                                            <select className={classes.select} value={frequencyYearly}  // Imposta il valore su quello dello stato
+                                                onChange={(e) => setFrequencyYearly(e.target.value)}>
+                                                <option value="Weekly and Monthly">Weekly and Monthly</option>
+                                                <option value="Monthly">Monthly</option>
+                                                <option value="Weekly">Weekly</option>
+                                            </select>
+                                        </div>
+
+                                        <div className={classes.inputGroupHorizontal}>
+                                            <label className={classes.label}>Modality</label>
+                                            <select className={classes.select}
+                                                value={checkModalityYearly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
+                                                onChange={(e) => setCheckModalityYearly(e.target.value === "Percentage")}
+                                            >
+                                                <option value="Value">Value</option>
+                                                <option value="Percentage">Percentage</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {rangeYearlyError && (
+                                        <div className={classes.errorMessage}>
+                                            The minimum value cannot be greater than the maximum value!
+                                        </div>
+                                    )}
+                                    <h3 className={classes.h3}>Quarterly</h3>
+                                    <div className={classes.converterContainer}>
+                                        {/* Input Quarterly Minimo */}
+                                        <div className={classes.inputGroupHorizontal}>
+                                            <label className={classes.label}>Minimum level</label>
+                                            <input type="number" placeholder="Enter minimum level" value={minimumLevelQuarterly}
+                                                onChange={(e) => setMinimumLevelQuarterly(e.target.value)}
+                                                onBlur={() => handleMinimumLevelBlur(minimumLevelQuarterly, setMinimumLevelQuarterly, setMinimumLevelQuarterlyError)}
+                                                className={`${classes.input} ${minimumLevelQuarterlyError ? classes.errorInput : ''}`}
+                                            />
+                                            {minimumLevelQuarterlyError&& (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Input Quarterly Massimo */}
+                                        <div className={classes.inputGroupHorizontal}>
+                                            <label className={classes.label}>Maximum level</label>
+                                            <input type="number" placeholder="Enter maximum level" value={maximumLevelQuarterly}
+                                                onChange={(e) => setMaximumLevelQuarterly(e.target.value)}
+                                                onBlur={() => handleMaximumLevelBlur(maximumLevelQuarterly, setMaximumLevelQuarterly, setMaximumLevelQuarterlyError, minimumLevelQuarterly, setRangeQuarterlyError)}
+                                                className={`${classes.input} ${maximumLevelQuarterlyError ? classes.errorInput : ''}`}
+                                            />
+                                            {maximumLevelQuarterlyError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className={classes.inputGroupHorizontal}>
+                                            <label className={classes.label}>Frequency</label>
+                                            <select
+                                                className={classes.select}
+                                                value={frequencyQuarterly}  // Imposta il valore su quello dello stato
+                                                onChange={(e) => setFrequencyQuarterly(e.target.value)}
+                                            >
+                                                <option value="Weekly and Monthly">Weekly and Monthly</option>
+                                                <option value="Monthly">Monthly</option>
+                                                <option value="Weekly">Weekly</option>
+                                            </select>
+                                        </div>
+
+                                        <div className={classes.inputGroupHorizontal}>
+                                            <label className={classes.label}>Modality</label>
+                                            <select
+                                                className={classes.select}
+                                                value={checkModalityQuarterly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
+                                                onChange={(e) => setCheckModalityQuarterly(e.target.value === "Percentage")}
+                                            >
+                                                <option value="Value">Value</option>
+                                                <option value="Percentage">Percentage</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {rangeQuarterlyError && (
+                                        <div className={classes.errorMessage}>
+                                            The minimum value cannot be greater than the maximum value!
+                                        </div>
+                                    )}
+                                    <h3 className={classes.h3}>Monthly</h3>
+                                    <div className={classes.converterContainer}>
+                                        <div className={classes.inputGroupHorizontal}>
+                                            <label className={classes.label}>Minimum level</label>
+                                            <input type="number" placeholder="Enter minimum level" value={minimumLevelMonthly}
+                                                onChange={(e) => setMinimumLevelMonthly(e.target.value)}
+                                                onBlur={() => handleMinimumLevelBlur(minimumLevelMonthly, setMinimumLevelMonthly, setMinimumLevelMonthlyError)}
+                                                className={`${classes.input} ${minimumLevelMonthlyError ? classes.errorInput : ''}`}
+                                            />
+                                            {minimumLevelMonthlyError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Input Monthly Massimo */}
+                                        <div className={classes.inputGroupHorizontal}>
+                                            <label className={classes.label}>Maximum level</label>
+                                            <input type="number" placeholder="Enter maximum level" value={maximumLevelMonthly}
+                                                onChange={(e) => setMaximumLevelMonthly(e.target.value)}
+                                                onBlur={() => handleMaximumLevelBlur(maximumLevelMonthly, setMaximumLevelMonthly, setMaximumLevelMonthlyError, minimumLevelMonthly, setRangeMonthlyError)}
+                                                className={`${classes.input} ${maximumLevelMonthlyError ? classes.errorInput : ''}`}
+                                            />
+                                            {maximumLevelMonthlyError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className={classes.inputGroupHorizontal}>
+                                            <label className={classes.label}>Frequency</label>
+                                            <select className={classes.select} value={frequencyMonthly}  // Imposta il valore su quello dello stato
+                                                onChange={(e) => setFrequencyMonthly(e.target.value)}>
+                                                <option value="Weekly and Monthly">Weekly and Monthly</option>
+                                                <option value="Monthly">Monthly</option>
+                                                <option value="Weekly">Weekly</option>
+                                            </select>
+                                        </div>
+
+                                        <div className={classes.inputGroupHorizontal}>
+                                            <label className={classes.label}>Modality</label>
+                                            <select className={classes.select} value={checkModalityMonthly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
+                                                onChange={(e) => setCheckModalityMonthly(e.target.value === "Percentage")}>
+                                                <option value="Value">Value</option>
+                                                <option value="Percentage">Percentage</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {rangeMonthlyError && (
+                                        <div className={classes.errorMessage}>
+                                            The minimum value cannot be greater than the maximum value!
+                                        </div>
+                                    )}
+                                </>
+                            )}
+
+                            {futuresType === "Yearly" && (
+                                <div className={classes.converterContainer}>
+                                    {/* Input per il minimo */}
+                                    <div className={classes.inputGroupHorizontal}>
+                                        <label className={classes.label}>Minimum level</label>
+                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`} value={minimumLevel}
+                                               onChange={(e) => setMinimumLevel(e.target.value)}
+                                               onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
+                                               className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
+                                        />
+                                        {minimumLevelError && (
+                                            <div className={classes.errorMessage}>
+                                                The value must be between 0 and {getLimit()}!
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Input per il massimo */}
+                                    <div className={classes.inputGroupHorizontal}>
+                                        <label className={classes.label}>Maximum level</label>
+                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`} value={maximumLevel}
+                                               onChange={(e) => setMaximumLevel(e.target.value)}
+                                               onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
+                                               className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
+                                        />
+                                        {maximumLevelError && (
+                                            <div className={classes.errorMessage}>
+                                                The value must be between 0 and {getLimit()}!
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className={classes.inputGroupHorizontal}>
+                                        <label className={classes.label}>Frequency</label>
+                                        <select
+                                            className={classes.select}
+                                            value={frequencyAlert}  // Imposta il valore su quello dello stato
+                                            onChange={(e) => setFrequencyAlert(e.target.value)}
                                         >
                                             <option value="Weekly and Monthly">Weekly and Monthly</option>
                                             <option value="Monthly">Monthly</option>
@@ -713,44 +848,42 @@ export default function Home() {
                                         <label className={classes.label}>Modality</label>
                                         <select
                                             className={classes.select}
-                                            value={checkModalityQuarterly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                            onChange={(e) => setCheckModalityQuarterly(e.target.value === "Percentage")}
+                                            value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
+                                            onChange={(e) => setCheckModality(e.target.value === "Percentage")}
                                         >
                                             <option value="Value">Value</option>
                                             <option value="Percentage">Percentage</option>
                                         </select>
                                     </div>
                                 </div>
-                                {rangeQuarterlyError && (
-                                    <div className={classes.errorMessage}>
-                                        The minimum value cannot be greater than the maximum value!
-                                    </div>
-                                )}
-                                <h3 className={classes.h3}>Monthly</h3>
+                            )}
+
+                            {futuresType === "Quarterly" && (
                                 <div className={classes.converterContainer}>
+                                    {/* Input per il minimo */}
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Minimum level</label>
-                                        <input type="number" placeholder="Enter minimum level" value={minimumLevelMonthly}
-                                            onChange={(e) => setMinimumLevelMonthly(e.target.value)}
-                                            onBlur={() => handleMinimumLevelBlur(minimumLevelMonthly, setMinimumLevelMonthly, setMinimumLevelMonthlyError)}
-                                            className={`${classes.input} ${minimumLevelMonthlyError ? classes.errorInput : ''}`}
+                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`} value={minimumLevel}
+                                               onChange={(e) => setMinimumLevel(e.target.value)}
+                                               onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
+                                               className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
                                         />
-                                        {minimumLevelMonthlyError && (
+                                        {minimumLevelError && (
                                             <div className={classes.errorMessage}>
                                                 The value must be between 0 and {getLimit()}!
                                             </div>
                                         )}
                                     </div>
 
-                                    {/* Input Monthly Massimo */}
+                                    {/* Input per il massimo */}
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Maximum level</label>
-                                        <input type="number" placeholder="Enter maximum level" value={maximumLevelMonthly}
-                                            onChange={(e) => setMaximumLevelMonthly(e.target.value)}
-                                            onBlur={() => handleMaximumLevelBlur(maximumLevelMonthly, setMaximumLevelMonthly, setMaximumLevelMonthlyError, minimumLevelMonthly, setRangeMonthlyError)}
-                                            className={`${classes.input} ${maximumLevelMonthlyError ? classes.errorInput : ''}`}
+                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`} value={maximumLevel}
+                                               onChange={(e) => setMaximumLevel(e.target.value)}
+                                               onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
+                                               className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
                                         />
-                                        {maximumLevelMonthlyError && (
+                                        {maximumLevelError && (
                                             <div className={classes.errorMessage}>
                                                 The value must be between 0 and {getLimit()}!
                                             </div>
@@ -759,8 +892,11 @@ export default function Home() {
 
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Frequency</label>
-                                        <select className={classes.select} value={frequencyMonthly}  // Imposta il valore su quello dello stato
-                                            onChange={(e) => setFrequencyMonthly(e.target.value)}>
+                                        <select
+                                            className={classes.select}
+                                            value={frequencyAlert}  // Imposta il valore su quello dello stato
+                                            onChange={(e) => setFrequencyAlert(e.target.value)}
+                                        >
                                             <option value="Weekly and Monthly">Weekly and Monthly</option>
                                             <option value="Monthly">Monthly</option>
                                             <option value="Weekly">Weekly</option>
@@ -769,239 +905,135 @@ export default function Home() {
 
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Modality</label>
-                                        <select className={classes.select} value={checkModalityMonthly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                            onChange={(e) => setCheckModalityMonthly(e.target.value === "Percentage")}>
+                                        <select
+                                            className={classes.select}
+                                            value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
+                                            onChange={(e) => setCheckModality(e.target.value === "Percentage")}
+                                        >
                                             <option value="Value">Value</option>
                                             <option value="Percentage">Percentage</option>
                                         </select>
                                     </div>
                                 </div>
-                                {rangeMonthlyError && (
-                                    <div className={classes.errorMessage}>
-                                        The minimum value cannot be greater than the maximum value!
+                            )}
+
+                            {futuresType === "Monthly" && (
+                                <div className={classes.converterContainer}>
+                                    {/* Input per il minimo */}
+                                    <div className={classes.inputGroupHorizontal}>
+                                        <label className={classes.label}>Minimum level</label>
+                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`} value={minimumLevel}
+                                               onChange={(e) => setMinimumLevel(e.target.value)}
+                                               onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
+                                               className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
+                                        />
+                                        {minimumLevelError && (
+                                            <div className={classes.errorMessage}>
+                                                The value must be between 0 and {getLimit()}!
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </>
-                        )}
 
-                        {futuresType === "Yearly" && (
-                            <div className={classes.converterContainer}>
-                                {/* Input per il minimo */}
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Minimum level</label>
-                                    <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`} value={minimumLevel}
-                                           onChange={(e) => setMinimumLevel(e.target.value)}
-                                           onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
-                                           className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
-                                    />
-                                    {minimumLevelError && (
-                                        <div className={classes.errorMessage}>
-                                            The value must be between 0 and {getLimit()}!
-                                        </div>
-                                    )}
-                                </div>
+                                    {/* Input per il massimo */}
+                                    <div className={classes.inputGroupHorizontal}>
+                                        <label className={classes.label}>Maximum level</label>
+                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`} value={maximumLevel}
+                                               onChange={(e) => setMaximumLevel(e.target.value)}
+                                               onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
+                                               className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
+                                        />
+                                        {maximumLevelError && (
+                                            <div className={classes.errorMessage}>
+                                                The value must be between 0 and {getLimit()}!
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className={classes.inputGroupHorizontal}>
+                                        <label className={classes.label}>Frequency</label>
+                                        <select className={classes.select} value={frequencyAlert} onChange={(e) => setFrequencyAlert(e.target.value)}>
+                                            <option value="Weekly and Monthly">Weekly and Monthly</option>
+                                            <option value="Monthly">Monthly</option>
+                                            <option value="Weekly">Weekly</option>
+                                        </select>
+                                    </div>
 
-                                {/* Input per il massimo */}
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Maximum level</label>
-                                    <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`} value={maximumLevel}
-                                           onChange={(e) => setMaximumLevel(e.target.value)}
-                                           onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
-                                           className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
-                                    />
-                                    {maximumLevelError && (
-                                        <div className={classes.errorMessage}>
-                                            The value must be between 0 and {getLimit()}!
-                                        </div>
-                                    )}
+                                    <div className={classes.inputGroupHorizontal}>
+                                        <label className={classes.label}>Modality</label>
+                                        <select className={classes.select} value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
+                                            onChange={(e) => setCheckModality(e.target.value === "Percentage")}>
+                                            <option value="Value">Value</option>
+                                            <option value="Percentage">Percentage</option>
+                                        </select>
+                                    </div>
                                 </div>
-
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Frequency</label>
-                                    <select
-                                        className={classes.select}
-                                        value={frequencyAlert}  // Imposta il valore su quello dello stato
-                                        onChange={(e) => setFrequencyAlert(e.target.value)}
-                                    >
-                                        <option value="Weekly and Monthly">Weekly and Monthly</option>
-                                        <option value="Monthly">Monthly</option>
-                                        <option value="Weekly">Weekly</option>
-                                    </select>
+                            )}
+                            {rangeError && (
+                                <div className={classes.errorMessage}>
+                                    The minimum value cannot be greater than the maximum value!
                                 </div>
-
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Modality</label>
-                                    <select
-                                        className={classes.select}
-                                        value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                        onChange={(e) => setCheckModality(e.target.value === "Percentage")}
-                                    >
-                                        <option value="Value">Value</option>
-                                        <option value="Percentage">Percentage</option>
-                                    </select>
-                                </div>
+                            )}
+                            <div style={{marginTop: '2%'}}>
+                                <input type="checkbox" className={classes} checked={activeAlert}
+                                    onChange={(e) => setActiveAlert(e.target.checked)}/>
+                                <label className={classes.label} style={{marginLeft: '4px'}}>Active Alert</label>
                             </div>
-                        )}
 
-                        {futuresType === "Quarterly" && (
-                            <div className={classes.converterContainer}>
-                                {/* Input per il minimo */}
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Minimum level</label>
-                                    <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`} value={minimumLevel}
-                                           onChange={(e) => setMinimumLevel(e.target.value)}
-                                           onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
-                                           className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
-                                    />
-                                    {minimumLevelError && (
-                                        <div className={classes.errorMessage}>
-                                            The value must be between 0 and {getLimit()}!
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Input per il massimo */}
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Maximum level</label>
-                                    <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`} value={maximumLevel}
-                                           onChange={(e) => setMaximumLevel(e.target.value)}
-                                           onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
-                                           className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
-                                    />
-                                    {maximumLevelError && (
-                                        <div className={classes.errorMessage}>
-                                            The value must be between 0 and {getLimit()}!
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Frequency</label>
-                                    <select
-                                        className={classes.select}
-                                        value={frequencyAlert}  // Imposta il valore su quello dello stato
-                                        onChange={(e) => setFrequencyAlert(e.target.value)}
-                                    >
-                                        <option value="Weekly and Monthly">Weekly and Monthly</option>
-                                        <option value="Monthly">Monthly</option>
-                                        <option value="Weekly">Weekly</option>
-                                    </select>
-                                </div>
-
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Modality</label>
-                                    <select
-                                        className={classes.select}
-                                        value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                        onChange={(e) => setCheckModality(e.target.value === "Percentage")}
-                                    >
-                                        <option value="Value">Value</option>
-                                        <option value="Percentage">Percentage</option>
-                                    </select>
-                                </div>
-                            </div>
-                        )}
-
-                        {futuresType === "Monthly" && (
-                            <div className={classes.converterContainer}>
-                                {/* Input per il minimo */}
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Minimum level</label>
-                                    <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`} value={minimumLevel}
-                                           onChange={(e) => setMinimumLevel(e.target.value)}
-                                           onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
-                                           className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
-                                    />
-                                    {minimumLevelError && (
-                                        <div className={classes.errorMessage}>
-                                            The value must be between 0 and {getLimit()}!
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Input per il massimo */}
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Maximum level</label>
-                                    <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`} value={maximumLevel}
-                                           onChange={(e) => setMaximumLevel(e.target.value)}
-                                           onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
-                                           className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
-                                    />
-                                    {maximumLevelError && (
-                                        <div className={classes.errorMessage}>
-                                            The value must be between 0 and {getLimit()}!
-                                        </div>
-                                    )}
-                                </div>
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Frequency</label>
-                                    <select
-                                        className={classes.select}
-                                        value={frequencyAlert}  // Imposta il valore su quello dello stato
-                                        onChange={(e) => setFrequencyAlert(e.target.value)}
-                                    >
-                                        <option value="Weekly and Monthly">Weekly and Monthly</option>
-                                        <option value="Monthly">Monthly</option>
-                                        <option value="Weekly">Weekly</option>
-                                    </select>
-                                </div>
-
-                                <div className={classes.inputGroupHorizontal}>
-                                    <label className={classes.label}>Modality</label>
-                                    <select
-                                        className={classes.select}
-                                        value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                        onChange={(e) => setCheckModality(e.target.value === "Percentage")}
-                                    >
-                                        <option value="Value">Value</option>
-                                        <option value="Percentage">Percentage</option>
-                                    </select>
-                                </div>
-                            </div>
-                        )}
-                        {rangeError && (
-                            <div className={classes.errorMessage}>
-                                The minimum value cannot be greater than the maximum value!
-                            </div>
-                        )}
-                        <div style={{marginTop: '2%'}}>
-                            <input type="checkbox" className={classes} checked={activeAlert}
-                                onChange={(e) => setActiveAlert(e.target.checked)}/>
-                            <label className={classes.label} style={{marginLeft: '4px'}}>Active Alert</label>
+                            <button className={classes.convertButton} onClick={fetchCheckAlert}>
+                                Send email
+                            </button>
                         </div>
-
-                        <button className={classes.convertButton} onClick={fetchCheckAlert}>
-                            Send email
-                        </button>
                     </div>
-                </div>
+                </motion.div>
 
-
-                <div id="FuturesAnalysis" ref={sectionRefs.current.FuturesAnalysis} className={classes.section}>
+                {/* 🔹 Sezione Futures Analysis */}
+                <motion.div id="FuturesAnalysis" ref={sectionRefs.current.FuturesAnalysis} className={classes.section} initial="hidden" animate={activeSection === "FuturesAnalysis" ? "visible" : "fadeOut"} variants={sectionVariants}>
                     <h1>Futures Analysis</h1>
-                    <div style={{position: "relative", width: "100%", height: 0, paddingBottom: "50%"}}>
-                        <iframe title="FuturesAnalysis" style={{position: "absolute", width: "100%", height: "100%", top: 0, left: 0}}
+                    {/* 🔹 Inserisci qui l'iframe per il report Power BI */}
+                    <div style={{ position: "relative", width: "100%", height: 0, paddingBottom: "50%" }}>
+                        <iframe
+                            title="FuturesAnalysis"
+                            style={{ position: "absolute", width: "100%", height: "100%", top: 0, left: 0 }}
                             src={`${powerBIConfig.baseURL}?reportId=${powerBIConfig.reports.FuturesAnalysis}&autoAuth=true&ctid=${powerBIConfig.tenantId}&filterPaneEnabled=false&navContentPaneEnabled=false`}
                             frameBorder="0" allowFullScreen={true}>
                         </iframe>
-                        <button onClick={goFullScreen} style={{ position: "absolute", top: 10, right: 10, padding: "10px", background: "black", color: "white", border: "none", cursor: "pointer" }}>
-                            Fullscreen
-                        </button>
+                        {isFullScreen && (
+                            <div style={{ position: "absolute", bottom: 0, width: "100%", textAlign: "right", background: "#325B72", color: "white", padding: "10px" }}>
+                                <button onClick={exitFullScreen} style={{ padding: "5px 10px", cursor: "pointer", background: "#5198B4", border: "none", color: "white", borderRadius: "20px" }}>Exit Full Screen</button>
+                            </div>
+                        )}
                     </div>
-                </div>
 
-                <div id="Past" ref={sectionRefs.current.Past} className={classes.section}>
+                    {!isFullScreen && (
+                        <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px", background: "#325B72" }}>
+                            <button onClick={enterFullScreen} style={{ padding: "5px 10px", cursor: "pointer", background: "#5198B4", border: "none", color: "white", borderRadius: "20px"}}>Full Screen</button>
+                        </div>
+                    )}
+                </motion.div>
+
+                {/* 🔹 Sezione Past */}
+                <motion.div id="Past" ref={sectionRefs.current.Past} className={classes.section} initial="hidden" animate={activeSection === "Past" ? "visible" : "hidden"} variants={sectionVariants}>
                     <h1>Past</h1>
-                    <div style={{position: "relative", width: "100%", height: 0, paddingBottom: "50%"}}>
-                        <iframe title="FuturesAnalysis" style={{position: "absolute", width: "100%", height: "100%", top: 0, left: 0}}
+                    <div id="pbi-container" style={{ position: "relative", width: "100%", height: 0, paddingBottom: "50%" }}>
+                        <iframe
+                            title="Past"
+                            style={{ position: "absolute", width: "100%", height: "100%", top: 0, left: 0 }}
                             src={`${powerBIConfig.baseURL}?reportId=${powerBIConfig.reports.Past}&autoAuth=true&ctid=${powerBIConfig.tenantId}&filterPaneEnabled=false&navContentPaneEnabled=false`}
-                            frameBorder="0" allowFullScreen={true}>
+                            frameBorder="0"
+                            allowFullScreen>
                         </iframe>
-                        <button onClick={goFullScreen} style={{ position: "absolute", top: 10, right: 10, padding: "10px", background: "black", color: "white", border: "none", cursor: "pointer" }}>
-                            Fullscreen
-                        </button>
+                        {isFullScreen && (
+                            <div style={{ position: "absolute", bottom: 0, width: "100%", textAlign: "right", background: "#325B72", color: "white", padding: "10px" }}>
+                                <button onClick={exitFullScreen} style={{ padding: "5px 10px", cursor: "pointer", background: "#5198B4", border: "none", color: "white", borderRadius: "20px" }}>Exit Full Screen</button>
+                            </div>
+                        )}
                     </div>
-                </div>
+
+                    {!isFullScreen && (
+                        <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px", background: "#325B72" }}>
+                            <button onClick={enterFullScreen} style={{ padding: "5px 10px", cursor: "pointer", background: "#5198B4", border: "none", color: "white", borderRadius: "20px"}}>Full Screen</button>
+                        </div>
+                    )}
+                </motion.div>
             </main>
         </div>
     );
