@@ -4,7 +4,7 @@
     margin-top: 95.94px;
     font-family: Montserrat, sans-serif;
     user-select: none;
-    width: 100%; /* Aggiungi questa proprietà per garantirne la larghezza completa */
+    width: 100%;
 }
 .sidebar {
     margin-top: 85px;
@@ -142,9 +142,16 @@
 }
 
 .section {
-    margin-bottom: 20px;
+    margin-bottom: 5%;
     min-height: 90vh; /* Imposta un'altezza minima per ogni sezione */
     width: 100%; /* Assicura che le sezioni occupino tutta la larghezza */
+}
+
+@media (max-width: 768px) {
+    .section {
+        min-height: auto; /* Puoi adattare l'altezza minima in base alle esigenze */
+        margin-bottom: 10px; /* Riduci il margine per adattarsi meglio agli schermi piccoli */
+    }
 }
 
 .section h1 {
@@ -250,3 +257,5 @@
         height: calc(100vh - 300px);
     }
 }
+
+/*------------------------------------------ PBI SECTION ------------------------------------------*/

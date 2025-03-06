@@ -56,16 +56,6 @@ export default function Home() {
     const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
     const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV
 
-    /*TODO:
-     * Server
-     * Controllo per evitare email non desiderate ed eventuali errori:
-     * 1. l'utente non può avere più di un alert attivo
-     * 2. nel caso vuole attivare un alert diverso devo cancellare quello precedentemente creato
-     * Server
-     * Creazione di scedulazione per analisi e eventuale invio dell'email
-     * Creazione dell'email nel caso di invio di email dopo analisi dati
-     */
-
     // Refs corretti
     const sectionRefs = useRef({
         Futures: useRef(null),
@@ -75,9 +65,8 @@ export default function Home() {
     });
 
     const sectionVariants = {
-        hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
-        fadeOut: { opacity: 0, transition: { duration: 2.0, ease: "easeIn" } }
+        hidden: { opacity: 0, y: -20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
     };
     // Nomi leggibili per la sidebar
     const readableNames = {
@@ -95,7 +84,7 @@ export default function Home() {
         const sectionElement = sectionRefs.current[section]?.current;
         if (!sectionElement) return;
 
-        sectionElement.scrollIntoView({ behavior: "smooth", block: "end" });
+        sectionElement.scrollIntoView({ behavior: "smooth", block: "center" });
     };
 
     useEffect(() => {
@@ -521,7 +510,7 @@ export default function Home() {
 
             <main className={classes.mainContent}>
                 {/* 🔹 Sezione Futures con animazione */}
-                <motion.div id="Futures" ref={sectionRefs.current.Futures} className={classes.section} initial="hidden" animate={activeSection === "Futures" ? "visible" : "fadeOut"} variants={sectionVariants}>
+                <motion.div id="Futures" ref={sectionRefs.current.Futures} className={classes.section} initial="hidden" animate="visible" variants={sectionVariants}>
                     <h1>Futures</h1>
                     <div style={{ position: "relative", width: "100%", height: 0, paddingBottom: "50%" }}>
                         <iframe ref={iframeRef} title="FuturesVisual" style={{ position: "absolute", width: "100%", height: "100%", top: 0, left: 0 }}
@@ -542,13 +531,12 @@ export default function Home() {
                     )}
                 </motion.div>
 
-                <motion.div id="Alert" ref={sectionRefs.current.Alert} className={classes.section} initial="hidden" animate={activeSection === "Alert" ? "visible" : "fadeOut"} variants={sectionVariants}>
+                <motion.div id="Alert" ref={sectionRefs.current.Alert} className={classes.section} initial="hidden" animate="visible" variants={sectionVariants}>
 
-                    <div id="Alert" ref={sectionRefs.current.Alert} className={classes.section}>
+                    <div id="Alert" ref={sectionRefs.current.Alert}>
                         <div className={classes.alertContainer}>
                             {/* Titolo "Email Alert" */}
                             <h1 className={classes.alertTitle}>Email Alert</h1>
-
                             {/* Futures type select */}
                             <div className={classes.inputGroupHorizontal} style={{paddingTop: '5%'}}>
                                 <label className={classes.label}>Futures type</label>
@@ -986,7 +974,8 @@ export default function Home() {
                 </motion.div>
 
                 {/* 🔹 Sezione Futures Analysis */}
-                <motion.div id="FuturesAnalysis" ref={sectionRefs.current.FuturesAnalysis} className={classes.section} initial="hidden" animate={activeSection === "FuturesAnalysis" ? "visible" : "fadeOut"} variants={sectionVariants}>
+                <motion.div id="FuturesAnalysis" ref={sectionRefs.current.FuturesAnalysis} className={classes.section} initial="hidden" animate="visible" variants={sectionVariants}>
+
                     <h1>Futures Analysis</h1>
                     {/* 🔹 Inserisci qui l'iframe per il report Power BI */}
                     <div style={{ position: "relative", width: "100%", height: 0, paddingBottom: "50%" }}>
@@ -1011,7 +1000,7 @@ export default function Home() {
                 </motion.div>
 
                 {/* 🔹 Sezione Past */}
-                <motion.div id="Past" ref={sectionRefs.current.Past} className={classes.section} initial="hidden" animate={activeSection === "Past" ? "visible" : "hidden"} variants={sectionVariants}>
+                <motion.div id="Past" ref={sectionRefs.current.Past} className={classes.section} initial="hidden" animate="visible" variants={sectionVariants}>
                     <h1>Past</h1>
                     <div id="pbi-container" style={{ position: "relative", width: "100%", height: 0, paddingBottom: "50%" }}>
                         <iframe
