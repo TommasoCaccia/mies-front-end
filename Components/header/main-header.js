@@ -81,6 +81,9 @@ export default function MainHeader() {
                         <li>
                             <Link href="/pod/bollette">Bollette</Link>
                         </li>
+                        <li>
+                            <Link href="/energy-portfolio/futures">Futures</Link>
+                        </li>
                         {categoriaUtente === "Admin" && (
                             <>
                                 <li>

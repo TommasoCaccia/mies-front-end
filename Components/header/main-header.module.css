@@ -1,4 +1,3 @@
-
 .loginContainer {
     padding: 20px 20px;
 }
@@ -33,19 +32,21 @@
     position: fixed;
     display: flex;
     align-items: center;
+    justify-content: center;
     width: 100%;
+    height: 5.5rem;
     z-index: 3;
+    padding: 0 10px;
 }
 
 .header ul {
     margin: 0;
     padding: 0;
     width: 100%;
+    height: 5.5rem;
     list-style: none;
-    overflow: hidden;
-    background-color: #fff;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     flex-direction: row;
 }
@@ -58,7 +59,7 @@
 }
 
 .header li a {
-    padding: 20px 20px;
+    padding: 10px 15px;
     text-decoration: none;
     text-transform: uppercase;
     font-size: 13px;
@@ -72,11 +73,12 @@
 }
 
 .header .logo {
-    font-size: 2em;
-    padding: 10px 20px;
+    font-size: 1.5em;
+    padding: 5px 10px;
     text-decoration: none;
-    max-width: 8rem;
-
+    max-width: 6rem;
+    display: flex;
+    align-items: center;
 }
 
 .header .logoElenco {
@@ -99,10 +101,10 @@
     cursor: pointer;
     display: none;
     float: right;
-    padding: 28px 20px;
+    padding: 15px;
     position: relative;
     user-select: none;
-    align-self: start;
+    align-self: center;
 }
 
 .header .menuIcon .navIcon {
@@ -158,8 +160,6 @@
     top: 0;
 }
 
-/* Gestione per schermi più piccoli */
-
 @media (max-width: 75em) {
     .header ul {
         flex-direction: column;
@@ -195,47 +195,4 @@
     .header .menuBtn:checked ~ .menu {
         max-height: 333rem;
     }
-
-    /* Aggiunta dell'effetto a caselli */
-    .header .menu li {
-        opacity: 0;
-        transform: translateY(-20px); /* Parte leggermente sopra */
-        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-    }
-
-    /* Quando il menu viene attivato */
-    .header .menuBtn:checked ~ .menu li {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    /* Ritardo per l'effetto cascata */
-    .header .menuBtn:checked ~ .menu li:nth-child(1) {
-        transition-delay: 0.1s;
-    }
-
-    .header .menuBtn:checked ~ .menu li:nth-child(2) {
-        transition-delay: 0.2s;
-    }
-
-    .header .menuBtn:checked ~ .menu li:nth-child(3) {
-        transition-delay: 0.3s;
-    }
-
-    .header .menuBtn:checked ~ .menu li:nth-child(4) {
-        transition-delay: 0.4s;
-    }
-
-    .header .menuBtn:checked ~ .menu li:nth-child(5) {
-        transition-delay: 0.5s;
-    }
-
-    .header .menuBtn:checked ~ .menu li:nth-child(6) {
-        transition-delay: 0.6s;
-    }
-
-    .header .menuBtn:checked ~ .menu li:nth-child(7) {
-        transition-delay: 0.7s;
-    }
 }
-
