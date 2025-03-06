@@ -11,45 +11,54 @@ export default function Pod() {
     const [file, setFile] = useState(null);
     const [pods, setPods] = useState([]);
     const [isEditable, setIsEditable] = useState({});
+    const [isModifica, setIsModifica] = useState({});
+
     const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
     const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV;
 
     useEffect(() => {
-        const fetchPods = async () => {
-            try {
-                const response = await fetch(`${PATH_DEV}/pod`, {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setPods(data);
-
-                    // Imposta i campi editabili se "sede" o "nazione" sono vuoti
-                    const editableStatus = {};
-                    data.forEach(pod => {
-                        editableStatus[pod.id] = {
-                            sede: !pod.sede,
-                            nazione: !pod.nazione
-                        };
-                        if (!pod.sede) pod.sede = '';  // Inizializza con stringa vuota se undefined
-                        if (!pod.nazione) pod.nazione = '';  // Inizializza con stringa vuota se undefined
+            const fetchPods = async () => {
+                try {
+                    const response = await fetch(`${PATH_DEV}/pod`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {'Content-Type': 'application/json'},
                     });
-                    setIsEditable(editableStatus);
-                } else {
-                    console.log('Fetch failed:', response.statusText);
-                }
-            } catch (error) {
-                console.log('Error during fetch:', error);
-            }
-        };
 
-        fetchPods();
-    }, []);
+                    if (response.ok) {
+                        const data = await response.json();
+                        const editableStatus = {};
+                        const modificaIds = [];
+
+                        data.forEach(pod => {
+                            editableStatus[pod.id] = {
+                                sede: !pod.sede,
+                                nazione: !pod.nazione
+                            };
+
+                            if (!pod.sede) pod.sede = '';
+                            if (!pod.nazione) pod.nazione = '';
+
+                            if (pod.sede && pod.nazione) {
+                                modificaIds.push(pod.id);
+                            }
+                        });
+
+                        setPods(data);
+                        setIsEditable(editableStatus);
+                        setIsModifica(modificaIds);
+                    }
+                } catch
+                    (error) {
+                    console.log('Error during fetch:', error);
+                }
+            };
+
+            fetchPods();
+        }, []
+    )
+    ;
+
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
@@ -125,7 +134,97 @@ export default function Pod() {
             return;
         }
 
-        const response = await fetch(`${PATH_DEV}/pod/sedeNazione`, {
+        try {
+            const response = await fetch(`${PATH_DEV}/pod/sedeNazione`, {
+                method: 'PUT',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    idPod: podToUpdate.id,
+                    sede: podToUpdate.sede,
+                    nazione: podToUpdate.nazione
+                })
+            });
+
+            if (response.ok) {
+                const text = await response.text();
+                if (text) {
+                    const data = JSON.parse(text);
+                    setPods(prevPods => prevPods.map(p => p.id === podId ? { ...p, ...data } : p));
+                } else {
+                    setPods(prevPods => prevPods.map(p => p.id === podId ? podToUpdate : p));
+                }
+
+                setIsEditable(prev => ({
+                    ...prev,
+                    [podId]: { sede: false, nazione: false }
+                }));
+                setIsModifica(prev => [...prev, podId]);
+
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Successo',
+                    text: 'Pod aggiornato correttamente.'
+                });
+
+            } else {
+                const errorText = await response.text();
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Errore',
+                    text: errorText || "Errore durante l'aggiornamento del pod"
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Errore',
+                text: 'Errore di rete o imprevisto durante la richiesta.'
+            });
+        }
+    };
+
+    const handleUpdateClick = (podId) => {
+        updatePod(podId);
+    };
+
+
+    const handleModificaClick = (podId) => {
+        setIsEditable(prev => ({
+            ...prev,
+            [podId]: { sede: true, nazione: true }
+        }));
+
+        setIsModifica(prev => prev.filter(id => id !== podId));
+    };
+
+
+    const handleInputChange = (podId, field, value) => {
+        setPods(prevPods =>
+            prevPods.map(pod => {
+                if (pod.id === podId) {
+                    return {...pod, [field]: value};
+                }
+                return pod;
+            }));
+    };
+
+
+    const handleViewBillsClick = () => {
+        window.location.href = '/pod/bollette';
+    };
+
+    const updateSedeNazione = async (podId) => {
+        const podToUpdate = pods.find(pod => pod.id === podId);
+        if (!podToUpdate) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Errore',
+                text: 'Pod non trovato'
+            });
+        }
+
+        const response = await fetch(`${PATH_DEV}/pod/modifica-sede-nazione`, {
             method: 'PUT',
             credentials: 'include',
             headers: {
@@ -139,43 +238,19 @@ export default function Pod() {
         });
 
         if (response.ok) {
-            const text = await response.text();
-            if (text) {
-                const data = JSON.parse(text);
-                setPods(prevPods => prevPods.map(p => p.id === podId ? {...p, ...data} : p));
-            } else {
-                setPods(prevPods => prevPods.map(p => p.id === podId ? podToUpdate : p));
-            }
-            window.location.href = '/pod';
+            Swal.fire({
+                icon: 'success',
+                title: 'Successo',
+                text: 'Sede e Nazione Modificate'
+            })
         } else {
-            const text = await response.text();
-            await Swal.fire({
+            Swal.fire({
                 icon: 'error',
                 title: 'Errore',
-                text: "Errore durante l'aggiornamento del pod"
-            });
-
+                text: 'Errore durante la modifica della sede'
+            })
         }
-
-    };
-
-    const handleUpdateClick = (podId) => {
-        updatePod(podId);
-    };
-
-    const handleInputChange = (podId, field, value) => {
-        setPods(prevPods => prevPods.map(pod => {
-            if (pod.id === podId) {
-                return {...pod, [field]: value};
-            }
-            return pod;
-        }));
-    };
-
-    const handleViewBillsClick = () => {
-        window.location.href = '/pod/bollette';
-    };
-
+    }
 
     return (
         <div className={classes.container}>
@@ -208,7 +283,7 @@ export default function Pod() {
                                     <TableCell>{pod.potenzaImpegnata}</TableCell>
                                     <TableCell>{pod.tensioneAlimentazione}</TableCell>
                                     <TableCell>
-                                        {isEditable[pod.id] && isEditable[pod.id].sede ? (
+                                        {isEditable[pod.id]?.sede ? (
                                             <input
                                                 type="text"
                                                 value={pod.sede}
@@ -218,8 +293,9 @@ export default function Pod() {
                                             pod.sede
                                         )}
                                     </TableCell>
+
                                     <TableCell>
-                                        {isEditable[pod.id] && isEditable[pod.id].nazione ? (
+                                        {isEditable[pod.id]?.nazione ? (
                                             <input
                                                 type="text"
                                                 value={pod.nazione}
@@ -229,8 +305,11 @@ export default function Pod() {
                                             pod.nazione
                                         )}
                                     </TableCell>
+
                                     <TableCell>
-                                        {(!pod.sede || !pod.nazione) && (
+                                        {isModifica.includes(pod.id) ? (
+                                            <button onClick={() => handleModificaClick(pod.id)}>Modifica</button>
+                                        ) : (
                                             <button onClick={() => handleUpdateClick(pod.id)}>Inserisci</button>
                                         )}
                                     </TableCell>

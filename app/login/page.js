@@ -4,8 +4,7 @@ import {useState} from "react";
 
 const LoginForm = () => {
 
-    const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
-    const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV
+    const PATH = process.env.NEXT_PUBLIC_PATH_DEV
     const [error, setError] = useState('');
 
     const handleLogin = async (event) => {
@@ -13,7 +12,7 @@ const LoginForm = () => {
         const username = event.target.username ? event.target.username.value : undefined;
         const password = event.target.password ? event.target.password.value : undefined;
 
-        const response = await fetch(`${PATH_DEV}/Autentication/login`, {
+        const response = await fetch(`${PATH}/Autentication/login`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -24,10 +23,9 @@ const LoginForm = () => {
 
         if (response.ok) {
             const data = await response;
-            console.log(data);
             window.location.href = "/";
         } else {
-            setError('errore durante il login ');
+            setError('password o username errati ');
         }
     };
 
