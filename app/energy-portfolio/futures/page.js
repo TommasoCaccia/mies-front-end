@@ -461,17 +461,20 @@ export default function Home() {
 
     const [isFullScreen, setIsFullScreen] = useState(false);
 
-    const enterFullScreen = () => {
-        const iframeContainer = document.getElementById("pbi-container");
+    const enterFullScreen = (containerId) => {
+        const iframeContainer = document.getElementById(containerId);
+        if (!iframeContainer) return; // Se il contenitore non esiste, esce
+
         if (iframeContainer.requestFullscreen) {
             iframeContainer.requestFullscreen();
-        } else if (iframeContainer.mozRequestFullScreen) {
+        } else if (iframeContainer.mozRequestFullScreen) { // Firefox
             iframeContainer.mozRequestFullScreen();
-        } else if (iframeContainer.webkitRequestFullscreen) {
+        } else if (iframeContainer.webkitRequestFullscreen) { // Chrome, Safari, Opera
             iframeContainer.webkitRequestFullscreen();
-        } else if (iframeContainer.msRequestFullscreen) {
+        } else if (iframeContainer.msRequestFullscreen) { // IE/Edge
             iframeContainer.msRequestFullscreen();
         }
+
         setIsFullScreen(true);
     };
 
@@ -512,21 +515,20 @@ export default function Home() {
                 {/* 🔹 Sezione Futures con animazione */}
                 <motion.div id="Futures" ref={sectionRefs.current.Futures} className={classes.section} initial="hidden" animate="visible" variants={sectionVariants}>
                     <h1>Futures</h1>
-                    <div style={{ position: "relative", width: "100%", height: 0, paddingBottom: "50%" }}>
-                        <iframe ref={iframeRef} title="FuturesVisual" style={{ position: "absolute", width: "100%", height: "100%", top: 0, left: 0 }}
-                            src={`${powerBIConfig.baseURL}?reportId=${powerBIConfig.reports.Futures}&autoAuth=true&ctid=${powerBIConfig.tenantId}&filterPaneEnabled=false&navContentPaneEnabled=false`}
-                            frameBorder="0" allowFullScreen={true}>
+                    <div id="FuturesContainer" className={classes.iframeContainer}>
+                        <iframe ref={iframeRef} title="FuturesVisual" className={classes.iframe}
+                                src={`${powerBIConfig.baseURL}?reportId=${powerBIConfig.reports.Futures}&autoAuth=true&ctid=${powerBIConfig.tenantId}&filterPaneEnabled=false&navContentPaneEnabled=false`}
+                                frameBorder="0" allowFullScreen={true}>
                         </iframe>
                         {isFullScreen && (
-                            <div style={{ position: "absolute", bottom: 0, width: "100%", textAlign: "right", background: "#325B72", color: "white", padding: "10px" }}>
-                                <button onClick={exitFullScreen} style={{ padding: "5px 10px", cursor: "pointer", background: "#5198B4", border: "none", color: "white", borderRadius: "20px" }}>Exit Full Screen</button>
+                            <div className={classes.fullscreenExit}>
+                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen</button>
                             </div>
                         )}
                     </div>
-
                     {!isFullScreen && (
-                        <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px", background: "#325B72" }}>
-                            <button onClick={enterFullScreen} style={{ padding: "5px 10px", cursor: "pointer", background: "#5198B4", border: "none", color: "white", borderRadius: "20px"}}>Full Screen</button>
+                        <div className={classes.fullscreenEnter}>
+                            <button onClick={() => enterFullScreen("FuturesContainer")} className={classes.fullscreenButton}>Full Screen</button>
                         </div>
                     )}
                 </motion.div>
@@ -975,26 +977,22 @@ export default function Home() {
 
                 {/* 🔹 Sezione Futures Analysis */}
                 <motion.div id="FuturesAnalysis" ref={sectionRefs.current.FuturesAnalysis} className={classes.section} initial="hidden" animate="visible" variants={sectionVariants}>
-
                     <h1>Futures Analysis</h1>
-                    {/* 🔹 Inserisci qui l'iframe per il report Power BI */}
-                    <div style={{ position: "relative", width: "100%", height: 0, paddingBottom: "50%" }}>
-                        <iframe
-                            title="FuturesAnalysis"
-                            style={{ position: "absolute", width: "100%", height: "100%", top: 0, left: 0 }}
-                            src={`${powerBIConfig.baseURL}?reportId=${powerBIConfig.reports.FuturesAnalysis}&autoAuth=true&ctid=${powerBIConfig.tenantId}&filterPaneEnabled=false&navContentPaneEnabled=false`}
-                            frameBorder="0" allowFullScreen={true}>
+                    <div id="FuturesAnalysisContainer" className={classes.iframeContainer}>
+                        <iframe title="FuturesAnalysis" className={classes.iframe}
+                                src={`${powerBIConfig.baseURL}?reportId=${powerBIConfig.reports.FuturesAnalysis}&autoAuth=true&ctid=${powerBIConfig.tenantId}&filterPaneEnabled=false&navContentPaneEnabled=false`}
+                                frameBorder="0" allowFullScreen={true}>
                         </iframe>
                         {isFullScreen && (
-                            <div style={{ position: "absolute", bottom: 0, width: "100%", textAlign: "right", background: "#325B72", color: "white", padding: "10px" }}>
-                                <button onClick={exitFullScreen} style={{ padding: "5px 10px", cursor: "pointer", background: "#5198B4", border: "none", color: "white", borderRadius: "20px" }}>Exit Full Screen</button>
+                            <div className={classes.fullscreenExit}>
+                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen</button>
                             </div>
                         )}
                     </div>
 
                     {!isFullScreen && (
-                        <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px", background: "#325B72" }}>
-                            <button onClick={enterFullScreen} style={{ padding: "5px 10px", cursor: "pointer", background: "#5198B4", border: "none", color: "white", borderRadius: "20px"}}>Full Screen</button>
+                        <div className={classes.fullscreenEnter}>
+                            <button onClick={() => enterFullScreen("FuturesAnalysisContainer")}  className={classes.fullscreenButton}>Full Screen</button>
                         </div>
                     )}
                 </motion.div>
@@ -1002,24 +1000,21 @@ export default function Home() {
                 {/* 🔹 Sezione Past */}
                 <motion.div id="Past" ref={sectionRefs.current.Past} className={classes.section} initial="hidden" animate="visible" variants={sectionVariants}>
                     <h1>Past</h1>
-                    <div id="pbi-container" style={{ position: "relative", width: "100%", height: 0, paddingBottom: "50%" }}>
-                        <iframe
-                            title="Past"
-                            style={{ position: "absolute", width: "100%", height: "100%", top: 0, left: 0 }}
+                    <div id="PastContainer" className={classes.iframeContainer}>
+                        <iframe title="Past" className={classes.iframe}
                             src={`${powerBIConfig.baseURL}?reportId=${powerBIConfig.reports.Past}&autoAuth=true&ctid=${powerBIConfig.tenantId}&filterPaneEnabled=false&navContentPaneEnabled=false`}
-                            frameBorder="0"
-                            allowFullScreen>
+                            frameBorder="0" allowFullScreen={true}>
                         </iframe>
                         {isFullScreen && (
-                            <div style={{ position: "absolute", bottom: 0, width: "100%", textAlign: "right", background: "#325B72", color: "white", padding: "10px" }}>
-                                <button onClick={exitFullScreen} style={{ padding: "5px 10px", cursor: "pointer", background: "#5198B4", border: "none", color: "white", borderRadius: "20px" }}>Exit Full Screen</button>
+                            <div className={classes.fullscreenExit}>
+                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen</button>
                             </div>
                         )}
                     </div>
 
                     {!isFullScreen && (
-                        <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px", background: "#325B72" }}>
-                            <button onClick={enterFullScreen} style={{ padding: "5px 10px", cursor: "pointer", background: "#5198B4", border: "none", color: "white", borderRadius: "20px"}}>Full Screen</button>
+                        <div className={classes.fullscreenEnter}>
+                            <button onClick={() => enterFullScreen("PastContainer")}  className={classes.fullscreenButton}>Full Screen</button>
                         </div>
                     )}
                 </motion.div>

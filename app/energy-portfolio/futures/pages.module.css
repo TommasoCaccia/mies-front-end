@@ -1,22 +1,5 @@
-.container {
-    display: flex;
-    flex-direction: row;
-    margin-top: 95.94px;
-    font-family: Montserrat, sans-serif;
-    user-select: none;
-    width: 100%;
-}
-.sidebar {
-    margin-top: 85px;
-    background-color: white;
-    overflow-y: auto;
-    position: fixed;
-    width: 200px; /* Mantieni la larghezza della sidebar */
-    height: calc(100vh - 350px); /* L'altezza della sidebar sarà dinamica in base alla finestra */
-    padding-left: 15px;
-    border-radius: 5px;
-    font-weight: 600;
-}
+/*------------------------------------------ EMAIL ALERT ------------------------------------------*/
+
 .errorInput {
     border: 2px solid red;
 }
@@ -26,26 +9,6 @@
     font-size: 12px;
     margin-top: 5px;
 }
-.mainContent {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Allinea gli elementi a sinistra */
-    justify-content: flex-start; /* Allinea il contenuto in alto */
-    flex-grow: 1;
-    margin-left: 200px; /* Larghezza della sidebar per evitare sovrapposizione */
-    padding: 20px;
-    width: calc(100% - 200px); /* La larghezza sarà dinamica e si adatterà alla sidebar */
-    height: 100vh; /* L'altezza occupa l'intera finestra */
-    overflow-y: auto; /* Permette lo scroll verticale se necessario */
-}
-
-.navLink {
-    color: #616161;
-    padding: 10px 15px;
-    text-decoration: none;
-    display: block;
-    position: relative;
-}
 .alertContainer {
     display: flex;
     flex-direction: column;
@@ -54,20 +17,19 @@
     position: relative;
     background-color: #f9f9f9;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 25px;
     min-height: 200px; /* Altezza minima per contenere tutto */
     width: 100%; /* Adatta alla larghezza del contenitore */
 }
-
 .alertTitle {
     position: absolute; /* Posiziona il titolo assolutamente */
     top: 10px;
     left: 10px;
-    font-size: 20px;
+    font-size: 40px;
     font-weight: bold;
     color: #333;
-    margin: 0; /* Elimina margini aggiuntivi */
+    margin-top: 1rem;
+    margin-left: 0.5rem;
 }
 
 .converterContainer {
@@ -77,7 +39,6 @@
     justify-content: space-between;
     width: 100%; /* Occupa tutto lo spazio disponibile */
     gap: 15px; /* Spazio tra gli elementi */
-    margin-top: 1%; /* Aggiungi spazio sotto il titolo */
 }
 
 .inputGroupHorizontal {
@@ -103,7 +64,7 @@
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 1px solid #ddd;
 }
 
@@ -111,7 +72,7 @@
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 1px solid #ddd;
 }
 
@@ -122,11 +83,116 @@
     font-size: 16px;
     font-weight: bold;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
     cursor: pointer;
     margin-top: 2%;
 }
 
+/*------------------------------------------ GENERAL MODIFIED------------------------------------------*/
+
+.section {
+    margin-bottom: 5%;
+    min-height: auto; /* Imposta un'altezza minima per ogni sezione */
+    width: 97%; /* Assicura che le sezioni occupino tutta la larghezza */
+}
+
+@media (max-width: 768px) {
+    .section {
+        min-height: auto; /* Puoi adattare l'altezza minima in base alle esigenze */
+        margin-bottom: 10px; /* Riduci il margine per adattarsi meglio agli schermi piccoli */
+    }
+}
+
+/*------------------------------------------  PBI  ------------------------------------------*/
+
+/* Stili per la sezione Futures */
+#Futures {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+}
+
+/* Stili per il contenitore dell'iframe */
+.iframeContainer {
+    width: 100%; /* Riduci la larghezza per evitare che si espanda troppo */
+    height: 40rem; /* Altezza fissa per mantenere proporzioni corrette */
+    background-color: #1c3b57; /* Sfondo scuro per armonizzarsi con il report */
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Stili per l'iframe di Power BI */
+.iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Pulsante per entrare e uscire dalla modalità full-screen */
+.fullscreenEnter{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 10px;
+    background: #325B72;
+    border-radius: 0 0 25px 25px;
+}
+.fullscreenExit {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #325B72;
+    padding: 10px;
+    display: flex;
+    justify-content: right; /* Per centrare il pulsante */
+    align-items: center;
+}
+
+.fullscreenButton {
+    padding: 8px 12px;
+    cursor: pointer;
+    background: #5198B4;
+    border: none;
+    color: white;
+    border-radius: 20px;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Ombra leggera */
+}
+
+.fullscreenButton:hover {
+    background: #00324F;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.9);
+}
+
+/* Responsività */
+@media (max-width: 1024px) {
+    .iframeContainer {
+        height: 400px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .iframeContainer {
+        height: 300px;
+        width: 100%;
+    }
+
+    .fullscreenButton {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+}
+
+/*------------------------------------------ GENERAL ------------------------------------------*/
 .navLink.active {
     color: #2C4D79;
 }
@@ -140,78 +206,45 @@
     width: 3px;
     background-color: #2C4D79;
 }
-
-.section {
-    margin-bottom: 5%;
-    min-height: 90vh; /* Imposta un'altezza minima per ogni sezione */
-    width: 100%; /* Assicura che le sezioni occupino tutta la larghezza */
+.navLink {
+    color: #616161;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    position: relative;
 }
 
-@media (max-width: 768px) {
-    .section {
-        min-height: auto; /* Puoi adattare l'altezza minima in base alle esigenze */
-        margin-bottom: 10px; /* Riduci il margine per adattarsi meglio agli schermi piccoli */
-    }
-}
 
-.section h1 {
-    margin-top: 25px;
-}
-
-.section p {
-    margin-bottom: 25px;
-}
-
-.sectionTitle {
-    margin-bottom: 15px;
-    color: #333;
-}
-
-.powerbi {
-    margin-bottom: 50px;
-}
-
-.PBI {
-    width: 100%;
-    height: 80vh; /* Altezza dinamica (80% della finestra) */
-    border: none;
-}
-
-.bottonePowerbi {
-    background-color: #2C4D79;
-    color: white;
-    margin-top: 20px;
-    border: none;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 15px;
-    padding: 10px 16px 10px 16px;
-}
-
-/* Styles for the hamburger button */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 30px;
-    height: 20px;
-    margin-left: 10px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-}
-
-.divMenu {
+.mainContent {
     display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-right: 20px;
-    height: 100%;
-    background: white;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    margin-top: 3%;
+    margin-left: 213px;
 }
 
-/* Show hamburger button only on screens smaller than 1050px */
+.container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 95.94px;
+    font-family: Montserrat, sans-serif;
+    user-select: none;
+    width: 100%;
+}
+.sidebar {
+    margin-top: 85px;
+    background-color: white;
+    overflow-y: auto;
+    position: fixed;
+    width: 200px; /* Mantieni la larghezza della sidebar */
+    height: calc(100vh - 350px); /* L'altezza della sidebar sarà dinamica in base alla finestra */
+    padding-left: 15px;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
 @media (max-width: 1050px) {
     .mainContent {
         margin-left: 0;
@@ -258,4 +291,54 @@
     }
 }
 
-/*------------------------------------------ PBI SECTION ------------------------------------------*/
+.divMenu {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-right: 20px;
+    height: 100%;
+    background: white;
+}
+
+.bottonePowerbi {
+    background-color: #2C4D79;
+    color: white;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 10px 16px 10px 16px;
+}
+
+/* Styles for the hamburger button */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 20px;
+    margin-left: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+.PBI {
+    width: 100%;
+    height: 80vh; /* Altezza dinamica (80% della finestra) */
+    border: none;
+}
+
+.section p {
+    margin-bottom: 25px;
+}
+
+.sectionTitle {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.powerbi {
+    margin-bottom: 50px;
+}
