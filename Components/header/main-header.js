@@ -64,9 +64,6 @@ export default function MainHeader() {
             <label className={classes.menuIcon} htmlFor="menuBtn"><span className={classes.navIcon}></span></label>
 
             <ul className={classes.menu}>
-                <Link href="/" className={classes.logoContainerElenco}>
-                    <img src="/Logo.png" className={classes.logoElenco} alt="Logo"/>
-                </Link>
                 <li>
                     <Link href="/servizi">Servizi</Link>
                 </li>

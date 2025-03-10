@@ -41,13 +41,6 @@
     border-radius: 10px;
 }
 
-/* chiSiamo section */
-.chiSiamo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
 
 .testoDx {
     display: flex;

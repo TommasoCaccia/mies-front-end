@@ -13,47 +13,46 @@ export default function Pod() {
     const [isEditable, setIsEditable] = useState({});
     const [isModifica, setIsModifica] = useState({});
 
-    const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
     const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV;
 
-    useEffect(() => {
-            const fetchPods = async () => {
-                try {
-                    const response = await fetch(`${PATH_DEV}/pod`, {
-                        method: 'GET',
-                        credentials: 'include',
-                        headers: {'Content-Type': 'application/json'},
-                    });
+    const fetchPods = async () => {
+        try {
+            const response = await fetch(`${PATH_DEV}/pod`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'},
+            });
 
-                    if (response.ok) {
-                        const data = await response.json();
-                        const editableStatus = {};
-                        const modificaIds = [];
+            if (response.ok) {
+                const data = await response.json();
+                const editableStatus = {};
+                const modificaIds = [];
 
-                        data.forEach(pod => {
-                            editableStatus[pod.id] = {
-                                sede: !pod.sede,
-                                nazione: !pod.nazione
-                            };
+                data.forEach(pod => {
+                    editableStatus[pod.id] = {
+                        sede: !pod.sede,
+                        nazione: !pod.nazione
+                    };
 
-                            if (!pod.sede) pod.sede = '';
-                            if (!pod.nazione) pod.nazione = '';
+                    if (!pod.sede) pod.sede = '';
+                    if (!pod.nazione) pod.nazione = '';
 
-                            if (pod.sede && pod.nazione) {
-                                modificaIds.push(pod.id);
-                            }
-                        });
-
-                        setPods(data);
-                        setIsEditable(editableStatus);
-                        setIsModifica(modificaIds);
+                    if (pod.sede && pod.nazione) {
+                        modificaIds.push(pod.id);
                     }
-                } catch
-                    (error) {
-                    console.log('Error during fetch:', error);
-                }
-            };
+                });
 
+                setPods(data);
+                setIsEditable(editableStatus);
+                setIsModifica(modificaIds);
+            }
+        } catch
+            (error) {
+            console.log('Error during fetch:', error);
+        }
+    };
+
+    useEffect(() => {
             fetchPods();
         }, []
     )
@@ -102,7 +101,7 @@ export default function Pod() {
                 });
 
                 // Reindirizzamento se necessario
-                window.location.href = '/pod';
+                await fetchPods();
             } else {
                 // Mostra il messaggio di errore dal server
                 await Swal.fire({
@@ -138,7 +137,7 @@ export default function Pod() {
             const response = await fetch(`${PATH_DEV}/pod/sedeNazione`, {
                 method: 'PUT',
                 credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     idPod: podToUpdate.id,
                     sede: podToUpdate.sede,
@@ -150,14 +149,14 @@ export default function Pod() {
                 const text = await response.text();
                 if (text) {
                     const data = JSON.parse(text);
-                    setPods(prevPods => prevPods.map(p => p.id === podId ? { ...p, ...data } : p));
+                    setPods(prevPods => prevPods.map(p => p.id === podId ? {...p, ...data} : p));
                 } else {
                     setPods(prevPods => prevPods.map(p => p.id === podId ? podToUpdate : p));
                 }
 
                 setIsEditable(prev => ({
                     ...prev,
-                    [podId]: { sede: false, nazione: false }
+                    [podId]: {sede: false, nazione: false}
                 }));
                 setIsModifica(prev => [...prev, podId]);
 
@@ -192,7 +191,7 @@ export default function Pod() {
     const handleModificaClick = (podId) => {
         setIsEditable(prev => ({
             ...prev,
-            [podId]: { sede: true, nazione: true }
+            [podId]: {sede: true, nazione: true}
         }));
 
         setIsModifica(prev => prev.filter(id => id !== podId));
