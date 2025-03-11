@@ -1,6 +1,14 @@
 "use client"
 import React, {useEffect, useState, useRef} from 'react';
 import classes from '@/app/energy-portfolio/page.module.css';
+import dynamic from "next/dynamic";
+import {reports } from '@/Components/PBI/reportsConfig';
+import DynamicPowerBIReport from "@/Components/PBI/DynamicPowerBIReport";
+
+const PowerBIReport = dynamic(
+    () => import("@/Components/PBI/PowerBIReport"),
+    {ssr: false}
+);
 
 export default function Home() {
     const [isOpen, setIsOpen] = useState(false);
@@ -94,6 +102,7 @@ export default function Home() {
                     </ul>
                 </nav>
             </div>
+
             <main className={classes.mainContent}>
                 <div id="section1" ref={sectionRefs.current.section1} className={classes.section}>
                     <h1 className={classes.sectionTitle}>Sales Funnel Power BI Dashboard</h1>
@@ -109,11 +118,16 @@ export default function Home() {
                         da
                         software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
 
-                    <iframe className={classes.PBI} title="mies_13_6_24" width="1140" height="541.25"
-                            src="https://app.powerbi.com/reportEmbed?reportId=e9de65d8-c498-4cd0-90d2-02461019efde&autoAuth=true&ctid=69da13af-78cb-4dd9-b20c-087550f2b912"
-                            frameBorder="0" allowFullScreen="true">
-
-                    </iframe>
+                    <div>
+                        {reports.map((report) => (
+                            <div key={report.id} className="h-screen my-5">
+                                <DynamicPowerBIReport
+                                    reportId={report.reportId}
+                                    embedUrl={report.embedUrl}
+                                />
+                            </div>
+                        ))}
+                    </div>
 
                 </div>
                 <div id="section2" ref={sectionRefs.current.section2} className={classes.section}>

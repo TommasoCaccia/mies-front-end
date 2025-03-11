@@ -115,25 +115,7 @@
     padding: 20px;
 }
 
-/* Stili per il contenitore dell'iframe */
-.iframeContainer {
-    width: 100%; /* Riduci la larghezza per evitare che si espanda troppo */
-    height: 40rem; /* Altezza fissa per mantenere proporzioni corrette */
-    background-color: #1c3b57; /* Sfondo scuro per armonizzarsi con il report */
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
-/* Stili per l'iframe di Power BI */
-.iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
 
 /* Pulsante per entrare e uscire dalla modalità full-screen */
 .fullscreenEnter{

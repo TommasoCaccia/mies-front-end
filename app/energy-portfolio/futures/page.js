@@ -1,9 +1,13 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from "react";
 import classes from '@/app/energy-portfolio/futures/pages.module.css';
 import Swal from "sweetalert2";
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
+import dynamic from "next/dynamic";
+import {futures} from '@/Components/PBI/reportsConfig';
 
+
+const DynamicPowerBIReport = dynamic(() => import('@/components/PBI/DynamicPowerBIReport'), {ssr: false});
 
 export default function Home() {
     const [isOpen, setIsOpen] = useState(false);
@@ -50,7 +54,7 @@ export default function Home() {
     const [maximumLevelMonthlyError, setMaximumLevelMonthlyError] = useState(false);
     const [rangeMonthlyError, setRangeMonthlyError] = useState(false);
 
-    const [deleteAlert, setDeleteAlert] = useState({active: false, message: "" });
+    const [deleteAlert, setDeleteAlert] = useState({active: false, message: ""});
     const [activeAlert, setActiveAlert] = useState(false);
 
     const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
@@ -65,8 +69,8 @@ export default function Home() {
     });
 
     const sectionVariants = {
-        hidden: { opacity: 0, y: -20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+        hidden: {opacity: 0, y: -20},
+        visible: {opacity: 1, y: 0, transition: {duration: 0.5}}
     };
     // Nomi leggibili per la sidebar
     const readableNames = {
@@ -84,7 +88,7 @@ export default function Home() {
         const sectionElement = sectionRefs.current[section]?.current;
         if (!sectionElement) return;
 
-        sectionElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        sectionElement.scrollIntoView({behavior: "smooth", block: "center"});
     };
 
     useEffect(() => {
@@ -171,7 +175,7 @@ export default function Home() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ futuresType: futuresType }),
+                body: JSON.stringify({futuresType: futuresType}),
             });
 
             if (!response.ok) {
@@ -190,20 +194,20 @@ export default function Home() {
                 // Se tutto è corretto, invia direttamente l'email
                 sendEmail();
             } else {
-/*
-                if (!(String(minimumLevel).trim()) || !(String(maximumLevel).trim()) || !(String(minimumLevelYearly).trim()) ||
-                    !(String(maximumLevelYearly).trim()) || !(String(minimumLevelQuarterly).trim()) || !(String(maximumLevelQuarterly).trim()) ||
-                    !(String(minimumLevelMonthly).trim()) || !(String(maximumLevelMonthly).trim())){
-                    Swal.fire({
-                        icon: "warning",
-                        title: "Attention!",
-                        text: "Please fill in all required fields before proceeding.",
-                        confirmButtonText: "OK",
-                    });
-                    return; // Interrompe l'esecuzione
-                }
+                /*
+                                if (!(String(minimumLevel).trim()) || !(String(maximumLevel).trim()) || !(String(minimumLevelYearly).trim()) ||
+                                    !(String(maximumLevelYearly).trim()) || !(String(minimumLevelQuarterly).trim()) || !(String(maximumLevelQuarterly).trim()) ||
+                                    !(String(minimumLevelMonthly).trim()) || !(String(maximumLevelMonthly).trim())){
+                                    Swal.fire({
+                                        icon: "warning",
+                                        title: "Attention!",
+                                        text: "Please fill in all required fields before proceeding.",
+                                        confirmButtonText: "OK",
+                                    });
+                                    return; // Interrompe l'esecuzione
+                                }
 
- */
+                 */
                 Swal.fire({
                     icon: "warning",
                     title: "Attention!",
@@ -216,7 +220,7 @@ export default function Home() {
                     if (result.isConfirmed) {
                         // L'utente ha premuto "Continua"
                         alert("isConfirmed")
-                        setDeleteAlert({ active: true, message: data});
+                        setDeleteAlert({active: true, message: data});
                     }
                 });
             }
@@ -354,7 +358,7 @@ export default function Home() {
     }, []);
     useEffect(() => {
 
-    }, [checkModalityMonthly, checkModalityQuarterly, checkModalityYearly, frequencyYearly, frequencyQuarterly,frequencyMonthly]);
+    }, [checkModalityMonthly, checkModalityQuarterly, checkModalityYearly, frequencyYearly, frequencyQuarterly, frequencyMonthly]);
 
     // Funzione per inviare l'email
     const sendEmail = async () => {
@@ -375,7 +379,7 @@ export default function Home() {
         try {
             let response;
             if (futuresType === "All") {
-                 response = await fetch(`${PATH_DEV}/cliente/sendWeeklyEmail`, {
+                response = await fetch(`${PATH_DEV}/cliente/sendWeeklyEmail`, {
                     method: "POST",
                     credentials: "include",
                     headers: {
@@ -401,8 +405,8 @@ export default function Home() {
                         deleteAlert,
                         activeAlert
                     }),
-                 });
-            }else{
+                });
+            } else {
                 response = await fetch(`${PATH_DEV}/cliente/send-email`, {
                     method: "POST",
                     credentials: "include",
@@ -492,7 +496,6 @@ export default function Home() {
     };
 
 
-
     return (
         <div className={classes.container}>
             <nav className={`${classes.sidebar}`}>
@@ -513,27 +516,32 @@ export default function Home() {
 
             <main className={classes.mainContent}>
                 {/* 🔹 Sezione Futures con animazione */}
-                <motion.div id="Futures" ref={sectionRefs.current.Futures} className={classes.section} initial="hidden" animate="visible" variants={sectionVariants}>
+                <motion.div id="Futures" ref={sectionRefs.current.Futures} className={classes.section} initial="hidden"
+                            animate="visible" variants={sectionVariants}>
                     <h1>Futures</h1>
                     <div id="FuturesContainer" className={classes.iframeContainer}>
-                        <iframe ref={iframeRef} title="FuturesVisual" className={classes.iframe}
-                                src={`${powerBIConfig.baseURL}?reportId=${powerBIConfig.reports.Futures}&autoAuth=true&ctid=${powerBIConfig.tenantId}&filterPaneEnabled=false&navContentPaneEnabled=false`}
-                                frameBorder="0" allowFullScreen={true}>
-                        </iframe>
+                        <DynamicPowerBIReport
+                            reportId={futures.reports.energia.reportId}
+                            embedUrl={futures.reports.energia.embedUrl}
+                        />
                         {isFullScreen && (
                             <div className={classes.fullscreenExit}>
-                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen</button>
+                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen
+                                </button>
                             </div>
                         )}
                     </div>
                     {!isFullScreen && (
                         <div className={classes.fullscreenEnter}>
-                            <button onClick={() => enterFullScreen("FuturesContainer")} className={classes.fullscreenButton}>Full Screen</button>
+                            <button onClick={() => enterFullScreen("FuturesContainer")}
+                                    className={classes.fullscreenButton}>Full Screen
+                            </button>
                         </div>
                     )}
                 </motion.div>
 
-                <motion.div id="Alert" ref={sectionRefs.current.Alert} className={classes.section} initial="hidden" animate="visible" variants={sectionVariants}>
+                <motion.div id="Alert" ref={sectionRefs.current.Alert} className={classes.section} initial="hidden"
+                            animate="visible" variants={sectionVariants}>
 
                     <div id="Alert" ref={sectionRefs.current.Alert}>
                         <div className={classes.alertContainer}>
@@ -543,7 +551,7 @@ export default function Home() {
                             <div className={classes.inputGroupHorizontal} style={{paddingTop: '5%'}}>
                                 <label className={classes.label}>Futures type</label>
                                 <select className={classes.select} value={futuresType}
-                                    onChange={(e) => setFuturesType(e.target.value)}>
+                                        onChange={(e) => setFuturesType(e.target.value)}>
                                     <option value="General">General</option>
                                     <option value="All">All</option>
                                     <option value="Yearly">Yearly</option>
@@ -558,10 +566,11 @@ export default function Home() {
                                     {/* Input per il minimo */}
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Minimum level</label>
-                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`} value={minimumLevel}
-                                            onChange={(e) => setMinimumLevel(e.target.value)}
-                                            onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
-                                            className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
+                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`}
+                                               value={minimumLevel}
+                                               onChange={(e) => setMinimumLevel(e.target.value)}
+                                               onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
+                                               className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
                                         />
                                         {minimumLevelError && (
                                             <div className={classes.errorMessage}>
@@ -573,10 +582,11 @@ export default function Home() {
                                     {/* Input per il massimo */}
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Maximum level</label>
-                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`} value={maximumLevel}
-                                            onChange={(e) => setMaximumLevel(e.target.value)}
-                                            onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
-                                            className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
+                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`}
+                                               value={maximumLevel}
+                                               onChange={(e) => setMaximumLevel(e.target.value)}
+                                               onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
+                                               className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
                                         />
                                         {maximumLevelError && (
                                             <div className={classes.errorMessage}>
@@ -600,8 +610,9 @@ export default function Home() {
 
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Modality</label>
-                                        <select className={classes.select} value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                            onChange={(e) => setCheckModality(e.target.value === "Percentage")}>
+                                        <select className={classes.select}
+                                                value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
+                                                onChange={(e) => setCheckModality(e.target.value === "Percentage")}>
                                             <option value="Value">Value</option>
                                             <option value="Percentage">Percentage</option>
                                         </select>
@@ -616,10 +627,11 @@ export default function Home() {
                                         {/* Input Yearly Minimo */}
                                         <div className={classes.inputGroupHorizontal}>
                                             <label className={classes.label}>Minimum level</label>
-                                            <input type="number" placeholder="Enter minimum level" value={minimumLevelYearly}
-                                                onChange={(e) => setMinimumLevelYearly(e.target.value)}
-                                                onBlur={() => handleMinimumLevelBlur(minimumLevelYearly, setMinimumLevelYearly, setMinimumLevelYearlyError)}
-                                                className={`${classes.input} ${minimumLevelYearlyError ? classes.errorInput : ''}`}
+                                            <input type="number" placeholder="Enter minimum level"
+                                                   value={minimumLevelYearly}
+                                                   onChange={(e) => setMinimumLevelYearly(e.target.value)}
+                                                   onBlur={() => handleMinimumLevelBlur(minimumLevelYearly, setMinimumLevelYearly, setMinimumLevelYearlyError)}
+                                                   className={`${classes.input} ${minimumLevelYearlyError ? classes.errorInput : ''}`}
                                             />
                                             {minimumLevelYearlyError && (
                                                 <div className={classes.errorMessage}>
@@ -631,10 +643,11 @@ export default function Home() {
                                         {/* Input Yearly Massimo */}
                                         <div className={classes.inputGroupHorizontal}>
                                             <label className={classes.label}>Maximum level</label>
-                                            <input type="number" placeholder="Enter maximum level" value={maximumLevelYearly}
-                                                onChange={(e) => setMaximumLevelYearly(e.target.value)}
-                                                onBlur={() => handleMaximumLevelBlur(maximumLevelYearly, setMaximumLevelYearly, setMaximumLevelYearlyError, minimumLevelYearly, setRangeYearlyError)}
-                                                className={`${classes.input} ${maximumLevelYearlyError ? classes.errorInput : ''}`}
+                                            <input type="number" placeholder="Enter maximum level"
+                                                   value={maximumLevelYearly}
+                                                   onChange={(e) => setMaximumLevelYearly(e.target.value)}
+                                                   onBlur={() => handleMaximumLevelBlur(maximumLevelYearly, setMaximumLevelYearly, setMaximumLevelYearlyError, minimumLevelYearly, setRangeYearlyError)}
+                                                   className={`${classes.input} ${maximumLevelYearlyError ? classes.errorInput : ''}`}
                                             />
                                             {maximumLevelYearlyError && (
                                                 <div className={classes.errorMessage}>
@@ -645,8 +658,9 @@ export default function Home() {
 
                                         <div className={classes.inputGroupHorizontal}>
                                             <label className={classes.label}>Frequency</label>
-                                            <select className={classes.select} value={frequencyYearly}  // Imposta il valore su quello dello stato
-                                                onChange={(e) => setFrequencyYearly(e.target.value)}>
+                                            <select className={classes.select}
+                                                    value={frequencyYearly}  // Imposta il valore su quello dello stato
+                                                    onChange={(e) => setFrequencyYearly(e.target.value)}>
                                                 <option value="Weekly and Monthly">Weekly and Monthly</option>
                                                 <option value="Monthly">Monthly</option>
                                                 <option value="Weekly">Weekly</option>
@@ -656,8 +670,8 @@ export default function Home() {
                                         <div className={classes.inputGroupHorizontal}>
                                             <label className={classes.label}>Modality</label>
                                             <select className={classes.select}
-                                                value={checkModalityYearly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                                onChange={(e) => setCheckModalityYearly(e.target.value === "Percentage")}
+                                                    value={checkModalityYearly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
+                                                    onChange={(e) => setCheckModalityYearly(e.target.value === "Percentage")}
                                             >
                                                 <option value="Value">Value</option>
                                                 <option value="Percentage">Percentage</option>
@@ -674,12 +688,13 @@ export default function Home() {
                                         {/* Input Quarterly Minimo */}
                                         <div className={classes.inputGroupHorizontal}>
                                             <label className={classes.label}>Minimum level</label>
-                                            <input type="number" placeholder="Enter minimum level" value={minimumLevelQuarterly}
-                                                onChange={(e) => setMinimumLevelQuarterly(e.target.value)}
-                                                onBlur={() => handleMinimumLevelBlur(minimumLevelQuarterly, setMinimumLevelQuarterly, setMinimumLevelQuarterlyError)}
-                                                className={`${classes.input} ${minimumLevelQuarterlyError ? classes.errorInput : ''}`}
+                                            <input type="number" placeholder="Enter minimum level"
+                                                   value={minimumLevelQuarterly}
+                                                   onChange={(e) => setMinimumLevelQuarterly(e.target.value)}
+                                                   onBlur={() => handleMinimumLevelBlur(minimumLevelQuarterly, setMinimumLevelQuarterly, setMinimumLevelQuarterlyError)}
+                                                   className={`${classes.input} ${minimumLevelQuarterlyError ? classes.errorInput : ''}`}
                                             />
-                                            {minimumLevelQuarterlyError&& (
+                                            {minimumLevelQuarterlyError && (
                                                 <div className={classes.errorMessage}>
                                                     The value must be between 0 and {getLimit()}!
                                                 </div>
@@ -689,10 +704,11 @@ export default function Home() {
                                         {/* Input Quarterly Massimo */}
                                         <div className={classes.inputGroupHorizontal}>
                                             <label className={classes.label}>Maximum level</label>
-                                            <input type="number" placeholder="Enter maximum level" value={maximumLevelQuarterly}
-                                                onChange={(e) => setMaximumLevelQuarterly(e.target.value)}
-                                                onBlur={() => handleMaximumLevelBlur(maximumLevelQuarterly, setMaximumLevelQuarterly, setMaximumLevelQuarterlyError, minimumLevelQuarterly, setRangeQuarterlyError)}
-                                                className={`${classes.input} ${maximumLevelQuarterlyError ? classes.errorInput : ''}`}
+                                            <input type="number" placeholder="Enter maximum level"
+                                                   value={maximumLevelQuarterly}
+                                                   onChange={(e) => setMaximumLevelQuarterly(e.target.value)}
+                                                   onBlur={() => handleMaximumLevelBlur(maximumLevelQuarterly, setMaximumLevelQuarterly, setMaximumLevelQuarterlyError, minimumLevelQuarterly, setRangeQuarterlyError)}
+                                                   className={`${classes.input} ${maximumLevelQuarterlyError ? classes.errorInput : ''}`}
                                             />
                                             {maximumLevelQuarterlyError && (
                                                 <div className={classes.errorMessage}>
@@ -735,10 +751,11 @@ export default function Home() {
                                     <div className={classes.converterContainer}>
                                         <div className={classes.inputGroupHorizontal}>
                                             <label className={classes.label}>Minimum level</label>
-                                            <input type="number" placeholder="Enter minimum level" value={minimumLevelMonthly}
-                                                onChange={(e) => setMinimumLevelMonthly(e.target.value)}
-                                                onBlur={() => handleMinimumLevelBlur(minimumLevelMonthly, setMinimumLevelMonthly, setMinimumLevelMonthlyError)}
-                                                className={`${classes.input} ${minimumLevelMonthlyError ? classes.errorInput : ''}`}
+                                            <input type="number" placeholder="Enter minimum level"
+                                                   value={minimumLevelMonthly}
+                                                   onChange={(e) => setMinimumLevelMonthly(e.target.value)}
+                                                   onBlur={() => handleMinimumLevelBlur(minimumLevelMonthly, setMinimumLevelMonthly, setMinimumLevelMonthlyError)}
+                                                   className={`${classes.input} ${minimumLevelMonthlyError ? classes.errorInput : ''}`}
                                             />
                                             {minimumLevelMonthlyError && (
                                                 <div className={classes.errorMessage}>
@@ -750,10 +767,11 @@ export default function Home() {
                                         {/* Input Monthly Massimo */}
                                         <div className={classes.inputGroupHorizontal}>
                                             <label className={classes.label}>Maximum level</label>
-                                            <input type="number" placeholder="Enter maximum level" value={maximumLevelMonthly}
-                                                onChange={(e) => setMaximumLevelMonthly(e.target.value)}
-                                                onBlur={() => handleMaximumLevelBlur(maximumLevelMonthly, setMaximumLevelMonthly, setMaximumLevelMonthlyError, minimumLevelMonthly, setRangeMonthlyError)}
-                                                className={`${classes.input} ${maximumLevelMonthlyError ? classes.errorInput : ''}`}
+                                            <input type="number" placeholder="Enter maximum level"
+                                                   value={maximumLevelMonthly}
+                                                   onChange={(e) => setMaximumLevelMonthly(e.target.value)}
+                                                   onBlur={() => handleMaximumLevelBlur(maximumLevelMonthly, setMaximumLevelMonthly, setMaximumLevelMonthlyError, minimumLevelMonthly, setRangeMonthlyError)}
+                                                   className={`${classes.input} ${maximumLevelMonthlyError ? classes.errorInput : ''}`}
                                             />
                                             {maximumLevelMonthlyError && (
                                                 <div className={classes.errorMessage}>
@@ -764,8 +782,9 @@ export default function Home() {
 
                                         <div className={classes.inputGroupHorizontal}>
                                             <label className={classes.label}>Frequency</label>
-                                            <select className={classes.select} value={frequencyMonthly}  // Imposta il valore su quello dello stato
-                                                onChange={(e) => setFrequencyMonthly(e.target.value)}>
+                                            <select className={classes.select}
+                                                    value={frequencyMonthly}  // Imposta il valore su quello dello stato
+                                                    onChange={(e) => setFrequencyMonthly(e.target.value)}>
                                                 <option value="Weekly and Monthly">Weekly and Monthly</option>
                                                 <option value="Monthly">Monthly</option>
                                                 <option value="Weekly">Weekly</option>
@@ -774,8 +793,9 @@ export default function Home() {
 
                                         <div className={classes.inputGroupHorizontal}>
                                             <label className={classes.label}>Modality</label>
-                                            <select className={classes.select} value={checkModalityMonthly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                                onChange={(e) => setCheckModalityMonthly(e.target.value === "Percentage")}>
+                                            <select className={classes.select}
+                                                    value={checkModalityMonthly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
+                                                    onChange={(e) => setCheckModalityMonthly(e.target.value === "Percentage")}>
                                                 <option value="Value">Value</option>
                                                 <option value="Percentage">Percentage</option>
                                             </select>
@@ -794,7 +814,8 @@ export default function Home() {
                                     {/* Input per il minimo */}
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Minimum level</label>
-                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`} value={minimumLevel}
+                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`}
+                                               value={minimumLevel}
                                                onChange={(e) => setMinimumLevel(e.target.value)}
                                                onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
                                                className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
@@ -809,7 +830,8 @@ export default function Home() {
                                     {/* Input per il massimo */}
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Maximum level</label>
-                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`} value={maximumLevel}
+                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`}
+                                               value={maximumLevel}
                                                onChange={(e) => setMaximumLevel(e.target.value)}
                                                onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
                                                className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
@@ -853,7 +875,8 @@ export default function Home() {
                                     {/* Input per il minimo */}
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Minimum level</label>
-                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`} value={minimumLevel}
+                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`}
+                                               value={minimumLevel}
                                                onChange={(e) => setMinimumLevel(e.target.value)}
                                                onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
                                                className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
@@ -868,7 +891,8 @@ export default function Home() {
                                     {/* Input per il massimo */}
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Maximum level</label>
-                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`} value={maximumLevel}
+                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`}
+                                               value={maximumLevel}
                                                onChange={(e) => setMaximumLevel(e.target.value)}
                                                onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
                                                className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
@@ -912,7 +936,8 @@ export default function Home() {
                                     {/* Input per il minimo */}
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Minimum level</label>
-                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`} value={minimumLevel}
+                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`}
+                                               value={minimumLevel}
                                                onChange={(e) => setMinimumLevel(e.target.value)}
                                                onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
                                                className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
@@ -927,7 +952,8 @@ export default function Home() {
                                     {/* Input per il massimo */}
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Maximum level</label>
-                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`} value={maximumLevel}
+                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`}
+                                               value={maximumLevel}
                                                onChange={(e) => setMaximumLevel(e.target.value)}
                                                onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
                                                className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
@@ -940,7 +966,8 @@ export default function Home() {
                                     </div>
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Frequency</label>
-                                        <select className={classes.select} value={frequencyAlert} onChange={(e) => setFrequencyAlert(e.target.value)}>
+                                        <select className={classes.select} value={frequencyAlert}
+                                                onChange={(e) => setFrequencyAlert(e.target.value)}>
                                             <option value="Weekly and Monthly">Weekly and Monthly</option>
                                             <option value="Monthly">Monthly</option>
                                             <option value="Weekly">Weekly</option>
@@ -949,8 +976,9 @@ export default function Home() {
 
                                     <div className={classes.inputGroupHorizontal}>
                                         <label className={classes.label}>Modality</label>
-                                        <select className={classes.select} value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                            onChange={(e) => setCheckModality(e.target.value === "Percentage")}>
+                                        <select className={classes.select}
+                                                value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
+                                                onChange={(e) => setCheckModality(e.target.value === "Percentage")}>
                                             <option value="Value">Value</option>
                                             <option value="Percentage">Percentage</option>
                                         </select>
@@ -964,7 +992,7 @@ export default function Home() {
                             )}
                             <div style={{marginTop: '2%'}}>
                                 <input type="checkbox" className={classes} checked={activeAlert}
-                                    onChange={(e) => setActiveAlert(e.target.checked)}/>
+                                       onChange={(e) => setActiveAlert(e.target.checked)}/>
                                 <label className={classes.label} style={{marginLeft: '4px'}}>Active Alert</label>
                             </div>
 
@@ -976,45 +1004,53 @@ export default function Home() {
                 </motion.div>
 
                 {/* 🔹 Sezione Futures Analysis */}
-                <motion.div id="FuturesAnalysis" ref={sectionRefs.current.FuturesAnalysis} className={classes.section} initial="hidden" animate="visible" variants={sectionVariants}>
+                <motion.div id="FuturesAnalysis" ref={sectionRefs.current.FuturesAnalysis} className={classes.section}
+                            initial="hidden" animate="visible" variants={sectionVariants}>
                     <h1>Futures Analysis</h1>
                     <div id="FuturesAnalysisContainer" className={classes.iframeContainer}>
-                        <iframe title="FuturesAnalysis" className={classes.iframe}
-                                src={`${powerBIConfig.baseURL}?reportId=${powerBIConfig.reports.FuturesAnalysis}&autoAuth=true&ctid=${powerBIConfig.tenantId}&filterPaneEnabled=false&navContentPaneEnabled=false`}
-                                frameBorder="0" allowFullScreen={true}>
-                        </iframe>
+                        <DynamicPowerBIReport
+                            reportId={futures.reports.futuresAnalysis.reportId}
+                            embedUrl={futures.reports.futuresAnalysis.embedUrl}
+                        />
                         {isFullScreen && (
                             <div className={classes.fullscreenExit}>
-                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen</button>
+                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen
+                                </button>
                             </div>
                         )}
                     </div>
 
                     {!isFullScreen && (
                         <div className={classes.fullscreenEnter}>
-                            <button onClick={() => enterFullScreen("FuturesAnalysisContainer")}  className={classes.fullscreenButton}>Full Screen</button>
+                            <button onClick={() => enterFullScreen("FuturesAnalysisContainer")}
+                                    className={classes.fullscreenButton}>Full Screen
+                            </button>
                         </div>
                     )}
                 </motion.div>
 
                 {/* 🔹 Sezione Past */}
-                <motion.div id="Past" ref={sectionRefs.current.Past} className={classes.section} initial="hidden" animate="visible" variants={sectionVariants}>
+                <motion.div id="Past" ref={sectionRefs.current.Past} className={classes.section} initial="hidden"
+                            animate="visible" variants={sectionVariants}>
                     <h1>Past</h1>
                     <div id="PastContainer" className={classes.iframeContainer}>
-                        <iframe title="Past" className={classes.iframe}
-                            src={`${powerBIConfig.baseURL}?reportId=${powerBIConfig.reports.Past}&autoAuth=true&ctid=${powerBIConfig.tenantId}&filterPaneEnabled=false&navContentPaneEnabled=false`}
-                            frameBorder="0" allowFullScreen={true}>
-                        </iframe>
+                        <DynamicPowerBIReport
+                            reportId={futures.reports.past.reportId}
+                            embedUrl={futures.reports.past.embedUrl}
+                        />
                         {isFullScreen && (
                             <div className={classes.fullscreenExit}>
-                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen</button>
+                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen
+                                </button>
                             </div>
                         )}
                     </div>
 
                     {!isFullScreen && (
                         <div className={classes.fullscreenEnter}>
-                            <button onClick={() => enterFullScreen("PastContainer")}  className={classes.fullscreenButton}>Full Screen</button>
+                            <button onClick={() => enterFullScreen("PastContainer")}
+                                    className={classes.fullscreenButton}>Full Screen
+                            </button>
                         </div>
                     )}
                 </motion.div>
