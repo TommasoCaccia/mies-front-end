@@ -17,7 +17,7 @@ export default function PowerBIReport({reportId, embedUrl}) {
             try {
                 const res = await fetch("http://localhost:8080/api/pbitoken");
                 const {token} = await res.json();
-
+                console.log(token);
                 const embedConfig = {
                     type: "report",
                     id: reportId,

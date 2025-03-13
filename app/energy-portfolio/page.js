@@ -1,14 +1,16 @@
 "use client"
 import React, {useEffect, useState, useRef} from 'react';
 import classes from '@/app/energy-portfolio/page.module.css';
-import dynamic from "next/dynamic";
-import {reports } from '@/Components/PBI/reportsConfig';
+/*import dynamic from "next/dynamic";
+import {futures} from '@/Components/PBI/reportsConfig';*/
 import DynamicPowerBIReport from "@/Components/PBI/DynamicPowerBIReport";
 
+/*
 const PowerBIReport = dynamic(
     () => import("@/Components/PBI/PowerBIReport"),
     {ssr: false}
 );
+*/
 
 export default function Home() {
     const [isOpen, setIsOpen] = useState(false);
@@ -119,14 +121,12 @@ export default function Home() {
                         software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
 
                     <div>
-                        {reports.map((report) => (
-                            <div key={report.id} className="h-screen my-5">
-                                <DynamicPowerBIReport
-                                    reportId={report.reportId}
-                                    embedUrl={report.embedUrl}
-                                />
-                            </div>
-                        ))}
+                        <div className="h-screen my-5">
+                            <DynamicPowerBIReport
+                                reportId={futures.reports.energia.reportId}
+                                embedUrl={futures.reports.energia.embedUrl}
+                            />
+                        </div>
                     </div>
 
                 </div>

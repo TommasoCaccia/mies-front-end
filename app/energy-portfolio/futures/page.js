@@ -437,16 +437,6 @@ export default function Home() {
         }
     };
 
-    const powerBIConfig = {
-        baseURL: "https://app.powerbi.com/reportEmbed",
-        tenantId: "69da13af-78cb-4dd9-b20c-087550f2b912",
-        reports: {
-            Futures: "e1eb76d5-5c75-442e-84b0-a88d20d3847f",
-            FuturesAnalysis: "38831d35-3aac-49b8-8f1a-8afbf6f96e43",
-            Past: "f9f7a1d8-32e8-4b04-9cb8-9f83c0e25858",
-        },
-    };
-
     const iframeRef = useRef(null);
 
     const goFullScreen = () => {
