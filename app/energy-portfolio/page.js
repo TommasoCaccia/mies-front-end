@@ -120,14 +120,14 @@ export default function Home() {
                         da
                         software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
 
-                    <div>
+{/*                    <div>
                         <div className="h-screen my-5">
                             <DynamicPowerBIReport
                                 reportId={futures.reports.energia.reportId}
                                 embedUrl={futures.reports.energia.embedUrl}
                             />
                         </div>
-                    </div>
+                    </div>*/}
 
                 </div>
                 <div id="section2" ref={sectionRefs.current.section2} className={classes.section}>
