@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import {futures} from '@/Components/PBI/reportsConfig';
 
 
-const DynamicPowerBIReport = dynamic(() => import('@/components/PBI/DynamicPowerBIReport'), {ssr: false});
+const DynamicPowerBIReport = dynamic(() => import('@/Components/PBI/DynamicPowerBIReport'), {ssr: false});
 
 export default function Home() {
     const [isOpen, setIsOpen] = useState(false);
