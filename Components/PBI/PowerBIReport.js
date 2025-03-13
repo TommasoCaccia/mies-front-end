@@ -4,6 +4,8 @@ import {useEffect, useRef} from "react";
 import * as pbi from "powerbi-client";
 import classes from "./PowerBIReport.module.css";
 
+const PATH = process.env.NEXT_PUBLIC_PATH_DEV
+
 export default function PowerBIReport({reportId, embedUrl}) {
     const reportRef = useRef(null);
 
@@ -15,7 +17,7 @@ export default function PowerBIReport({reportId, embedUrl}) {
             }
 
             try {
-                const res = await fetch("http://localhost:8080/api/pbitoken");
+                const res = await fetch(`${PATH}/api/pbitoken`);
                 const {token} = await res.json();
                 console.log(token);
                 const embedConfig = {
