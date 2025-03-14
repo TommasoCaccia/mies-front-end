@@ -58,9 +58,28 @@ export default function Home() {
     const [activeAlert, setActiveAlert] = useState(false);
 
     const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
-    const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV
+    const PATH = process.env.NEXT_PUBLIC_PATH_DEV
 
-    // Refs corretti
+    //Cookie-extract
+    const getCookie = async () => {
+        const response = await fetch(`${PATH}/session/extract-cookie`, {
+            method: "GET",
+            credentials: "include",
+        });
+
+        if (response.ok) {
+            console.log("Cookie estratto con successo");
+        } else {
+            console.error("Errore durante l'estrazione del cookie");
+        }
+
+    }
+
+    useEffect(() => {
+        getCookie()
+    }, []);
+
+// Refs corretti
     const sectionRefs = useRef({
         Futures: useRef(null),
         Alert: useRef(null),
@@ -72,7 +91,7 @@ export default function Home() {
         hidden: {opacity: 0, y: -20},
         visible: {opacity: 1, y: 0, transition: {duration: 0.5}}
     };
-    // Nomi leggibili per la sidebar
+// Nomi leggibili per la sidebar
     const readableNames = {
         Futures: "Futures",
         Alert: "Email Alert",
@@ -80,7 +99,7 @@ export default function Home() {
         Past: "Past",
     };
 
-    // Funzione di navigazione
+// Funzione di navigazione
     const handleNavigation = (e, section) => {
         e.preventDefault();
         setActiveSection(section);
@@ -129,7 +148,7 @@ export default function Home() {
         return 400; // Limite per il valore
     };
 
-    // Funzioni di controllo per gli input
+// Funzioni di controllo per gli input
     const handleMinimumLevelBlur = (level, setLevel, setError) => {
         const limit = getLimit();
         const value = parseFloat(level);
@@ -169,7 +188,7 @@ export default function Home() {
 
     const fetchCheckAlert = async () => {
         try {
-            const response = await fetch(`${PATH_DEV}/cliente/checkAlert`, {
+            const response = await fetch(`${PATH}/cliente/checkAlert`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -236,7 +255,7 @@ export default function Home() {
 
     const fetchAlertData = async () => {
         try {
-            const response = await fetch(`${PATH_DEV}/cliente/checkAlertField`, {
+            const response = await fetch(`${PATH}/cliente/checkAlertField`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -360,7 +379,7 @@ export default function Home() {
 
     }, [checkModalityMonthly, checkModalityQuarterly, checkModalityYearly, frequencyYearly, frequencyQuarterly, frequencyMonthly]);
 
-    // Funzione per inviare l'email
+// Funzione per inviare l'email
     const sendEmail = async () => {
         // Verifica se ci sono errori
         const hasErrors = minimumLevelError || maximumLevelError || rangeError || minimumLevelYearlyError || maximumLevelYearlyError || rangeYearlyError || minimumLevelQuarterlyError || maximumLevelQuarterlyError || rangeQuarterlyError || minimumLevelMonthlyError || maximumLevelMonthlyError || rangeMonthlyError;
@@ -379,7 +398,7 @@ export default function Home() {
         try {
             let response;
             if (futuresType === "All") {
-                response = await fetch(`${PATH_DEV}/cliente/sendWeeklyEmail`, {
+                response = await fetch(`${PATH}/cliente/sendWeeklyEmail`, {
                     method: "POST",
                     credentials: "include",
                     headers: {
@@ -407,7 +426,7 @@ export default function Home() {
                     }),
                 });
             } else {
-                response = await fetch(`${PATH_DEV}/cliente/send-email`, {
+                response = await fetch(`${PATH}/cliente/send-email`, {
                     method: "POST",
                     credentials: "include",
                     headers: {
