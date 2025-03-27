@@ -1,82 +1,180 @@
 .container {
     max-width: 100%;
-    padding: 20px;
+    padding: 1.25rem; /* circa 20px */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 125px;
-    margin-bottom: 125px;
-    font-family: "Montserrat", sans-serif;
+    margin-top: 7.8125rem; /* circa 125px */
+    margin-bottom: 7.8125rem;
+    font-family: var(--font-family);
 }
 
-
-.formBolletta {
-    width: 50%;
-    padding: 20px;
-    margin: 20px;
+.primoblocco {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-evenly;
     align-items: center;
-    justify-content: center;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
-.bottoneCarica {
-    background-color: #2C4D79;
-    color: white;
-    margin-top: 20px;
-    border: none;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 15px;
-    padding: 10px 20px 10px 20px;
-}
-
-.tableContainer {
-    width: 100%; /* Ensure container takes full width */
-    display: flex;
-    justify-content: center; /* Center the table */
-}
-
-.scrollableTable {
-    overflow-x: auto; /* Enable horizontal scrolling */
-    max-width: 100%; /* Prevent overflow of the parent container */
-}
-
-.tabellaBolletta {
-    min-width: 400px; /* Set a minimum width for the table if necessary */
-    border-collapse: collapse; /* Optional: for better styling */
-}
-
-.tabellaBolletta th, .tabellaBolletta td {
-    padding: 10px; /* Add padding for better readability */
-    border: 1px solid #ddd; /* Optional: add borders */
-}
-
-.titoloBolletta, .titoloPod {
-    text-align: center;
-    font-weight: 600;
-    color: #424242
-}
-
-.tabellaBolletta th {
-    background-color: #2C4D79 !important;
-    color: white !important;
-    border-color: #000000 !important;
-}
-
-.tabellaBolletta td {
-    border-color: #000000 !important;
-    border-width: 0.8px;
-}
-
+/* Responsive: su schermi medi, disponi i blocchi in colonna */
 @media (max-width: 768px) {
-    .formBolletta {
-        width: 97%;
+    .primoblocco {
+        flex-direction: column;
+        align-items: center;
     }
 }
 
+/* Form per il caricamento della bolletta */
+.formBolletta {
+    width: 100%;
+    max-width: 500px;
+    padding: 1.25rem;
+    margin: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+/* Form dei costi impostato a 2 colonne con CSS Grid */
+.costiForm {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+    max-width: 500px;
+    background-color: #fff;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+/* Gruppo input nel form */
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+}
+
+.inputGroup label {
+    margin-bottom: 0.3125rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.inputNumber {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.1875rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.inputNumber:focus {
+    border-color: var(--primary-color);
+}
+
+/* Bottone di submit nel form dei costi occupa entrambe le colonne */
+.costiForm button[type="submit"] {
+    grid-column: 1 / -1;
+    margin-top: 0.625rem;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.costiForm button[type="submit"]:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Bottone per il caricamento della bolletta */
+.bottoneCarica {
+    background-color: var(--primary-color);
+    color: #fff;
+    margin-top: 1.25rem;
+    border: none;
+    border-radius: var(--border-radius);
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    padding: 0.625rem 1.25rem;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.bottoneCarica:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Container della tabella */
+.tableContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.scrollableTable {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+/* Stile della tabella */
+.tabellaBolletta {
+    min-width: 400px;
+    border-collapse: collapse;
+}
+
+.tabellaBolletta th,
+.tabellaBolletta td {
+    padding: 0.625rem;
+    border: 1px solid var(--border-color);
+}
+
+.titoloBolletta,
+.titoloPod {
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.tabellaBolletta th {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+    border-color: #000 !important;
+}
+
+.tabellaBolletta td {
+    border-color: #000 !important;
+    border-width: 0.8px;
+}
+
+/* Media query per dispositivi molto piccoli: costiForm passa a una colonna */
+@media (max-width: 600px) {
+    .costiForm {
+        grid-template-columns: 1fr;
+    }
+
+    .formBolletta {
+        width: 97%;
+        margin: 10px;
+        padding: 1rem;
+    }
+
+    .tableContainer {
+        margin: 0 10px;
+    }
+}

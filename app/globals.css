@@ -19,6 +19,13 @@ body {
 :root {
     --gradient: linear-gradient(45deg, #ff7c7d, #ffda67);
     --card: #272524;
+    --primary-color: #2C4D79;
+    --secondary-color: #1E355C;
+    --text-color: #424242;
+    --border-color: #ddd;
+    --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    --border-radius: 5px;
+    --font-family: "Montserrat", sans-serif;
 }
 
 a {

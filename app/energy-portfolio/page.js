@@ -1,16 +1,16 @@
 "use client"
 import React, {useEffect, useState, useRef} from 'react';
 import classes from '@/app/energy-portfolio/page.module.css';
-/*import dynamic from "next/dynamic";
-import {futures} from '@/Components/PBI/reportsConfig';*/
+import dynamic from "next/dynamic";
+import {energyportfolio} from '@/Components/PBI/reportsConfig';
 import DynamicPowerBIReport from "@/Components/PBI/DynamicPowerBIReport";
 
-/*
-const PowerBIReport = dynamic(
-    () => import("@/Components/PBI/PowerBIReport"),
+const PATH = process.env.NEXT_PUBLIC_PATH_DEV
+
+
+const PowerBIReport = dynamic(() => import("../../Components/PBI/PowerBIReport"),
     {ssr: false}
 );
-*/
 
 export default function Home() {
     const [isOpen, setIsOpen] = useState(false);
@@ -77,6 +77,25 @@ export default function Home() {
         }
     };
 
+    //Cookie-extract
+    const getCookie = async () => {
+        const response = await fetch(`${PATH}/session/extract-cookie`, {
+            method: "GET",
+            credentials: "include",
+        });
+
+        if (response.ok) {
+            console.log("Cookie estratto con successo");
+        } else {
+            console.error("Errore durante l'estrazione del cookie");
+        }
+
+    }
+
+    useEffect(() => {
+        getCookie()
+    }, []);
+
     return (
         <div className={classes.container}>
             {/* Hamburger Menu Button */}
@@ -120,14 +139,14 @@ export default function Home() {
                         da
                         software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
 
-{/*                    <div>
+                    <div>
                         <div className="h-screen my-5">
                             <DynamicPowerBIReport
-                                reportId={futures.reports.energia.reportId}
-                                embedUrl={futures.reports.energia.embedUrl}
+                                reportId={energyportfolio.reports.home.reportId}
+                                embedUrl={energyportfolio.reports.home.embedUrl}
                             />
                         </div>
-                    </div>*/}
+                    </div>
 
                 </div>
                 <div id="section2" ref={sectionRefs.current.section2} className={classes.section}>
@@ -143,7 +162,16 @@ export default function Home() {
                         caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
                         da
                         software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                    <div>
+                        <div className="h-screen my-5">
+                            <DynamicPowerBIReport
+                                reportId={energyportfolio.reports.controllo.reportId}
+                                embedUrl={energyportfolio.reports.controllo.embedUrl}
+                            />
+                        </div>
+                    </div>
                 </div>
+
             </main>
         </div>
     );
