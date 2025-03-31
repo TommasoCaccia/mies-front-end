@@ -5,8 +5,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 7.8125rem; /* circa 125px */
-    margin-bottom: 7.8125rem;
+    margin-top: 3rem; /* circa 125px */
+    margin-bottom: 3rem;
     font-family: var(--font-family);
 }
 

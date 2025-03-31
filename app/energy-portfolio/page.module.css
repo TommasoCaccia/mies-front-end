@@ -1,167 +1,145 @@
+/* Container principale per sidebar e mainContent, che rimane tutto all'interno del contenitore */
 .container {
     display: flex;
     flex-direction: row;
-    margin-top: 95.94px;
-    font-family: Montserrat, sans-serif;
-    user-select: none;
-}
-
-.sidebar {
-    margin-top: 85px;
-    background-color: white;
-    overflow-y: auto;
-    position: fixed;
-    width: 200px;
-    height: calc(100vh - 350px);
-    padding-left: 15px;
+    position: relative;
+    background-color: #f9f9f9;
+    min-height: 400px; /* imposta un'altezza minima per dare struttura */
+    border: 1px solid #ddd;
     border-radius: 5px;
-    font-weight: 600;
+    overflow: hidden;
 }
 
-
-.mainContent {
+/* Header interno per la navigazione (non fixed) */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 10; /* Garantisce che l'header resti sopra gli altri elementi */
+    width: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-    margin-left: 213px;
+    padding: 10px 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
 }
 
+
+/* Logo o titolo della navigazione interna */
+.logo {
+    margin-left: 10px;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+/* Pulsante Menu: sostituisce il vecchio hamburger, visibile solo in mobile */
+.menuButton {
+    display: none;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.menuButton:hover {
+    background-color: #1E355C;
+}
+
+.closeButton {
+    display: none;
+}
+
+/* Sidebar per desktop: visibile e parte del flusso del container */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+}
+
+/* Navigazione all'interno della sidebar */
 .navLink {
-    color: #616161;
+    color: var(--secondary-color);
     padding: 10px 15px;
     text-decoration: none;
     display: block;
+    margin-bottom: 10px;
+    border-radius: 4px;
     position: relative;
+    transition: background-color 0.3s ease;
 }
 
+.navLink:hover,
 .navLink.active {
-    color: #2C4D79;
+    background-color: var(--primary-color);
+    color: #fff;
 }
 
 .navLink.active::before {
-    content: ""; /* Necessario per i pseudo-elementi */
+    content: "";
     position: absolute;
-    left: 0; /* Posiziona la barra sul lato sinistro */
+    left: 0;
     top: 0;
     bottom: 0;
-    width: 3px; /* Larghezza della barra */
-    background-color: #2C4D79; /* Colore della barra, uguale al colore del testo attivo */
+    width: 3px;
+    background-color: var(--primary-color);
 }
 
-
-.section {
-    margin-bottom: 20px;
+/* Main content: occupa lo spazio rimanente a destra della sidebar */
+.mainContent {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
 }
 
-.section h1 {
-    margin-top: 25px;
-}
-
-/* Aggiungi questo al tuo file CSS esistente */
-.section p {
-    margin-bottom: 25px; /* Aggiungi margine inferiore a tutti i paragrafi all'interno delle sezioni */
-}
-
-
-.sectionTitle {
-    margin-bottom: 15px;
-    color: #333;
-}
-
-
-.powerbi {
-    margin-bottom: 50px;
-}
-
-.PBI {
-    width: 100%;
-    height: 500px;
-    border: none;
-}
-
-.bottonePowerbi {
-    background-color: #2C4D79;
-    color: white;
-    margin-top: 20px;
-    border: none;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 15px;
-    padding: 10px 16px 10px 16px;
-}
-
-
-/* Styles for the hamburger button */
-.hamburger {
-    display: none; /* Hidden by default */
-    flex-direction: column;
-    justify-content: space-around;
-    width: 30px;
-    height: 20px;
-    margin-left: 10px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-}
-
-.divMenu {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-right: 20px;
-    height: 100%;
-    background: white;
-}
-
-/* Show hamburger button only on screens smaller than 1050px */
+/* Responsive: Mobile / Schermi piccoli */
 @media (max-width: 1050px) {
-    .mainContent {
-        margin-left: 0;
+    /* Mostra il pulsante Menu */
+    .menuButton {
+        display: block;
     }
 
-
-    .hamburger {
-        display: flex; /* Show hamburger button */
-        position: fixed;
-        margin-top: 15px;
-
+    /* In mobile, il layout del container diventa colonna;
+       il pulsante Menu si posiziona in alto (all'interno dell'header interno) */
+    .container {
+        flex-direction: column;
     }
 
-    .bar {
-        height: 3px;
-        width: 100%;
-        background-color: #333; /* Color of the hamburger lines */
-        transition: all 0.3s ease; /* Smooth transition */
-    }
-
+    /* Sidebar diventa overlay: inizialmente nascosta, si apre a clic sul pulsante Menu */
     .sidebar {
-        display: none; /* Hide sidebar by default */
-    }
-
-    .sidebar.show {
-        display: block; /* Show sidebar when toggled */
-        position: fixed; /* Position as needed */
-        top: 60px; /* Adjust based on your layout */
+        position: absolute;
+        top: 0;
         left: 0;
-        right: 0;
-        background-color: white; /* Sidebar background */
-        z-index: 1000; /* Ensure it appears above other content */
+        width: 80%; /* regola la larghezza su mobile */
+        max-width: var(--sidebar-width);
+        height: 100%;
+        padding: 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        background-color: #fff;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1250;
+    }
+
+    /* Mostra il pulsante di chiusura solo in mobile */
+    .closeButton {
+        display: block;
+        position: relative;
+        left: 9rem;
+        background: transparent;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+    }
+
+    /* Quando attivata, la sidebar appare */
+    .sidebar.show {
+        transform: translateX(0);
     }
 }
-
-/* Styles for larger screens */
-@media (min-width: 1051px) {
-    .hamburger {
-        display: none; /* Hide hamburger button */
-    }
-}
-
-@media (max-height: 450px) {
-    .sidebar {
-        height: calc(100vh - 300px); /* Adjust height based on screen height */
-    }
-}
-

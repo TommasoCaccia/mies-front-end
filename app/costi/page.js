@@ -241,6 +241,28 @@ export default function DataEntry() {
 
     return (
         <div className={`${classes.container} container`}>
+            <div className={classes.formContainer}>
+                <h2 className={classes.h2}>Upload Excel File</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className={classes.fileInput}>
+                        <label htmlFor="file-upload" className={classes.fileLabel}>
+                            Scegli file
+                        </label>
+                        <input
+                            onChange={handleFileChange}
+                            type="file"
+                            accept=".xlsx,.xls"
+                            id="file-upload"
+                            className={classes.file}
+                        />
+                        <span className="fileName">{file ? file.name : 'Nessun file selezionato'}</span>
+                    </div>
+                    <button type="submit" className={classes.uploadButton}>UPLOAD</button>
+                    <button type="button" onClick={handleDownloadCosti} className={classes.uploadButton}>Scarica Excel
+                    </button>
+
+                </form>
+            </div>
             <div className="mb-3 d-flex">
                 <FormControl
                     as="select"
@@ -342,28 +364,6 @@ export default function DataEntry() {
                 </Table>
             </div>
 
-            <div className={classes.formContainer}>
-                <h2 className={classes.h2}>Upload Excel File</h2>
-                <form onSubmit={handleSubmit}>
-                    <div className={classes.fileInput}>
-                        <label htmlFor="file-upload" className={classes.fileLabel}>
-                            Scegli file
-                        </label>
-                        <input
-                            onChange={handleFileChange}
-                            type="file"
-                            accept=".xlsx,.xls"
-                            id="file-upload"
-                            className={classes.file}
-                        />
-                        <span className="fileName">{file ? file.name : 'Nessun file selezionato'}</span>
-                    </div>
-                    <button type="submit" className={classes.uploadButton}>UPLOAD</button>
-                    <button type="button" onClick={handleDownloadCosti} className={classes.uploadButton}>Scarica Excel
-                    </button>
-
-                </form>
-            </div>
             {isFormVisible ? (
                 <div ref={formRef} className={classes.containerFormModifica}>
                     {selectedIndex !== null && (

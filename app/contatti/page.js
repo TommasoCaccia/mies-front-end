@@ -30,27 +30,11 @@ const Contatti = () => (
             </div>
             <div className={classes.sidebarContainer}>
                 <div>
-                    <h2 className={classes.sedeLegale}>Sede Legale</h2>
+                    <h2 className={classes.sedeLegale}>Sede Operativa</h2>
                     <p className={classes.paragrafiSedeLegale}>
                         <strong className={classes.strong}>Indirizzo</strong>
                         <br></br>Via Puricelli 1
                         <br></br>Gallarate 21013 (VA) - Italia
-                    </p>
-                    <p className={classes.paragrafiSedeLegale}>
-                        <strong className={classes.strong}>Contatti</strong>
-                        <br></br>amministrazione@miesgroup.it
-                    </p>
-                    <p className={classes.paragrafiSedeLegale}>
-                        <strong className={classes.strong}>Orari di apertura</strong>
-                        <br></br>Lun-Ven: 9:00-18:00
-                    </p>
-                </div>
-                <div>
-                    <h2 className={classes.sedeOperativa}>Sede Operativa</h2>
-                    <p className={classes.paragrafiSedeLegale}>
-                        <strong className={classes.strong}>Indirizzo</strong>
-                        <br></br>Via Cremona 1
-                        <br></br>Legnano 20025 (MI) - Italia
                     </p>
                     <p className={classes.paragrafiSedeLegale}>
                         <strong className={classes.strong}>Contatti</strong>

@@ -53,23 +53,6 @@ export default function Home() {
         };
     }, [manualNavigation]);
 
-    const handleNavigation = (e, section) => {
-        e.preventDefault();
-        setManualNavigation(true);
-        const sectionElement = sectionRefs.current[section].current;
-        const offsetTop = 110;
-
-        window.scrollTo({
-            top: sectionElement.offsetTop - offsetTop, behavior: 'smooth'
-        });
-
-        setActiveSection(section);
-        setTimeout(() => {
-            setManualNavigation(false);
-            scrollToActiveLink(section);
-        }, 10000);
-    };
-
     const scrollToActiveLink = (sectionId) => {
         const activeLink = sidebarRef.current?.querySelector(`.${classes.active}`);
         if (activeLink) {
@@ -92,6 +75,17 @@ export default function Home() {
 
     }
 
+    const handleNavigation = (event, sectionId) => {
+        event.preventDefault();
+        const section = document.getElementById(sectionId);
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+
+
+
     useEffect(() => {
         getCookie()
     }, []);
@@ -100,21 +94,29 @@ export default function Home() {
         <div className={classes.container}>
             {/* Hamburger Menu Button */}
             <div>
-                <button className={classes.hamburger} onClick={() => setIsOpen(!isOpen)}>
-                    <span className={classes.bar}></span>
-                    <span className={classes.bar}></span>
-                    <span className={classes.bar}></span>
-                </button>
+                <header className={classes.header}>
+                    <button className={classes.menuButton} onClick={() => setIsOpen(!isOpen)}>
+                        Menu
+                    </button>
+                </header>
 
-                {/* Sidebar Navigation */}
+                {/* Sidebar come menu overlay */}
                 <nav className={`${classes.sidebar} ${isOpen ? classes.show : ''}`}>
+                    <button className={classes.closeButton} onClick={() => setIsOpen(false)}>
+                        ✕
+                    </button>
                     <ul className="nav flex-column">
                         {Object.keys(sectionRefs.current).map((key) => (
                             <li key={key} className="nav-item">
                                 <a
-                                    className={`${classes.navLink} ${activeSection === key ? classes.active : ''}`}
+                                    className={`${classes.navLink} ${
+                                        activeSection === key ? classes.active : ''
+                                    }`}
                                     href={`#${key}`}
-                                    onClick={(e) => handleNavigation(e, key)}
+                                    onClick={(e) => {
+                                        handleNavigation(e, key);
+                                        setIsOpen(false);
+                                    }}
                                 >
                                     {key.replace('section', 'Section ')}
                                 </a>

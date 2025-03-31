@@ -26,11 +26,16 @@ body {
     --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     --border-radius: 5px;
     --font-family: "Montserrat", sans-serif;
+    --sidebar-width: 200px;
+    --sidebar-margin-top: 85px;
+    --container-margin-top: 6rem; /* Sostituisci 95.94px con un valore in rem se possibile */
+    --header-height: 60px;
+    --footer-height: 60px;
 }
 
 a {
     color: inherit;
-    text-decoration: none!important;
+    text-decoration: none !important;
 }
 
 
