@@ -1,22 +1,30 @@
 "use client";
-import React, {useEffect, useRef, useState} from 'react';
-import {Button, FormControl} from 'react-bootstrap';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, FormControl } from 'react-bootstrap';
 import classes from '@/app/costi/page.module.css';
-import {Table, TableHeader, TableBody, TableColumn, TableRow, TableCell} from "@nextui-org/react";
+import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from "@nextui-org/react";
 import Swal from "sweetalert2";
 
-
 export default function DataEntry() {
-    const [data, setData] = useState([]);
+    // Stato per i dati e la paginazione
+    const [data, setData] = useState({});
+    const [page, setPage] = useState(0);
+    const size = 50;
+    const totalPages = data.totalePagine || 1;
+
+    // Stati per i filtri (usati dal nuovo endpoint)
     const [filterCategoria, setFilterCategoria] = useState('');
-    const [filterPotenza, setFilterPotenza] = useState('');
-    const [filterClasse, setFilterClasse] = useState('');
+    const [filterAnno, setFilterAnno] = useState('');
+    const [filterAnnoRiferimento, setFilterAnnoRiferimento] = useState('');
+    const [filterIntervalloPotenza, setFilterIntervalloPotenza] = useState('');
+
+    // Altri stati
     const [file, setFile] = useState(null);
+    const [selectedIds, setSelectedIds] = useState([]);
     const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
     const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV;
-
     const [isFormVisible, setIsFormVisible] = useState(false);
-    const [selectedIndex, setSelectedIndex] = useState(null); // Indice della riga selezionata
+    const [selectedIndex, setSelectedIndex] = useState(null);
     const [editRowData, setEditRowData] = useState({
         id: "",
         descrizione: "",
@@ -30,72 +38,86 @@ export default function DataEntry() {
         annoRiferimento: "",
     });
 
-    const formRef = useRef(null); // Riferimento al form
+    const formRef = useRef(null);
 
+    // Per la navigazione della pagina (sezioni interne)
+    const [activeSection, setActiveSection] = useState('section1');
+    const [manualNavigation, setManualNavigation] = useState(false);
+    const sectionRefs = useRef({
+        section1: useRef(null),
+        section2: useRef(null)
+    });
+    const sidebarRef = useRef(null);
+    const [isOpen, setIsOpen] = useState(false);
 
-    const handleSelectRow = (index) => {
-        setIsFormVisible(true)
-        const rowData = filteredData[index];
-        setSelectedIndex(index);
-        setEditRowData({...rowData});
-        // Scorri verso il form
-        formRef.current.scrollIntoView({behavior: "smooth"});
-    };
+    useEffect(() => {
+        getCookie();
 
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+                    if (!manualNavigation) {
+                        setActiveSection(entry.target.id);
+                        scrollToActiveLink(entry.target.id);
+                    }
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        });
 
-    const verificaEliminazione = (id) => {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                deleteCosto(id);
-                window.location.href = '/costi';
+        Object.values(sectionRefs.current).forEach(ref => {
+            if (ref.current) {
+                observer.observe(ref.current);
             }
         });
-    }
 
-    const handleCancel = () => {
-        setSelectedIndex(null);
-        setIsFormVisible(false); // Nascondi il form quando si annulla
-    };
-
-    const handleSaveChanges = async () => {
-        const updatedData = [...filteredData];
-        updatedData[selectedIndex] = editRowData; // Update the selected row
-        const response = await fetch(`${PATH_DEV}/costi/update`, {
-            method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(editRowData)
-        });
-
-        if (response.ok) {
-            setSelectedIndex(null); // Exit edit mode
-            setEditRowData({}); // Reset form data
-            setIsFormVisible(false); // Hide the form after saving
-            window.location.href = '/costi';
-        } else {
-            await Swal.fire({
-                icon: "error",
-                text: "Errore durante il salvataggio delle modifiche"
+        return () => {
+            Object.values(sectionRefs.current).forEach(ref => {
+                if (ref.current) {
+                    observer.unobserve(ref.current);
+                }
             });
-        }
+        };
+    }, [manualNavigation]);
 
+    const scrollToActiveLink = (sectionId) => {
+        const activeLink = sidebarRef.current?.querySelector(`.${classes.active}`);
+        if (activeLink) {
+            sidebarRef.current.scrollTop = activeLink.offsetTop - sidebarRef.current.offsetTop - 100;
+        }
     };
 
+    const getCookie = async () => {
+        const response = await fetch(`${PATH_DEV}/session/extract-cookie`, {
+            method: "GET",
+            credentials: "include",
+        });
+        if (response.ok) {
+            console.log("Cookie estratto con successo");
+        } else {
+            console.error("Errore durante l'estrazione del cookie");
+        }
+    };
 
+    const handleNavigation = (event, sectionId) => {
+        event.preventDefault();
+        const section = document.getElementById(sectionId);
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+        setIsOpen(false);
+    };
+
+    // Funzioni per upload, download, modifica ed eliminazione
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (!file) {
             await Swal.fire({
                 icon: "error",
@@ -103,18 +125,13 @@ export default function DataEntry() {
             });
             return;
         }
-
-
         const formData = new FormData();
         formData.append('file', file);
         formData.append('fileName', file.name);
-
-
         const response = await fetch(`${PATH_DEV}/costi/upload`, {
             method: 'POST',
             body: formData,
         });
-
         if (response.ok) {
             await Swal.fire({
                 icon: "success",
@@ -126,9 +143,7 @@ export default function DataEntry() {
                 text: "Errore durante l'upload dei dati",
             });
         }
-
     };
-
 
     const handleDownloadCosti = async () => {
         try {
@@ -138,68 +153,64 @@ export default function DataEntry() {
                     'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 },
             });
-
             if (response.ok) {
-                // Converti la risposta in un blob
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
-
-                // Crea un collegamento temporaneo per il download
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'costi.xlsx'); // Nome del file
+                link.setAttribute('download', 'costi.xlsx');
                 document.body.appendChild(link);
                 link.click();
-
-                // Rimuovi il collegamento temporaneo
                 link.parentNode.removeChild(link);
-
-                // Mostra il messaggio di successo
-                await Swal.fire({
-                    icon: 'success',
-                    text: 'Download dei dati avvenuto con successo',
-                });
+                await Swal.fire({ icon: 'success', text: 'Download dei dati avvenuto con successo' });
             } else {
-                // Mostra il messaggio di errore
-                await Swal.fire({
-                    icon: 'error',
-                    text: 'Errore durante il download dei dati',
-                });
+                await Swal.fire({ icon: 'error', text: 'Errore durante il download dei dati' });
             }
         } catch (error) {
             console.error('Errore durante il download:', error);
-            await Swal.fire({
-                icon: 'error',
-                text: 'Si è verificato un errore imprevisto',
+            await Swal.fire({ icon: 'error', text: 'Si è verificato un errore imprevisto' });
+        }
+    };
+
+    // Funzione per ottenere i costi filtrati dal backend (nuovo endpoint)
+    const fetchCostiFiltrati = async (page = 0, size = 50) => {
+        try {
+            const params = new URLSearchParams();
+            if (filterCategoria) params.append("categoria", filterCategoria);
+            if (filterAnno) params.append("anno", filterAnno);
+            if (filterAnnoRiferimento) params.append("annoRiferimento", filterAnnoRiferimento);
+            if (filterIntervalloPotenza) params.append("intervalloPotenza", filterIntervalloPotenza);
+            params.append("page", page);
+            params.append("size", size);
+
+            console.log(`${PATH_DEV}/costi/filtrati?${params.toString()}`);
+            const response = await fetch(`${PATH_DEV}/costi/filtrati?${params.toString()}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' }
             });
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log("Dati ricevuti:", responseData);
+                setData(responseData);
+            } else {
+                console.error('Errore durante il fetch:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Errore durante il fetch dei costi filtrati:', error);
         }
     };
 
-
-    const fetchCosti = async () => {
-
-        const response = await fetch(`${PATH_DEV}/costi`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {'Content-Type': 'application/json'}
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            setData(data);
-        } else {
-            console.log('Errore durante il fetch:', response.statusText);
-        }
-
-    };
+    useEffect(() => {
+        fetchCostiFiltrati(page, size);
+    }, [page, filterCategoria, filterAnno, filterAnnoRiferimento, filterIntervalloPotenza]);
 
     const deleteCosto = async (id) => {
         const response = await fetch(`${PATH_DEV}/costi/delete/${id}`, {
             method: 'DELETE',
             credentials: 'include',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
         });
-
         if (response.ok) {
             await Swal.fire({
                 icon: "success",
@@ -210,34 +221,94 @@ export default function DataEntry() {
                 icon: "error",
                 text: "Errore durante l'eliminazione del costo"
             });
-
         }
+    };
 
-    }
-
-    useEffect(() => {
-        fetchCosti();
-    }, []);
-
+    // Handlers per i nuovi filtri
     const handleFilterCategoria = (e) => {
         setFilterCategoria(e.target.value);
-        setFilterPotenza('');
-        setFilterClasse('');
     };
 
-    const handleFilterPotenza = (e) => {
-        setFilterPotenza(e.target.value);
+    const handleFilterAnno = (e) => {
+        setFilterAnno(e.target.value);
     };
 
-    const handleFilterClasse = (e) => {
-        setFilterClasse(e.target.value);
+    const handleFilterAnnoRiferimento = (e) => {
+        setFilterAnnoRiferimento(e.target.value);
     };
 
-    const filteredData = data.filter(costo => {
-        return (!filterCategoria || costo.categoria === filterCategoria) &&
-            (!filterPotenza || costo.tipoTensione === filterPotenza) &&
-            (!filterClasse || costo.classeAgevolazione === filterClasse);
-    });
+    const handleFilterIntervalloPotenza = (e) => {
+        setFilterIntervalloPotenza(e.target.value);
+    };
+
+    // Funzione per il toggle delle checkbox
+    const handleToggleCheckbox = (id) => {
+        if (selectedIds.includes(id)) {
+            setSelectedIds(selectedIds.filter(selectedId => selectedId !== id));
+        } else {
+            setSelectedIds([...selectedIds, id]);
+        }
+    };
+
+    // Funzione per inviare gli id selezionati
+    const handleSubmitSelected = async () => {
+        try {
+            const response = await fetch('/api/submit-ids', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(selectedIds),
+            });
+            if (!response.ok) {
+                console.error("Errore nell'invio dei dati");
+                return;
+            }
+            const result = await response.json();
+            console.log("Dati inviati correttamente:", result);
+        } catch (error) {
+            console.error("Errore nella fetch:", error);
+        }
+    };
+
+    // Funzioni per il form di modifica
+    const handleSelectRow = (index) => {
+        setIsFormVisible(true);
+        const rowData = filteredData[index];
+        setSelectedIndex(index);
+        setEditRowData({ ...rowData });
+        formRef.current.scrollIntoView({ behavior: "smooth" });
+    };
+
+    const handleCancel = () => {
+        setSelectedIndex(null);
+        setIsFormVisible(false);
+    };
+
+    const handleSaveChanges = async () => {
+        const updatedData = [...filteredData];
+        updatedData[selectedIndex] = editRowData;
+        const response = await fetch(`${PATH_DEV}/costi/update`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(editRowData)
+        });
+        if (response.ok) {
+            setSelectedIndex(null);
+            setEditRowData({});
+            setIsFormVisible(false);
+            window.location.href = '/costi';
+        } else {
+            await Swal.fire({
+                icon: "error",
+                text: "Errore durante il salvataggio delle modifiche"
+            });
+        }
+    };
+
+    // Per la paginazione dei dati, "filteredData" è preso da data.contenuto
+    // Modifica: se data è un array, usalo direttamente, altrimenti cerca data.contenuto
+    const filteredData = Array.isArray(data)
+        ? data
+        : data.contenuto || [];
 
     return (
         <div className={`${classes.container} container`}>
@@ -258,9 +329,9 @@ export default function DataEntry() {
                         <span className="fileName">{file ? file.name : 'Nessun file selezionato'}</span>
                     </div>
                     <button type="submit" className={classes.uploadButton}>UPLOAD</button>
-                    <button type="button" onClick={handleDownloadCosti} className={classes.uploadButton}>Scarica Excel
+                    <button type="button" onClick={handleDownloadCosti} className={classes.uploadButton}>
+                        Scarica Excel
                     </button>
-
                 </form>
             </div>
             <div className="mb-3 d-flex">
@@ -276,54 +347,51 @@ export default function DataEntry() {
                     <option value="penali">Penali</option>
                     <option value="oneri">Oneri</option>
                 </FormControl>
-                {filterCategoria === 'trasporti' && (
-                    <FormControl
-                        as="select"
-                        value={filterPotenza}
-                        onChange={handleFilterPotenza}
-                        className="ml-3"
-                        style={{marginLeft: '10px'}}
-                    >
-                        <option value="">Seleziona Intervallo Potenza</option>
-                        <option value=">500KW">+500KW</option>
-                        <option value="100-500KW">100-500KW</option>
-                        <option value="<100KW">-100KW</option>
-                    </FormControl>
-                )}
-                {filterCategoria === 'oneri' && (
-                    <>
-                        <FormControl
-                            as="select"
-                            value={filterPotenza}
-                            onChange={handleFilterPotenza}
-                            className="ml-3"
-                            style={{marginLeft: '15px'}}
-                        >
-                            <option value="">Seleziona Intervallo Potenza</option>
-                            <option value=">500KW">+500KW</option>
-                            <option value="100-500KW">100-500KW</option>
-                            <option value="<100KW">-100KW</option>
-                        </FormControl>
-                        <FormControl
-                            as="select"
-                            value={filterClasse}
-                            onChange={handleFilterClasse}
-                            className="ml-3"
-                            style={{marginLeft: '15px'}}
-                        >
-                            <option value="">Seleziona Classe di Agevolazione</option>
-                            <option value="Val">Val1</option>
-                            <option value="Fat1">Fat1</option>
-                            <option value="Fat2">Fat2</option>
-                            <option value="Fat3">Fat3</option>
-                            <option value="0">0</option>
-                        </FormControl>
-                    </>
-                )}
+                <FormControl
+                    type="text"
+                    placeholder="Filtra per Anno"
+                    value={filterAnno}
+                    onChange={handleFilterAnno}
+                    className="ml-3"
+                    style={{ marginLeft: '10px' }}
+                />
+                <FormControl
+                    type="text"
+                    placeholder="Filtra per Anno di Riferimento"
+                    value={filterAnnoRiferimento}
+                    onChange={handleFilterAnnoRiferimento}
+                    className="ml-3"
+                    style={{ marginLeft: '10px' }}
+                />
+                <FormControl
+                    as="select"
+                    value={filterIntervalloPotenza}
+                    onChange={handleFilterIntervalloPotenza}
+                    className="ml-3"
+                    style={{ marginLeft: '10px' }}
+                >
+                    <option value="">Filtra per Intervallo di Potenza</option>
+                    <option value=">500KW">+500KW</option>
+                    <option value="100-500KW">100-500KW</option>
+                    <option value="<100KW">-100KW</option>
+                </FormControl>
             </div>
             <div>
                 <Table className={classes.tabella}>
                     <TableHeader>
+                        <TableColumn>
+                            <input
+                                type="checkbox"
+                                onChange={(e) => {
+                                    if (e.target.checked) {
+                                        setSelectedIds(filteredData.map(costo => costo.id));
+                                    } else {
+                                        setSelectedIds([]);
+                                    }
+                                }}
+                                checked={filteredData.length > 0 && filteredData.every(costo => selectedIds.includes(costo.id))}
+                            />
+                        </TableColumn>
                         <TableColumn>N.riga</TableColumn>
                         <TableColumn>Descrizione</TableColumn>
                         <TableColumn>Unità di Misura</TableColumn>
@@ -331,7 +399,7 @@ export default function DataEntry() {
                         <TableColumn>Anno</TableColumn>
                         <TableColumn>Valore</TableColumn>
                         <TableColumn>Categoria</TableColumn>
-                        <TableColumn>Intevallo di Potenza</TableColumn>
+                        <TableColumn>Intervallo di Potenza</TableColumn>
                         <TableColumn>Classe di agevolazione</TableColumn>
                         <TableColumn>Anno di riferimento</TableColumn>
                         <TableColumn></TableColumn>
@@ -339,7 +407,14 @@ export default function DataEntry() {
                     </TableHeader>
                     <TableBody emptyContent={"No rows to display."}>
                         {filteredData.map((costo, index) => (
-                            <TableRow key={index}>
+                            <TableRow key={costo.id}>
+                                <TableCell>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedIds.includes(costo.id)}
+                                        onChange={() => handleToggleCheckbox(costo.id)}
+                                    />
+                                </TableCell>
                                 <TableCell>{index}</TableCell>
                                 <TableCell>{costo.descrizione}</TableCell>
                                 <TableCell>{costo.unitaMisura}</TableCell>
@@ -354,16 +429,27 @@ export default function DataEntry() {
                                     <Button onClick={() => handleSelectRow(index)}>Modifica</Button>
                                 </TableCell>
                                 <TableCell>
-                                    <Button variant="danger"
-                                            onClick={() => verificaEliminazione(costo.id)}>Elimina
+                                    <Button variant="danger" onClick={() => verificaEliminazione(costo.id)}>
+                                        Elimina
                                     </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
+                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Button onClick={() => setPage(page - 1)} disabled={page === 0}>
+                        Precedente
+                    </Button>
+                    <span>Pagina {page + 1} di {totalPages}</span>
+                    <Button onClick={() => setPage(page + 1)} disabled={page >= totalPages - 1}>
+                        Successiva
+                    </Button>
+                </div>
+                <div style={{ marginTop: '10px' }}>
+                    <Button onClick={handleSubmitSelected}>Invia Selezione</Button>
+                </div>
             </div>
-
             {isFormVisible ? (
                 <div ref={formRef} className={classes.containerFormModifica}>
                     {selectedIndex !== null && (
@@ -379,7 +465,7 @@ export default function DataEntry() {
                                     type="text"
                                     value={editRowData.descrizione}
                                     onChange={(e) =>
-                                        setEditRowData({...editRowData, descrizione: e.target.value})
+                                        setEditRowData({ ...editRowData, descrizione: e.target.value })
                                     }
                                 />
                             </label>
@@ -389,7 +475,7 @@ export default function DataEntry() {
                                     type="text"
                                     value={editRowData.unitaMisura}
                                     onChange={(e) =>
-                                        setEditRowData({...editRowData, unitaMisura: e.target.value})
+                                        setEditRowData({ ...editRowData, unitaMisura: e.target.value })
                                     }
                                 />
                             </label>
@@ -399,7 +485,7 @@ export default function DataEntry() {
                                     type="text"
                                     value={editRowData.trimestre}
                                     onChange={(e) =>
-                                        setEditRowData({...editRowData, trimestre: e.target.value})
+                                        setEditRowData({ ...editRowData, trimestre: e.target.value })
                                     }
                                 />
                             </label>
@@ -409,7 +495,7 @@ export default function DataEntry() {
                                     type="number"
                                     value={editRowData.anno}
                                     onChange={(e) =>
-                                        setEditRowData({...editRowData, anno: e.target.value})
+                                        setEditRowData({ ...editRowData, anno: e.target.value })
                                     }
                                 />
                             </label>
@@ -419,7 +505,7 @@ export default function DataEntry() {
                                     type="number"
                                     value={editRowData.costo}
                                     onChange={(e) =>
-                                        setEditRowData({...editRowData, costo: e.target.value})
+                                        setEditRowData({ ...editRowData, costo: e.target.value })
                                     }
                                 />
                             </label>
@@ -429,7 +515,7 @@ export default function DataEntry() {
                                     type="text"
                                     value={editRowData.categoria}
                                     onChange={(e) =>
-                                        setEditRowData({...editRowData, categoria: e.target.value})
+                                        setEditRowData({ ...editRowData, categoria: e.target.value })
                                     }
                                 />
                             </label>
@@ -439,7 +525,7 @@ export default function DataEntry() {
                                     type="text"
                                     value={editRowData.intervalloPotenza}
                                     onChange={(e) =>
-                                        setEditRowData({...editRowData, intervalloPotenza: e.target.value})
+                                        setEditRowData({ ...editRowData, intervalloPotenza: e.target.value })
                                     }
                                 />
                             </label>
@@ -449,7 +535,7 @@ export default function DataEntry() {
                                     type="text"
                                     value={editRowData.classeAgevolazione}
                                     onChange={(e) =>
-                                        setEditRowData({...editRowData, classeAgevolazione: e.target.value})
+                                        setEditRowData({ ...editRowData, classeAgevolazione: e.target.value })
                                     }
                                 />
                             </label>
@@ -459,7 +545,7 @@ export default function DataEntry() {
                                     type="text"
                                     value={editRowData.annoRiferimento}
                                     onChange={(e) =>
-                                        setEditRowData({...editRowData, annoRiferimento: e.target.value})
+                                        setEditRowData({ ...editRowData, annoRiferimento: e.target.value })
                                     }
                                 />
                             </label>
