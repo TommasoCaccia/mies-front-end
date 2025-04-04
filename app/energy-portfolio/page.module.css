@@ -48,6 +48,43 @@
     background-color: #1E355C;
 }
 
+.fullscreenEnter{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 4rem;
+    background: #325B72;
+    border-radius: 0 0 25px 25px;
+}
+.fullscreenExit {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #325B72;
+    padding: 10px;
+    display: flex;
+    justify-content: right; /* Per centrare il pulsante */
+    align-items: center;
+}
+
+.fullscreenButton {
+    padding: 8px 12px;
+    cursor: pointer;
+    background: #5198B4;
+    border: none;
+    color: white;
+    border-radius: 20px;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Ombra leggera */
+}
+
+.fullscreenButton:hover {
+    background: #00324F;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.9);
+}
+
 .closeButton {
     display: none;
 }
