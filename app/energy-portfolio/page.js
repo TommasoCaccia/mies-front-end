@@ -25,6 +25,8 @@ export default function Home() {
     const observerRef = useRef(null);
 
     useEffect(() => {
+        getCookie();
+
         // ✅ CHIAMATA all'endpoint Quarkus che invia i dati a Power BI
         fetch(`${PATH}/proxy/articoli`, {
             method: "GET",
@@ -125,10 +127,6 @@ export default function Home() {
         }
         setIsFullScreen(false);
     };
-
-    useEffect(() => {
-        getCookie();
-    }, []);
 
     return (
         <div className={classes.container}>
