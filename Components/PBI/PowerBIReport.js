@@ -13,19 +13,23 @@ export default function PowerBIReport({ reportId, embedUrl }) {
         async function embedReport() {
             const container = reportRef.current;
             if (!container) {
-                console.error("⚠️ Il container del report non è stato trovato.");
+                console.error("❌ Il container del report non è stato trovato.");
                 return;
             }
 
-            // 🔁 Resetta il container prima dell'embed per evitare errori
-            pbi.powerbi.reset(container);
-
             try {
+                // ✅ Recupero token da endpoint backend
                 const res = await fetch(`${PATH}/api/pbitoken`, {
-                    credentials: "include"
+                    credentials: "include",
                 });
+
+                if (!res.ok) {
+                    throw new Error("Errore nel recupero del token Power BI.");
+                }
+
                 const { token } = await res.json();
 
+                // ✅ Configurazione dell'embedding
                 const embedConfig = {
                     type: "report",
                     id: reportId,
@@ -35,7 +39,7 @@ export default function PowerBIReport({ reportId, embedUrl }) {
                     settings: {
                         panes: {
                             filters: { visible: true },
-                            pageNavigation: { visible: false }
+                            pageNavigation: { visible: false },
                         },
                         navContentPaneEnabled: false,
                         background: pbi.models.BackgroundType.Transparent,
@@ -43,20 +47,26 @@ export default function PowerBIReport({ reportId, embedUrl }) {
                         customLayout: {
                             displayOption: pbi.models.DisplayOption.FitToPage,
                             pageSize: {
-                                type: pbi.models.PageSizeType.Widescreen
-                            }
-                        }
-                    }
+                                type: pbi.models.PageSizeType.Widescreen,
+                            },
+                        },
+                    },
                 };
 
+                // ✅ Istanza Power BI Service
                 const powerbiService = new pbi.service.Service(
                     pbi.factories.hpmFactory,
                     pbi.factories.wpmpFactory,
                     pbi.factories.routerFactory
                 );
 
+                // 🔁 Reset prima di un nuovo embedding per evitare conflitti
+                powerbiService.reset(container);
+
+                // 🚀 Esegui embedding
                 const report = powerbiService.embed(container, embedConfig);
 
+                // ✅ Eventi di feedback
                 report.on("loaded", () => {
                     console.log("✅ Report caricato correttamente.");
                 });
