@@ -1,24 +1,30 @@
 "use client";
 
-import {useEffect, useRef} from "react";
+import { useEffect, useRef } from "react";
 import * as pbi from "powerbi-client";
 import classes from "./PowerBIReport.module.css";
 
-const PATH = process.env.NEXT_PUBLIC_PATH_DEV
+const PATH = process.env.NEXT_PUBLIC_PATH_DEV;
 
-export default function PowerBIReport({reportId, embedUrl}) {
+export default function PowerBIReport({ reportId, embedUrl }) {
     const reportRef = useRef(null);
 
     useEffect(() => {
         async function embedReport() {
-            if (!reportRef.current) {
-                console.error("Il container del report non è stato trovato.");
+            const container = reportRef.current;
+            if (!container) {
+                console.error("⚠️ Il container del report non è stato trovato.");
                 return;
             }
 
+            // 🔁 Resetta il container prima dell'embed per evitare errori
+            pbi.powerbi.reset(container);
+
             try {
-                const res = await fetch(`${PATH}/api/pbitoken`);
-                const {token} = await res.json();
+                const res = await fetch(`${PATH}/api/pbitoken`, {
+                    credentials: "include"
+                });
+                const { token } = await res.json();
 
                 const embedConfig = {
                     type: "report",
@@ -49,17 +55,17 @@ export default function PowerBIReport({reportId, embedUrl}) {
                     pbi.factories.routerFactory
                 );
 
-                const report = powerbiService.embed(reportRef.current, embedConfig);
+                const report = powerbiService.embed(container, embedConfig);
 
                 report.on("loaded", () => {
-                    console.log("Report caricato correttamente.");
+                    console.log("✅ Report caricato correttamente.");
                 });
 
                 report.on("error", (event) => {
-                    console.error("Errore durante l'embedding del report:", event.detail);
+                    console.error("❌ Errore durante l'embedding del report:", event.detail);
                 });
             } catch (error) {
-                console.error("Errore durante l'embedding del report:", error);
+                console.error("❌ Errore generale durante l'embedding del report:", error);
             }
         }
 
