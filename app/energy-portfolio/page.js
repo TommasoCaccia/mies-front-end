@@ -44,6 +44,15 @@ export default function Home() {
             }
         });
 
+        useEffect(() => {
+            fetch(`${PATH}/proxy/articoli`, {
+                method: "GET",
+                credentials: "include", // se usi cookie per la sessione
+            })
+                .then((res) => res.json())
+                .then((data) => console.log("Dati inviati a Power BI:", data))
+                .catch((err) => console.error("Errore:", err));
+        }, []);
         return () => {
             Object.values(sectionRefs.current).forEach(ref => {
                 if (ref.current) {
@@ -79,11 +88,9 @@ export default function Home() {
         event.preventDefault();
         const section = document.getElementById(sectionId);
         if (section) {
-            section.scrollIntoView({ behavior: 'smooth' });
+            section.scrollIntoView({behavior: 'smooth'});
         }
     };
-
-
 
 
     useEffect(() => {

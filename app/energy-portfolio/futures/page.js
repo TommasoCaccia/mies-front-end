@@ -57,7 +57,6 @@ export default function Home() {
     const [deleteAlert, setDeleteAlert] = useState({active: false, message: ""});
     const [activeAlert, setActiveAlert] = useState(false);
 
-    const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
     const PATH = process.env.NEXT_PUBLIC_PATH_DEV
 
     //Cookie-extract

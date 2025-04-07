@@ -28,7 +28,7 @@ export default function PowerBIReport({reportId, embedUrl}) {
                     tokenType: pbi.models.TokenType.Embed,
                     settings: {
                         panes: {
-                            filters: false,
+                            filters: true,
                             pageNavigation: true,
                         },
                         mobileOptimized: true,
