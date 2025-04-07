@@ -1,16 +1,16 @@
-"use client"
-import React, {useEffect, useState, useRef} from 'react';
+"use client";
+
+import React, { useEffect, useState, useRef } from 'react';
 import classes from '@/app/energy-portfolio/page.module.css';
 import dynamic from "next/dynamic";
-import {energyportfolio, futures} from '@/Components/PBI/reportsConfig';
+import { energyportfolio } from '@/Components/PBI/reportsConfig';
 import DynamicPowerBIReport from "@/Components/PBI/DynamicPowerBIReport";
 
-const PATH = process.env.NEXT_PUBLIC_PATH_DEV
+const PATH = process.env.NEXT_PUBLIC_PATH_DEV;
 
-
-const PowerBIReport = dynamic(() => import("../../Components/PBI/PowerBIReport"),
-    {ssr: false}
-);
+const PowerBIReport = dynamic(() => import("../../Components/PBI/PowerBIReport"), {
+    ssr: false,
+});
 
 export default function Home() {
     const [isOpen, setIsOpen] = useState(false);
@@ -21,10 +21,22 @@ export default function Home() {
         section1: useRef(null),
         section2: useRef(null)
     });
-    const sidebarRef = useRef(null); // Ref per la sidebar
+    const sidebarRef = useRef(null);
+    const observerRef = useRef(null);
 
     useEffect(() => {
-        const observer = new IntersectionObserver((entries) => {
+        // ✅ CHIAMATA all'endpoint Quarkus che invia i dati a Power BI
+        fetch(`${PATH}/proxy/articoli`, {
+            method: "GET",
+            credentials: "include",
+        })
+            .then(res => res.json())
+            .then(data => console.log("✅ Dati inviati a Power BI:", data))
+            .catch(err => console.error("❌ Errore durante invio:", err));
+    }, []);
+
+    useEffect(() => {
+        observerRef.current = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
                     if (!manualNavigation) {
@@ -41,25 +53,18 @@ export default function Home() {
 
         Object.values(sectionRefs.current).forEach(ref => {
             if (ref.current) {
-                observer.observe(ref.current);
+                observerRef.current.observe(ref.current);
             }
         });
 
-        useEffect(() => {
-            fetch(`${PATH}/proxy/articoli`, {
-                method: "GET",
-                credentials: "include", // se usi cookie per la sessione
-            })
-                .then((res) => res.json())
-                .then((data) => console.log("Dati inviati a Power BI:", data))
-                .catch((err) => console.error("Errore:", err));
-        }, []);
         return () => {
-            Object.values(sectionRefs.current).forEach(ref => {
-                if (ref.current) {
-                    observer.unobserve(ref.current);
-                }
-            });
+            if (observerRef.current) {
+                Object.values(sectionRefs.current).forEach(ref => {
+                    if (ref.current) {
+                        observerRef.current.unobserve(ref.current);
+                    }
+                });
+            }
         };
     }, [manualNavigation]);
 
@@ -70,7 +75,6 @@ export default function Home() {
         }
     };
 
-    //Cookie-extract
     const getCookie = async () => {
         const response = await fetch(`${PATH}/session/extract-cookie`, {
             method: "GET",
@@ -82,8 +86,7 @@ export default function Home() {
         } else {
             console.error("Errore durante l'estrazione del cookie");
         }
-
-    }
+    };
 
     const handleNavigation = (event, sectionId) => {
         event.preventDefault();
@@ -95,15 +98,15 @@ export default function Home() {
 
     const enterFullScreen = (containerId) => {
         const iframeContainer = document.getElementById(containerId);
-        if (!iframeContainer) return; // Se il contenitore non esiste, esce
+        if (!iframeContainer) return;
 
         if (iframeContainer.requestFullscreen) {
             iframeContainer.requestFullscreen();
-        } else if (iframeContainer.mozRequestFullScreen) { // Firefox
+        } else if (iframeContainer.mozRequestFullScreen) {
             iframeContainer.mozRequestFullScreen();
-        } else if (iframeContainer.webkitRequestFullscreen) { // Chrome, Safari, Opera
+        } else if (iframeContainer.webkitRequestFullscreen) {
             iframeContainer.webkitRequestFullscreen();
-        } else if (iframeContainer.msRequestFullscreen) { // IE/Edge
+        } else if (iframeContainer.msRequestFullscreen) {
             iframeContainer.msRequestFullscreen();
         }
 
@@ -124,12 +127,11 @@ export default function Home() {
     };
 
     useEffect(() => {
-        getCookie()
+        getCookie();
     }, []);
 
     return (
         <div className={classes.container}>
-            {/* Hamburger Menu Button */}
             <div>
                 <header className={classes.header}>
                     <button className={classes.menuButton} onClick={() => setIsOpen(!isOpen)}>
@@ -137,8 +139,7 @@ export default function Home() {
                     </button>
                 </header>
 
-                {/* Sidebar come menu overlay */}
-                <nav className={`${classes.sidebar} ${isOpen ? classes.show : ''}`}>
+                <nav className={`${classes.sidebar} ${isOpen ? classes.show : ''}`} ref={sidebarRef}>
                     <button className={classes.closeButton} onClick={() => setIsOpen(false)}>
                         ✕
                     </button>
@@ -146,9 +147,7 @@ export default function Home() {
                         {Object.keys(sectionRefs.current).map((key) => (
                             <li key={key} className="nav-item">
                                 <a
-                                    className={`${classes.navLink} ${
-                                        activeSection === key ? classes.active : ''
-                                    }`}
+                                    className={`${classes.navLink} ${activeSection === key ? classes.active : ''}`}
                                     href={`#${key}`}
                                     onClick={(e) => {
                                         handleNavigation(e, key);
@@ -166,77 +165,47 @@ export default function Home() {
             <main className={classes.mainContent}>
                 <div id="section1" ref={sectionRefs.current.section1} className={classes.section}>
                     <h1 className={classes.sectionTitle}>Sales Funnel Power BI Dashboard</h1>
-                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
-                        Ipsum
-                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
-                        tipografo
-                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
-                        non
-                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
-                        da
-                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
+                    <p>Lorem Ipsum...</p>
 
-                    <div id={"pbi1"}>
-                        <div >
-                            <DynamicPowerBIReport
-                                reportId={energyportfolio.reports.home.reportId}
-                                embedUrl={energyportfolio.reports.home.embedUrl}
-                            />
-                            {isFullScreen && (
-                                <div className={classes.fullscreenExit}>
-                                    <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen
-                                    </button>
-                                </div>
-                            )}
-                        </div>
+                    <div id="pbi1">
+                        <DynamicPowerBIReport
+                            reportId={energyportfolio.reports.home.reportId}
+                            embedUrl={energyportfolio.reports.home.embedUrl}
+                        />
+                        {isFullScreen && (
+                            <div className={classes.fullscreenExit}>
+                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen</button>
+                            </div>
+                        )}
                         {!isFullScreen && (
                             <div className={classes.fullscreenEnter}>
-                                <button onClick={() => enterFullScreen("pbi1")}
-                                        className={classes.fullscreenButton}>Full Screen
-                                </button>
+                                <button onClick={() => enterFullScreen("pbi1")} className={classes.fullscreenButton}>Full Screen</button>
                             </div>
                         )}
                     </div>
-
                 </div>
 
                 <div id="section2" ref={sectionRefs.current.section2} className={classes.section}>
                     <h1 className={classes.sectionTitle}>Sales Dashboard in Power BI</h1>
-                    <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
-                        Ipsum
-                        è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo
-                        tipografo
-                        prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto
-                        non
-                        solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci
-                        sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di
-                        caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
-                        da
-                        software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-                    <div  id={"pbi2"}>
-                        <div>
-                            <DynamicPowerBIReport
-                                reportId={energyportfolio.reports.controllo.reportId}
-                                embedUrl={energyportfolio.reports.controllo.embedUrl}
-                            />{isFullScreen && (
+                    <p>Lorem Ipsum...</p>
+
+                    <div id="pbi2">
+                        <DynamicPowerBIReport
+                            reportId={energyportfolio.reports.controllo.reportId}
+                            embedUrl={energyportfolio.reports.controllo.embedUrl}
+                        />
+                        {isFullScreen && (
                             <div className={classes.fullscreenExit}>
-                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen
-                                </button>
+                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen</button>
                             </div>
                         )}
-                        </div>
                         {!isFullScreen && (
                             <div className={classes.fullscreenEnter}>
-                                <button onClick={() => enterFullScreen("pbi2")}
-                                        className={classes.fullscreenButton}>Full Screen
-                                </button>
+                                <button onClick={() => enterFullScreen("pbi2")} className={classes.fullscreenButton}>Full Screen</button>
                             </div>
                         )}
                     </div>
                 </div>
-
             </main>
         </div>
     );
