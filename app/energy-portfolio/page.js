@@ -2,7 +2,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import classes from '@/app/energy-portfolio/page.module.css';
 import dynamic from "next/dynamic";
-import {energyportfolio} from '@/Components/PBI/reportsConfig';
+import {energyportfolio, futures} from '@/Components/PBI/reportsConfig';
 import DynamicPowerBIReport from "@/Components/PBI/DynamicPowerBIReport";
 
 const PATH = process.env.NEXT_PUBLIC_PATH_DEV
@@ -14,6 +14,7 @@ const PowerBIReport = dynamic(() => import("../../Components/PBI/PowerBIReport")
 
 export default function Home() {
     const [isOpen, setIsOpen] = useState(false);
+    const [isFullScreen, setIsFullScreen] = useState(false);
     const [activeSection, setActiveSection] = useState('section1');
     const [manualNavigation, setManualNavigation] = useState(false);
     const sectionRefs = useRef({
@@ -88,10 +89,39 @@ export default function Home() {
         event.preventDefault();
         const section = document.getElementById(sectionId);
         if (section) {
-            section.scrollIntoView({behavior: 'smooth'});
+            section.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
+    const enterFullScreen = (containerId) => {
+        const iframeContainer = document.getElementById(containerId);
+        if (!iframeContainer) return; // Se il contenitore non esiste, esce
+
+        if (iframeContainer.requestFullscreen) {
+            iframeContainer.requestFullscreen();
+        } else if (iframeContainer.mozRequestFullScreen) { // Firefox
+            iframeContainer.mozRequestFullScreen();
+        } else if (iframeContainer.webkitRequestFullscreen) { // Chrome, Safari, Opera
+            iframeContainer.webkitRequestFullscreen();
+        } else if (iframeContainer.msRequestFullscreen) { // IE/Edge
+            iframeContainer.msRequestFullscreen();
+        }
+
+        setIsFullScreen(true);
+    };
+
+    const exitFullScreen = () => {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+        setIsFullScreen(false);
+    };
 
     useEffect(() => {
         getCookie()
@@ -148,16 +178,30 @@ export default function Home() {
                         da
                         software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
 
-                    <div>
-                        <div className="h-screen my-5">
+                    <div id={"pbi1"}>
+                        <div >
                             <DynamicPowerBIReport
                                 reportId={energyportfolio.reports.home.reportId}
                                 embedUrl={energyportfolio.reports.home.embedUrl}
                             />
+                            {isFullScreen && (
+                                <div className={classes.fullscreenExit}>
+                                    <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen
+                                    </button>
+                                </div>
+                            )}
                         </div>
+                        {!isFullScreen && (
+                            <div className={classes.fullscreenEnter}>
+                                <button onClick={() => enterFullScreen("pbi1")}
+                                        className={classes.fullscreenButton}>Full Screen
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                 </div>
+
                 <div id="section2" ref={sectionRefs.current.section2} className={classes.section}>
                     <h1 className={classes.sectionTitle}>Sales Dashboard in Power BI</h1>
                     <p>Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem
@@ -171,13 +215,25 @@ export default function Home() {
                         caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente
                         da
                         software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.</p>
-                    <div>
-                        <div className="h-screen my-5">
+                    <div  id={"pbi2"}>
+                        <div>
                             <DynamicPowerBIReport
                                 reportId={energyportfolio.reports.controllo.reportId}
                                 embedUrl={energyportfolio.reports.controllo.embedUrl}
-                            />
+                            />{isFullScreen && (
+                            <div className={classes.fullscreenExit}>
+                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen
+                                </button>
+                            </div>
+                        )}
                         </div>
+                        {!isFullScreen && (
+                            <div className={classes.fullscreenEnter}>
+                                <button onClick={() => enterFullScreen("pbi2")}
+                                        className={classes.fullscreenButton}>Full Screen
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
 

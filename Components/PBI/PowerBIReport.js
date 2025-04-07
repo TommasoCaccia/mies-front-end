@@ -28,12 +28,19 @@ export default function PowerBIReport({reportId, embedUrl}) {
                     tokenType: pbi.models.TokenType.Embed,
                     settings: {
                         panes: {
-                            filters: true,
-                            pageNavigation: true,
+                            filters: { visible: true },
+                            pageNavigation: { visible: false }
                         },
-                        mobileOptimized: true,
-                        showMobileLayout: true
-                    },
+                        navContentPaneEnabled: false,
+                        background: pbi.models.BackgroundType.Transparent,
+                        layoutType: pbi.models.LayoutType.Custom,
+                        customLayout: {
+                            displayOption: pbi.models.DisplayOption.FitToPage,
+                            pageSize: {
+                                type: pbi.models.PageSizeType.Widescreen
+                            }
+                        }
+                    }
                 };
 
                 const powerbiService = new pbi.service.Service(
