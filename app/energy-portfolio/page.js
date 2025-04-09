@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import classes from '@/app/energy-portfolio/page.module.css';
 import dynamic from "next/dynamic";
-import { energyportfolio } from '@/Components/PBI/reportsConfig';
+import {energyportfolio} from '@/Components/PBI/reportsConfig';
 import DynamicPowerBIReport from "@/Components/PBI/DynamicPowerBIReport";
 
 const PATH = process.env.NEXT_PUBLIC_PATH_DEV;
@@ -25,17 +25,30 @@ export default function Home() {
     const observerRef = useRef(null);
 
     useEffect(() => {
-        getCookie();
-
         // ✅ CHIAMATA all'endpoint Quarkus che invia i dati a Power BI
-        fetch(`${PATH}/proxy/articoli`, {
+        handleProxy();
+    }, []);
+
+    const handleProxy = async () => {
+        const response = await fetch(`${PATH}/proxy/articoli`, {
             method: "GET",
             credentials: "include",
-        })
-            .then(res => res.json())
-            .then(data => console.log("✅ Dati inviati a Power BI:", data))
-            .catch(err => console.error("❌ Errore durante invio:", err));
-    }, []);
+        });
+
+        if (response.ok) {
+            console.log("Proxy chiamato con successo");
+        } else {
+            console.error("Errore durante la chiamata al proxy: " + response.status);
+        }
+
+        const data = await response.json();
+
+        if (data) {
+            console.log("Dati ricevuti:", data);
+        } else {
+            console.error("Nessun dato ricevuto: ", data);
+        }
+    }
 
     useEffect(() => {
         observerRef.current = new IntersectionObserver((entries) => {
@@ -94,7 +107,7 @@ export default function Home() {
         event.preventDefault();
         const section = document.getElementById(sectionId);
         if (section) {
-            section.scrollIntoView({ behavior: 'smooth' });
+            section.scrollIntoView({behavior: 'smooth'});
         }
     };
 
@@ -172,12 +185,15 @@ export default function Home() {
                         />
                         {isFullScreen && (
                             <div className={classes.fullscreenExit}>
-                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen</button>
+                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen
+                                </button>
                             </div>
                         )}
                         {!isFullScreen && (
                             <div className={classes.fullscreenEnter}>
-                                <button onClick={() => enterFullScreen("pbi1")} className={classes.fullscreenButton}>Full Screen</button>
+                                <button onClick={() => enterFullScreen("pbi1")}
+                                        className={classes.fullscreenButton}>Full Screen
+                                </button>
                             </div>
                         )}
                     </div>
@@ -194,12 +210,15 @@ export default function Home() {
                         />
                         {isFullScreen && (
                             <div className={classes.fullscreenExit}>
-                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen</button>
+                                <button onClick={exitFullScreen} className={classes.fullscreenButton}>Exit Full Screen
+                                </button>
                             </div>
                         )}
                         {!isFullScreen && (
                             <div className={classes.fullscreenEnter}>
-                                <button onClick={() => enterFullScreen("pbi2")} className={classes.fullscreenButton}>Full Screen</button>
+                                <button onClick={() => enterFullScreen("pbi2")}
+                                        className={classes.fullscreenButton}>Full Screen
+                                </button>
                             </div>
                         )}
                     </div>
