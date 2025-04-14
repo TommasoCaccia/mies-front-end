@@ -1,11 +1,10 @@
 .container {
     max-width: 100%;
+    height: 81vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 125px;
-    margin-bottom: 125px;
     font-family: "Montserrat", sans-serif;
 }
 
