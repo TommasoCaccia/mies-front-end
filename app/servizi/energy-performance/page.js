@@ -3,7 +3,7 @@ import classes from '@/app/servizi/energy-performance/page.module.css';
 export default function EnergyPerformance() {
     return (
         <div className={classes.container}>
-            <img src="/EnergyPerformance.jpg" className={classes.imgDiagnosi} alt="Energy Performance"/>
+            <img src="/EnergyPerformance.webp" className={classes.imgDiagnosi} alt="Energy Performance"/>
             <div className={classes.textTitle}>
                 <h1 className={classes.titoloServizi}>
                     L’Energy Performance Contract<br/>
@@ -35,11 +35,11 @@ export default function EnergyPerformance() {
                         finanziamento dell’intervento.
                     </p>
                 </div>
-                <img src="/E-ProcessoProduttivo.jpg" className={classes.sectionImage} alt="Processo Produttivo"/>
+                <img src="/E-ProcessoProduttivo.webp" className={classes.sectionImage} alt="Processo Produttivo"/>
             </div>
 
             <div className={classes.cardsContainerRev}>
-                <img src="/CECompetenze.jpg" className={classes.sectionImage} alt="Competenze"/>
+                <img src="/CECompetenze.webp" className={classes.sectionImage} alt="Competenze"/>
                 <div className={classes.textContainer}>
                     <h2 className={classes.sectionTitle}>Competenze</h2>
                     <p className={classes.sectionText}>

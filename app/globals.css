@@ -29,6 +29,25 @@ body {
     --container-margin-top: 6rem; /* Sostituisci 95.94px con un valore in rem se possibile */
     --header-height: 60px;
     --footer-height: 60px;
+    --base-font-size: 1rem; /* Base 16px */
+    --background-color: #f0f4fa;
+    --white: #fff;
+    --container-max-width: 50rem;
+    --bg-dark: rgba(0, 0, 0, 0.5);
+    --bg-darker: rgba(0, 0, 0, 0.8);
+    --dot-color: #bbb;
+    --dot-active: #717171;
+    --arrow-bg: transparent;
+    --arrow-color: var(--primary-color);
+    --primary-hover: #1d3b5e;
+    --error-color: #ca0303;
+    --bg-white: #ffffff;
+    --bg-light: #f8f9fa;
+    --text-dark: #333333;
+    --text-muted: #616161;
+    --font-family-base: "Montserrat", sans-serif;
+    --shadow-small: 0 0 10px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 a {

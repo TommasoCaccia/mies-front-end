@@ -62,6 +62,7 @@ export default function ContactForm() {
     return (
         <div className={classes.formContainer}>
             <form onSubmit={handleSubmit} className={classes.form}>
+                <h1>Inviaci un email</h1>
                 <div className={classes.formGroup}>
                     <label htmlFor="name" className={classes.label}>
                         Nome di riferimento:

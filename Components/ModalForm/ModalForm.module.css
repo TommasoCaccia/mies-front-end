@@ -1,0 +1,89 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalContent {
+    background-color: var(--bg-white);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+
+/* Stile per il form di modifica con due colonne */
+.containerFormModifica {
+    font-family: var(--font-family-base);
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* due colonne uguali */
+    gap: 15px;
+    align-items: start;
+}
+
+/* Ogni label verrà posizionata in una cella della griglia */
+.containerFormModifica label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+}
+
+/* Input in modo standard */
+.containerFormModifica input {
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* Per i bottoni, puoi farli occupare entrambe le colonne */
+.containerFormModifica .fullWidth {
+    grid-column: 1 / -1;
+}
+
+.containerFormModifica button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* Bottoni specifici per Submit e Annulla */
+.containerFormModifica button[type="submit"] {
+    background-color: var(--primary-color);
+    color: var(--bg-white);
+}
+
+.containerFormModifica button[type="submit"]:hover {
+    background-color: var(--primary-hover);
+}
+
+.containerFormModifica button[type="button"] {
+    background-color: var(--error-color);
+    color: var(--bg-white);
+}
+
+.containerFormModifica button[type="button"]:hover {
+    background-color: darkred;
+}
+
+/* Se vuoi che anche le etichette occupino colonne complete per esempio su schermi piccoli, puoi aggiungere una media query */
+@media (max-width: 600px) {
+    .containerFormModifica {
+        grid-template-columns: 1fr;
+    }
+}

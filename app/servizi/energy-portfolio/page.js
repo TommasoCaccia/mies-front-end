@@ -4,7 +4,7 @@ export default function EnergyPortfolio() {
     return (
         <>
             <div className={classes.container}>
-                <img src="/EnergyPortfolio.jpg" className={classes.imgDiagnosi} alt="Logo"/>
+                <img src="/EnergyPortfolio.webp" className={classes.imgDiagnosi} alt="Logo"/>
                 <div className={classes.textTitle}>
                     <h1 className={classes.titoloServizi}>
                         ENERGY PORTFOLIO<br></br>
@@ -37,12 +37,12 @@ export default function EnergyPortfolio() {
                             mercato ed altri trend significativi.
                         </p>
                     </div>
-                    <img src="/EPGestionePrezzoEnergia.jpg" className={classes.sectionImage} alt="Immagine 1"/>
+                    <img src="/EPGestionePrezzoEnergia.webp" className={classes.sectionImage} alt="Immagine 1"/>
                 </div>
 
                 <div className={classes.cardsContainerRev}>
                     <img
-                        src="/EPVerificaFatture.jpg" className={classes.sectionImage} alt="Immagine degli Strumenti"
+                        src="/EPVerificaFatture.webp" className={classes.sectionImage} alt="Immagine degli Strumenti"
                     />
                     <div className={classes.textContainer}>
                         <h2 className={classes.sectionTitle}>Verifica Fatture</h2>

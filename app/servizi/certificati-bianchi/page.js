@@ -2,7 +2,7 @@ import classes from '@/app/servizi/certificati-bianchi/page.module.css';
 
 export default function CertificatiBianchi() {
     return (<>
-        <img src="/CertificatiBianchi.jpg" className={`${classes.imgDiagnosi}`} alt="Logo"/>
+        <img src="/CertificatiBianchi.webp" className={`${classes.imgDiagnosi}`} alt="Logo"/>
 
         <div className={classes.container}>
             <div className={classes.textTitle}>
@@ -36,11 +36,11 @@ export default function CertificatiBianchi() {
                         periodicamente i risparmi energetici ottenuti.
                     </p>
                 </div>
-                <img src="/CEComeFunzionano.jpg" className={classes.sectionImage} alt="Immagine 1"/>
+                <img src="/CEComeFunzionano.webp" className={classes.sectionImage} alt="Immagine 1"/>
             </div>
             <div className={classes.cardsContainerRev}>
                 <img
-                    src="/Metodologia.jpg" className={classes.sectionImage} alt="Immagine degli Strumenti"
+                    src="/Metodologia.webp" className={classes.sectionImage} alt="Immagine degli Strumenti"
                 />
                 <div className={classes.textContainer}>
                     <h2 className={classes.sectionTitle}>Competenze</h2>
@@ -69,7 +69,7 @@ export default function CertificatiBianchi() {
                         dei titoli attraverso i principali canali di vendita.
                     </p>
                 </div>
-                <img src="/CEAttivita.jpg" className={classes.sectionImage} alt="Immagine 1"/>
+                <img src="/CEAttivita.webp" className={classes.sectionImage} alt="Immagine 1"/>
             </div>
         </div>
     </>);
