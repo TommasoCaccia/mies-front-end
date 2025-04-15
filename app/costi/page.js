@@ -21,7 +21,7 @@ export default function DataEntry() {
 
     // Altri stati
     const [file, setFile] = useState(null);
-    const [selectedIds, setSelectedIds] = useState([]);
+    const [ids, setIds] = useState([]);
     const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV;
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -202,9 +202,13 @@ export default function DataEntry() {
             headers: {'Content-Type': 'application/json'},
         });
         if (response.ok) {
-            await Swal.fire({
+            Swal.fire({
                 icon: "success",
-                text: "Costo eliminato con successo, ricarica la pagina per visualizzare i cambiamenti"
+                text: "Eliminazione avvenuta con successo",
+                timer: 2000, // Il messaggio scompare dopo 2 secondi
+                showConfirmButton: false
+            }).then(() => {
+                fetchCostiFiltrati(page, size); // Richiama la funzione per ricaricare i costi
             });
         } else {
             await Swal.fire({
@@ -213,6 +217,41 @@ export default function DataEntry() {
             });
         }
     };
+
+    const deleteCosti = async (ids) => {
+        try {
+            const response = await fetch(`${PATH_DEV}/costi/delete-ids`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(ids),
+            });
+
+            if (!response.ok) {
+                Swal.fire({
+                    icon: "error",
+                    text: "Errore durante l'eliminazione dei costi selezionati:" + response.statusText
+                })
+                console.error("Errore nell'eliminazione dei dati:", response.statusText);
+                return null;
+            }
+
+            const data = await response.json();
+            console.log("Costi eliminati:");
+            await Swal.fire({
+                icon: "success",
+                text: "Costi eliminati con successo",
+                timer: 2000, // Il messaggio scompare dopo 2 secondi
+                showConfirmButton: false
+            }).then(() => {
+                fetchCostiFiltrati(page, size); // Richiama la funzione per ricaricare i costi
+            });
+            return data;
+        } catch (error) {
+            console.error("Errore nella fetch dei costi:", error);
+        }
+    };
+
 
     // Handlers per i nuovi filtri
     const handleFilterCategoria = (e) => {
@@ -233,33 +272,15 @@ export default function DataEntry() {
 
     // Funzione per il toggle delle checkbox
     const handleToggleCheckbox = (id) => {
-        if (selectedIds.includes(id)) {
-            setSelectedIds(selectedIds.filter(selectedId => selectedId !== id));
+        if (ids.includes(id)) {
+            setIds(ids.filter(selectedId => selectedId !== id));
         } else {
-            setSelectedIds([...selectedIds, id]);
+            setIds([...ids, id]);
         }
     };
 
-    // Funzione per inviare gli id selezionati
-    const handleSubmitSelected = async () => {
-        try {
-            const response = await fetch('/api/submit-ids', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(selectedIds),
-            });
-            if (!response.ok) {
-                console.error("Errore nell'invio dei dati");
-                return;
-            }
-            const result = await response.json();
-            console.log("Dati inviati correttamente:", result);
-        } catch (error) {
-            console.error("Errore nella fetch:", error);
-        }
-    };
 
-   // Funzioni per il form di modifica
+    // Funzioni per il form di modifica
     const handleSelectRow = (index, id) => {
         setIsFormVisible(true);
         const rowData = filteredData[index];
@@ -284,7 +305,14 @@ export default function DataEntry() {
             setSelectedIndex(null);
             setEditRowData({});
             setIsFormVisible(false);
-            window.location.href = '/costi';
+            Swal.fire({
+                icon: "success",
+                text: "Modifiche salvate con successo",
+                timer: 2000, // Il messaggio scompare dopo 2 secondi
+                showConfirmButton: false
+            }).then(() => {
+                fetchCostiFiltrati(page, size); // Richiama la funzione per ricaricare i costi
+            });
         } else {
             await Swal.fire({
                 icon: "error",
@@ -374,12 +402,12 @@ export default function DataEntry() {
                                 type="checkbox"
                                 onChange={(e) => {
                                     if (e.target.checked) {
-                                        setSelectedIds(filteredData.map(costo => costo.id));
+                                        setIds(filteredData.map(costo => costo.id));
                                     } else {
-                                        setSelectedIds([]);
+                                        setIds([]);
                                     }
                                 }}
-                                checked={filteredData.length > 0 && filteredData.every(costo => selectedIds.includes(costo.id))}
+                                checked={filteredData.length > 0 && filteredData.every(costo => ids.includes(costo.id))}
                             />
                         </TableColumn>
                         <TableColumn>N.riga</TableColumn>
@@ -401,7 +429,7 @@ export default function DataEntry() {
                                 <TableCell>
                                     <input
                                         type="checkbox"
-                                        checked={selectedIds.includes(costo.id)}
+                                        checked={ids.includes(costo.id)}
                                         onChange={() => handleToggleCheckbox(costo.id)}
                                     />
                                 </TableCell>
@@ -419,7 +447,7 @@ export default function DataEntry() {
                                     <Button onClick={() => handleSelectRow(index, costo.id)}>Modifica</Button>
                                 </TableCell>
                                 <TableCell>
-                                    <Button variant="danger" onClick={() => verificaEliminazione(costo.id)}>
+                                    <Button variant="danger" onClick={() => deleteCosto(costo.id)}>
                                         Elimina
                                     </Button>
                                 </TableCell>
@@ -438,7 +466,7 @@ export default function DataEntry() {
                     </Button>
                 </div>
                 <div style={{marginTop: '10px'}}>
-                    <Button onClick={handleSubmitSelected}>Invia Selezione</Button>
+                    <Button onClick={deleteCosti}>Invia Selezione</Button>
                 </div>
             </div>
             <ModalForm

@@ -162,6 +162,25 @@
     border-width: 0.8px;
 }
 
+/* loading animation */
+
+/* Spinner per il loading */
+.spinner {
+    display: inline-block;
+    width: 1.5rem;         /* circa 24px */
+    height: 1.5rem;
+    border: 0.25rem solid #f3f3f3;  /* Colore chiaro per il bordo */
+    border-top: 0.25rem solid #2C4D79; /* Colore principale */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
 /* Media query per dispositivi molto piccoli: costiForm passa a una colonna */
 @media (max-width: 600px) {
     .costiForm {

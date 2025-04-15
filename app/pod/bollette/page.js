@@ -9,7 +9,6 @@ export default function Bollette() {
     const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [pod, setPod] = useState([]);
-    const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
     const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV;
 
 
