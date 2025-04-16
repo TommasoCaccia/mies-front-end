@@ -123,7 +123,7 @@ export default function Bollette() {
                                     <TableCell>{file.fileName}</TableCell>
                                     <TableCell>{file.idPod}</TableCell>
                                     <TableCell>
-                                        <button onClick={() => downloadFile(file.idFile, file.fileName)}>Download
+                                        <button className={classes.addBolletteButton} onClick={() => downloadFile(file.idFile, file.fileName)}>Download
                                         </button>
                                     </TableCell>
                                 </TableRow>

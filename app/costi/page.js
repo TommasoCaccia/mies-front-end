@@ -195,6 +195,28 @@ export default function DataEntry() {
         fetchCostiFiltrati(page, size);
     }, [page, filterCategoria, filterAnno, filterAnnoRiferimento, filterIntervalloPotenza]);
 
+    const confirmAndDeleteCosto = async (id) => {
+        const result = await Swal.fire({
+            title: "Sei sicuro?",
+            text: "Questa operazione eliminerà il costo selezionato.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sì, elimina",
+            cancelButtonText: "Annulla",
+        });
+
+        if (result.isConfirmed) {
+            await deleteCosto(id);
+        } else {
+            Swal.fire({
+                icon: "info",
+                text: "Operazione annullata",
+                timer: 2000,
+                showConfirmButton: false,
+            });
+        }
+    };
+
     const deleteCosto = async (id) => {
         const response = await fetch(`${PATH_DEV}/costi/delete/${id}`, {
             method: 'DELETE',
@@ -205,7 +227,7 @@ export default function DataEntry() {
             Swal.fire({
                 icon: "success",
                 text: "Eliminazione avvenuta con successo",
-                timer: 2000, // Il messaggio scompare dopo 2 secondi
+                timer: 2000,
                 showConfirmButton: false
             }).then(() => {
                 fetchCostiFiltrati(page, size); // Richiama la funzione per ricaricare i costi
@@ -447,7 +469,7 @@ export default function DataEntry() {
                                     <Button onClick={() => handleSelectRow(index, costo.id)}>Modifica</Button>
                                 </TableCell>
                                 <TableCell>
-                                    <Button variant="danger" onClick={() => deleteCosto(costo.id)}>
+                                    <Button variant="danger" onClick={() => confirmAndDeleteCosto(costo.id)}>
                                         Elimina
                                     </Button>
                                 </TableCell>

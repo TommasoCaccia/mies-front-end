@@ -507,9 +507,9 @@ export default function Pod() {
                                     <TableCell>{pod.cap}</TableCell>
                                     <TableCell>
                                         {isModifica.includes(pod.id) ? (
-                                            <button onClick={() => handleModificaClick(pod.id)}>Modifica</button>
+                                            <button className={classes.bottoneCarica} onClick={() => handleModificaClick(pod.id)}>Modifica</button>
                                         ) : (
-                                            <button onClick={() => handleUpdateClick(pod.id)}>Inserisci</button>
+                                            <button className={classes.bottoneCarica} onClick={() => handleUpdateClick(pod.id)}>Inserisci</button>
                                         )}
                                     </TableCell>
                                 </TableRow>

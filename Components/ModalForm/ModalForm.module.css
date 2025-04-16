@@ -18,6 +18,8 @@
     width: 90%;
     max-width: 500px;
     position: relative;
+    max-height: 90vh;   /* Limita l'altezza al 90% della viewport */
+    overflow-y: auto;   /* Abilita lo scroll verticale se necessario */
 }
 
 /* Stile per il form di modifica con due colonne */
@@ -81,7 +83,7 @@
     background-color: darkred;
 }
 
-/* Se vuoi che anche le etichette occupino colonne complete per esempio su schermi piccoli, puoi aggiungere una media query */
+/* Media query per schermi piccoli: passa a una colonna */
 @media (max-width: 600px) {
     .containerFormModifica {
         grid-template-columns: 1fr;
