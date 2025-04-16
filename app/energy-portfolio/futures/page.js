@@ -187,7 +187,7 @@ export default function Home() {
 
     const fetchCheckAlert = async () => {
         try {
-            const response = await fetch(`${PATH}/cliente/checkAlert`, {
+            const response = await fetch(`${PATH}/email/checkAlert`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -254,7 +254,7 @@ export default function Home() {
 
     const fetchAlertData = async () => {
         try {
-            const response = await fetch(`${PATH}/cliente/checkAlertField`, {
+            const response = await fetch(`${PATH}/email/checkAlertField`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -264,15 +264,15 @@ export default function Home() {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error(`Errore: ${errorText}`);
+                console.log(`Errore: ${errorText}`);
                 return;
             }
 
             const data = await response.json();
-            //alert(JSON.stringify(data, null, 2));
+            alert(JSON.stringify(data, null, 2));
             // Assicuriamoci che `alertData` sia effettivamente un array prima di iterarlo
-            if (!data.alertData || !Array.isArray(data.alertData)) {
-                console.error("Errore: alertData non è un array valido", data);
+            if (!data.alerts || !Array.isArray(data.alerts)) {
+                console.log("Errore: alertData non è un array valido", data);
                 return;
             }
 
@@ -282,10 +282,10 @@ export default function Home() {
             let minimumLevelMonthly, maximumLevelMonthly, checkModalityMonthly, frequencyMonthly;
             let minimumLevel, maximumLevel, checkModality, frequencyAlert;
 
-            data.alertData.forEach((alertFutures) => {
+            data.alerts.forEach((alertFutures) => {
 
                 if (!alertFutures) {
-                    return; // Salta l'iterazione corrente
+                    return;
                 }
 
                 const tableName = alertFutures.futuresType;
@@ -367,7 +367,7 @@ export default function Home() {
             setActiveAlert(data.checkEmail || false);
 
         } catch (error) {
-            console.error("Errore durante il recupero dei dati degli alert:", error);
+            console.log("Errore durante il recupero dei dati degli alert:", error);
         }
     };
 
