@@ -14,6 +14,7 @@ const ModalForm = ({
                        handleSaveChanges,
                        handleCancel
                    }) => {
+
     return (
         <Modal
             isOpen={isOpen}
