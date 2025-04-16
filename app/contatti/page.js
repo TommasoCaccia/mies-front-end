@@ -1,53 +1,57 @@
+"use client";
+import React from 'react';
 import classes from '@/app/contatti/page.module.css';
-import Card from '../../Components/cardTeam/cardTeam'
+import Card from '../../Components/cardTeam/cardTeam';
 import SendEmailForm from "@/Components/formEmail/form";
+import dynamic from "next/dynamic";
 
-const Contatti = () => (
-    <div>
-        <div className={classes.mappa}>
-            <iframe
-                width="100%"
-                height="300px"
-                allowFullScreen
-                allow="geolocation"
-                src="//umap.openstreetmap.fr/it/map/mappa-senza-nome_1098870?scaleControl=false&miniMap=false&scrollWheelZoom=false&zoomControl=true&editMode=disabled&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false&captionMenus=false"
-                title="Mappa Semplificata"
-            ></iframe>
-        </div>
-        <div className={classes.container}>
-            <div className={classes.mainContent}>
-                <h1 className={classes.titoloPrincipale}>LA SEDE MIES</h1>
-                <p>Ti diamo il benvenuto in MIES. <br></br>
-                    Mettiti in contatto senza alcun impegno, ti risponderemo al più presto!
-                </p>
-                <div>
-                    <Card/>
-                </div>
-                <div>
-                    <h1>Inviaci un email</h1>
-                    <SendEmailForm/>
-                </div>
+const MyMap = dynamic(() => import('@/Components/Map/map'), { ssr: false });
+
+const Contatti = () => {
+    return (
+        <div className={classes.page}>
+            <div className={classes.mapContainer}>
+               <MyMap/>
             </div>
-            <div className={classes.sidebarContainer}>
-                <div>
-                    <h2 className={classes.sedeLegale}>Sede Operativa</h2>
-                    <p className={classes.paragrafiSedeLegale}>
-                        <strong className={classes.strong}>Indirizzo</strong>
-                        <br></br>Via Puricelli 1
-                        <br></br>Gallarate 21013 (VA) - Italia
+            <div className={classes.container}>
+                <main className={classes.mainContent}>
+                    <h1 className={classes.titoloPrincipale}>LA SEDE MIES</h1>
+                    <p>
+                        Ti diamo il benvenuto in MIES. <br />
+                        Mettiti in contatto senza alcun impegno, ti risponderemo al più presto!
                     </p>
-                    <p className={classes.paragrafiSedeLegale}>
-                        <strong className={classes.strong}>Contatti</strong>
-                        <br></br>amministrazione@miesgroup.it
-                    </p>
-                    <p className={classes.paragrafiSedeLegale}>
-                        <strong className={classes.strong}>Orari di apertura</strong>
-                        <br></br>Lun-Ven: 9:00-18:00
-                    </p>
-                </div>
+                    <div className={classes.cardContainer}>
+                        <Card />
+                    </div>
+                    <section className={classes.emailSection}>
+                        <SendEmailForm />
+                    </section>
+                </main>
+                <aside className={classes.sidebarContainer}>
+                    <div className={classes.infoBlock}>
+                        <h2 className={classes.sedeLegale}>Sede Operativa</h2>
+                        <p className={classes.paragrafiSedeLegale}>
+                            <strong className={classes.strong}>Indirizzo</strong>
+                            <br />
+                            Via Puricelli 1
+                            <br />
+                            Gallarate 21013 (VA) - Italia
+                        </p>
+                        <p className={classes.paragrafiSedeLegale}>
+                            <strong className={classes.strong}>Contatti</strong>
+                            <br />
+                            amministrazione@miesgroup.it
+                        </p>
+                        <p className={classes.paragrafiSedeLegale}>
+                            <strong className={classes.strong}>Orari di apertura</strong>
+                            <br />
+                            Lun-Ven: 9:00-18:00
+                        </p>
+                    </div>
+                </aside>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default Contatti;

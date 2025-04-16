@@ -3,7 +3,7 @@ import classes from '@/app/servizi/sistema-monitoraggio/page.module.css';
 export default function SistemaMonitoraggio() {
     return (
         <div className={classes.container}>
-            <img src="/OneView.jpg" className={classes.imgDiagnosi} alt="Logo"/>
+            <img src="/OneView.webp" className={classes.imgDiagnosi} alt="Logo"/>
             <div className={classes.textTitle}>
                 <h1 className={classes.titoloServizi}>
                     OneView: Riduce<br></br>
@@ -39,12 +39,12 @@ export default function SistemaMonitoraggio() {
                         migliori tecnologie presenti a mercato.
                     </p>
                 </div>
-                <img src="/OneViewCrescita.jpg" className={classes.sectionImage} alt="Immagine 1"/>
+                <img src="/OneViewCrescita.webp" className={classes.sectionImage} alt="Immagine 1"/>
             </div>
 
             <div className={classes.cardsContainerRev}>
                 <img
-                    src="/OneViewDinamico.jpg" className={classes.sectionImage} alt="Immagine degli Strumenti"
+                    src="/OneViewDinamico.webp" className={classes.sectionImage} alt="Immagine degli Strumenti"
                 />
                 <div className={classes.textContainer}>
                     <h2 className={classes.sectionTitle}>Dinamico e sempre aggiornato</h2>
@@ -71,7 +71,7 @@ export default function SistemaMonitoraggio() {
                         così di verificarne in anticipo i reali risparmi e i benefici prestazionali.
                     </p>
                 </div>
-                <img src="/OneViewRisparmio.jpg" className={classes.sectionImage} alt="Immagine 1"/>
+                <img src="/OneViewRisparmio.webp" className={classes.sectionImage} alt="Immagine 1"/>
             </div>
         </div>
     );

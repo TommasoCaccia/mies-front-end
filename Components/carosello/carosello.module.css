@@ -1,24 +1,94 @@
-.carosello {
-    max-width: 100%;
+
+/* Contenitore del carousel */
+.carousel {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 70rem; /* 1120px circa */
     margin: 0 auto;
-    padding: 1rem;
+    border-radius: 0.5rem;  /* 8px */
 }
 
-.Immagine1 {
-    width: 100%; /* Adatta l'immagine alla larghezza del contenitore */
-    height: auto; /* Mantieni le proporzioni */
-    object-fit: cover; /* Assicura che l'immagine si adatti bene */
-    border-radius: 0.5rem;
+/* Slider: contenitore delle slide */
+.slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
 }
 
-@media (min-width: 768px) {
-    .carosello {
-        padding: 2rem;
-    }
+/* Ogni slide occupa il 100% del contenitore */
+.slide {
+    min-width: 100%;
+    transition: opacity 0.5s ease-in-out;
 }
 
-@media (min-width: 1024px) {
-    .carosello {
-        padding: 3rem;
+/* Stile dell'immagine */
+.image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Pulsanti di navigazione (freccia sinistra e destra) */
+.prev,
+.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    color: var(--arrow-color);
+    background-color: var(--arrow-bg);
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+    box-shadow: none; /* Rimuove eventuale ombreggiatura */
+}
+
+.prev:hover,
+.next:hover {
+    /* Per l'effetto hover puoi decidere di cambiare leggermente il background o rimanere trasparenti */
+    background-color: rgba(44, 77, 121, 0.1);
+}
+
+.prev {
+    left: 1rem;
+}
+
+.next {
+    right: 1rem;
+}
+
+/* Indicatori (dots) */
+.dots {
+    text-align: center;
+    position: absolute;
+    bottom: 1rem;
+    width: 100%;
+}
+
+.dot {
+    display: inline-block;
+    height: 0.75rem;
+    width: 0.75rem;
+    margin: 0 0.5rem;
+    background-color: var(--dot-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.activeDot,
+.dot:hover {
+    background-color: var(--dot-active);
+}
+
+/* Responsive per schermi piccoli */
+@media (max-width: 40rem) {
+    .prev,
+    .next {
+        font-size: 1.5rem;
+        padding: 0.5rem;
     }
 }

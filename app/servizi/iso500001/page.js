@@ -3,7 +3,7 @@ import classes from '@/app/servizi/iso500001/page.module.css';
 export default function Iso500001() {
     return (
         <div className={classes.container}>
-            <img src="/ISO50001.jpg" className={classes.imgDiagnosi} alt="Logo"/>
+            <img src="/ISO50001.webp" className={classes.imgDiagnosi} alt="Logo"/>
             <div className={classes.textTitle}>
                 <h1 className={classes.titoloServizi}>
                     ISO 50001
@@ -41,11 +41,11 @@ export default function Iso500001() {
                         aziendale</strong> riconosciuto sia in ambito europeo che internazionale.
                     </p>
                 </div>
-                <img src="/Vantaggi.jpg" className={classes.sectionImage} alt="Immagine 1"/>
+                <img src="/Vantaggi.webp" className={classes.sectionImage} alt="Immagine 1"/>
             </div>
 
             <div className={classes.cardsContainerRev}>
-                <img src="/Metodologia.jpg" className={classes.sectionImage} alt="Immagine degli Strumenti"/>
+                <img src="/Metodologia.webp" className={classes.sectionImage} alt="Immagine degli Strumenti"/>
                 <div className={classes.textContainer}>
                     <h2 className={classes.sectionTitle}>Metodologia</h2>
                     <p className={classes.sectionText}>

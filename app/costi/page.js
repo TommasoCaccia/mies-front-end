@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, FormControl } from 'react-bootstrap';
+import React, {useEffect, useRef, useState} from 'react';
+import {Button, FormControl} from 'react-bootstrap';
 import classes from '@/app/costi/page.module.css';
-import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from "@nextui-org/react";
+import {Table, TableHeader, TableBody, TableColumn, TableRow, TableCell} from "@nextui-org/react";
 import Swal from "sweetalert2";
+import ModalForm from "@/Components/ModalForm/modalForm";
 
 export default function DataEntry() {
     // Stato per i dati e la paginazione
@@ -20,8 +21,7 @@ export default function DataEntry() {
 
     // Altri stati
     const [file, setFile] = useState(null);
-    const [selectedIds, setSelectedIds] = useState([]);
-    const PATH_PRODUCTION = process.env.NEXT_PUBLIC_PATH_PRODUCTION;
+    const [ids, setIds] = useState([]);
     const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV;
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -48,7 +48,6 @@ export default function DataEntry() {
         section2: useRef(null)
     });
     const sidebarRef = useRef(null);
-    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         getCookie();
@@ -102,15 +101,6 @@ export default function DataEntry() {
         }
     };
 
-    const handleNavigation = (event, sectionId) => {
-        event.preventDefault();
-        const section = document.getElementById(sectionId);
-        if (section) {
-            section.scrollIntoView({ behavior: 'smooth' });
-        }
-        setIsOpen(false);
-    };
-
     // Funzioni per upload, download, modifica ed eliminazione
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -162,13 +152,13 @@ export default function DataEntry() {
                 document.body.appendChild(link);
                 link.click();
                 link.parentNode.removeChild(link);
-                await Swal.fire({ icon: 'success', text: 'Download dei dati avvenuto con successo' });
+                await Swal.fire({icon: 'success', text: 'Download dei dati avvenuto con successo'});
             } else {
-                await Swal.fire({ icon: 'error', text: 'Errore durante il download dei dati' });
+                await Swal.fire({icon: 'error', text: 'Errore durante il download dei dati'});
             }
         } catch (error) {
             console.error('Errore durante il download:', error);
-            await Swal.fire({ icon: 'error', text: 'Si è verificato un errore imprevisto' });
+            await Swal.fire({icon: 'error', text: 'Si è verificato un errore imprevisto'});
         }
     };
 
@@ -187,7 +177,7 @@ export default function DataEntry() {
             const response = await fetch(`${PATH_DEV}/costi/filtrati?${params.toString()}`, {
                 method: 'GET',
                 credentials: 'include',
-                headers: { 'Content-Type': 'application/json' }
+                headers: {'Content-Type': 'application/json'}
             });
             if (response.ok) {
                 const responseData = await response.json();
@@ -209,12 +199,16 @@ export default function DataEntry() {
         const response = await fetch(`${PATH_DEV}/costi/delete/${id}`, {
             method: 'DELETE',
             credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
         });
         if (response.ok) {
-            await Swal.fire({
+            Swal.fire({
                 icon: "success",
-                text: "Costo eliminato con successo, ricarica la pagina per visualizzare i cambiamenti"
+                text: "Eliminazione avvenuta con successo",
+                timer: 2000, // Il messaggio scompare dopo 2 secondi
+                showConfirmButton: false
+            }).then(() => {
+                fetchCostiFiltrati(page, size); // Richiama la funzione per ricaricare i costi
             });
         } else {
             await Swal.fire({
@@ -223,6 +217,41 @@ export default function DataEntry() {
             });
         }
     };
+
+    const deleteCosti = async (ids) => {
+        try {
+            const response = await fetch(`${PATH_DEV}/costi/delete-ids`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(ids),
+            });
+
+            if (!response.ok) {
+                Swal.fire({
+                    icon: "error",
+                    text: "Errore durante l'eliminazione dei costi selezionati:" + response.statusText
+                })
+                console.error("Errore nell'eliminazione dei dati:", response.statusText);
+                return null;
+            }
+
+            const data = await response.json();
+            console.log("Costi eliminati:");
+            await Swal.fire({
+                icon: "success",
+                text: "Costi eliminati con successo",
+                timer: 2000, // Il messaggio scompare dopo 2 secondi
+                showConfirmButton: false
+            }).then(() => {
+                fetchCostiFiltrati(page, size); // Richiama la funzione per ricaricare i costi
+            });
+            return data;
+        } catch (error) {
+            console.error("Errore nella fetch dei costi:", error);
+        }
+    };
+
 
     // Handlers per i nuovi filtri
     const handleFilterCategoria = (e) => {
@@ -243,39 +272,20 @@ export default function DataEntry() {
 
     // Funzione per il toggle delle checkbox
     const handleToggleCheckbox = (id) => {
-        if (selectedIds.includes(id)) {
-            setSelectedIds(selectedIds.filter(selectedId => selectedId !== id));
+        if (ids.includes(id)) {
+            setIds(ids.filter(selectedId => selectedId !== id));
         } else {
-            setSelectedIds([...selectedIds, id]);
+            setIds([...ids, id]);
         }
     };
 
-    // Funzione per inviare gli id selezionati
-    const handleSubmitSelected = async () => {
-        try {
-            const response = await fetch('/api/submit-ids', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(selectedIds),
-            });
-            if (!response.ok) {
-                console.error("Errore nell'invio dei dati");
-                return;
-            }
-            const result = await response.json();
-            console.log("Dati inviati correttamente:", result);
-        } catch (error) {
-            console.error("Errore nella fetch:", error);
-        }
-    };
 
     // Funzioni per il form di modifica
-    const handleSelectRow = (index) => {
+    const handleSelectRow = (index, id) => {
         setIsFormVisible(true);
         const rowData = filteredData[index];
         setSelectedIndex(index);
-        setEditRowData({ ...rowData });
-        formRef.current.scrollIntoView({ behavior: "smooth" });
+        setEditRowData({...rowData, id});
     };
 
     const handleCancel = () => {
@@ -288,19 +298,27 @@ export default function DataEntry() {
         updatedData[selectedIndex] = editRowData;
         const response = await fetch(`${PATH_DEV}/costi/update`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(editRowData)
         });
         if (response.ok) {
             setSelectedIndex(null);
             setEditRowData({});
             setIsFormVisible(false);
-            window.location.href = '/costi';
+            Swal.fire({
+                icon: "success",
+                text: "Modifiche salvate con successo",
+                timer: 2000, // Il messaggio scompare dopo 2 secondi
+                showConfirmButton: false
+            }).then(() => {
+                fetchCostiFiltrati(page, size); // Richiama la funzione per ricaricare i costi
+            });
         } else {
             await Swal.fire({
                 icon: "error",
                 text: "Errore durante il salvataggio delle modifiche"
             });
+            console.log("modifiche: " + JSON.stringify(editRowData));
         }
     };
 
@@ -353,7 +371,7 @@ export default function DataEntry() {
                     value={filterAnno}
                     onChange={handleFilterAnno}
                     className="ml-3"
-                    style={{ marginLeft: '10px' }}
+                    style={{marginLeft: '10px'}}
                 />
                 <FormControl
                     type="text"
@@ -361,14 +379,14 @@ export default function DataEntry() {
                     value={filterAnnoRiferimento}
                     onChange={handleFilterAnnoRiferimento}
                     className="ml-3"
-                    style={{ marginLeft: '10px' }}
+                    style={{marginLeft: '10px'}}
                 />
                 <FormControl
                     as="select"
                     value={filterIntervalloPotenza}
                     onChange={handleFilterIntervalloPotenza}
                     className="ml-3"
-                    style={{ marginLeft: '10px' }}
+                    style={{marginLeft: '10px'}}
                 >
                     <option value="">Filtra per Intervallo di Potenza</option>
                     <option value=">500KW">+500KW</option>
@@ -384,12 +402,12 @@ export default function DataEntry() {
                                 type="checkbox"
                                 onChange={(e) => {
                                     if (e.target.checked) {
-                                        setSelectedIds(filteredData.map(costo => costo.id));
+                                        setIds(filteredData.map(costo => costo.id));
                                     } else {
-                                        setSelectedIds([]);
+                                        setIds([]);
                                     }
                                 }}
-                                checked={filteredData.length > 0 && filteredData.every(costo => selectedIds.includes(costo.id))}
+                                checked={filteredData.length > 0 && filteredData.every(costo => ids.includes(costo.id))}
                             />
                         </TableColumn>
                         <TableColumn>N.riga</TableColumn>
@@ -411,7 +429,7 @@ export default function DataEntry() {
                                 <TableCell>
                                     <input
                                         type="checkbox"
-                                        checked={selectedIds.includes(costo.id)}
+                                        checked={ids.includes(costo.id)}
                                         onChange={() => handleToggleCheckbox(costo.id)}
                                     />
                                 </TableCell>
@@ -426,10 +444,10 @@ export default function DataEntry() {
                                 <TableCell>{costo.classeAgevolazione}</TableCell>
                                 <TableCell>{costo.annoRiferimento}</TableCell>
                                 <TableCell>
-                                    <Button onClick={() => handleSelectRow(index)}>Modifica</Button>
+                                    <Button onClick={() => handleSelectRow(index, costo.id)}>Modifica</Button>
                                 </TableCell>
                                 <TableCell>
-                                    <Button variant="danger" onClick={() => verificaEliminazione(costo.id)}>
+                                    <Button variant="danger" onClick={() => deleteCosto(costo.id)}>
                                         Elimina
                                     </Button>
                                 </TableCell>
@@ -437,7 +455,8 @@ export default function DataEntry() {
                         ))}
                     </TableBody>
                 </Table>
-                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div
+                    style={{marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Button onClick={() => setPage(page - 1)} disabled={page === 0}>
                         Precedente
                     </Button>
@@ -446,117 +465,18 @@ export default function DataEntry() {
                         Successiva
                     </Button>
                 </div>
-                <div style={{ marginTop: '10px' }}>
-                    <Button onClick={handleSubmitSelected}>Invia Selezione</Button>
+                <div style={{marginTop: '10px'}}>
+                    <Button onClick={deleteCosti}>Invia Selezione</Button>
                 </div>
             </div>
-            {isFormVisible ? (
-                <div ref={formRef} className={classes.containerFormModifica}>
-                    {selectedIndex !== null && (
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                handleSaveChanges();
-                            }}
-                        >
-                            <label>
-                                Descrizione:
-                                <input
-                                    type="text"
-                                    value={editRowData.descrizione}
-                                    onChange={(e) =>
-                                        setEditRowData({ ...editRowData, descrizione: e.target.value })
-                                    }
-                                />
-                            </label>
-                            <label>
-                                Unità di Misura:
-                                <input
-                                    type="text"
-                                    value={editRowData.unitaMisura}
-                                    onChange={(e) =>
-                                        setEditRowData({ ...editRowData, unitaMisura: e.target.value })
-                                    }
-                                />
-                            </label>
-                            <label>
-                                Trimestre:
-                                <input
-                                    type="text"
-                                    value={editRowData.trimestre}
-                                    onChange={(e) =>
-                                        setEditRowData({ ...editRowData, trimestre: e.target.value })
-                                    }
-                                />
-                            </label>
-                            <label>
-                                Anno:
-                                <input
-                                    type="number"
-                                    value={editRowData.anno}
-                                    onChange={(e) =>
-                                        setEditRowData({ ...editRowData, anno: e.target.value })
-                                    }
-                                />
-                            </label>
-                            <label>
-                                Valore:
-                                <input
-                                    type="number"
-                                    value={editRowData.costo}
-                                    onChange={(e) =>
-                                        setEditRowData({ ...editRowData, costo: e.target.value })
-                                    }
-                                />
-                            </label>
-                            <label>
-                                Categoria:
-                                <input
-                                    type="text"
-                                    value={editRowData.categoria}
-                                    onChange={(e) =>
-                                        setEditRowData({ ...editRowData, categoria: e.target.value })
-                                    }
-                                />
-                            </label>
-                            <label>
-                                Intervallo di Potenza:
-                                <input
-                                    type="text"
-                                    value={editRowData.intervalloPotenza}
-                                    onChange={(e) =>
-                                        setEditRowData({ ...editRowData, intervalloPotenza: e.target.value })
-                                    }
-                                />
-                            </label>
-                            <label>
-                                Classe di Agevolazione:
-                                <input
-                                    type="text"
-                                    value={editRowData.classeAgevolazione}
-                                    onChange={(e) =>
-                                        setEditRowData({ ...editRowData, classeAgevolazione: e.target.value })
-                                    }
-                                />
-                            </label>
-                            <label>
-                                Anno di Riferimento:
-                                <input
-                                    type="text"
-                                    value={editRowData.annoRiferimento}
-                                    onChange={(e) =>
-                                        setEditRowData({ ...editRowData, annoRiferimento: e.target.value })
-                                    }
-                                />
-                            </label>
-                            <button type="submit">Salva modifiche</button>
-                            <button type="button" onClick={handleCancel}>Annulla</button>
-                        </form>
-                    )}
-                </div>
-            ) : (
-                <div ref={formRef}></div>
-            )}
+            <ModalForm
+                isOpen={isFormVisible}
+                selectedIndex={selectedIndex}
+                editRowData={editRowData}
+                setEditRowData={setEditRowData}
+                handleSaveChanges={handleSaveChanges}
+                handleCancel={handleCancel}
+            />
         </div>
     );
 }

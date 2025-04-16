@@ -3,7 +3,7 @@ import classes from '@/app/servizi/engineering/page.module.css';
 export default function Enegineering() {
     return (
         <div className={classes.container}>
-            <img src="/Engineering.jpg" className={classes.imgDiagnosi} alt="Logo"/>
+            <img src="/Engineering.webp" className={classes.imgDiagnosi} alt="Logo"/>
             <div className={classes.textTitle}>
                 <h1 className={classes.titoloServizi}>
                     ENGINEERING, IL SUPPORTO CONCRETO<br></br>
@@ -37,12 +37,12 @@ export default function Enegineering() {
                         eventuali integrazioni impiantistiche, free cooling…
                     </p>
                 </div>
-                <img src="/Refrigerazione.jpg" className={classes.sectionImage} alt="Immagine 1"/>
+                <img src="/Refrigerazione.webp" className={classes.sectionImage} alt="Immagine 1"/>
             </div>
 
             <div className={classes.cardsContainerRev}>
                 <img
-                    src="/Compressore.jpg" className={classes.sectionImage} alt="Immagine degli Strumenti"
+                    src="/Compressore.webp" className={classes.sectionImage} alt="Immagine degli Strumenti"
                 />
                 <div className={classes.textContainer}>
                     <h2 className={classes.sectionTitle}>Aria compressa</h2>
@@ -78,12 +78,12 @@ export default function Enegineering() {
                         recupero dei flussi caldi presenti…
                     </p>
                 </div>
-                <img src="/CentraleTermica.jpg" className={classes.sectionImage} alt="Immagine 1"/>
+                <img src="/CentraleTermica.webp" className={classes.sectionImage} alt="Immagine 1"/>
             </div>
 
             <div className={classes.cardsContainerRev}>
                 <img
-                    src="/CentraleTermica2.jpg" className={classes.sectionImage} alt="Immagine degli Strumenti"
+                    src="/CentraleTermica2.webp" className={classes.sectionImage} alt="Immagine degli Strumenti"
                 />
                 <div className={classes.textContainer}>
                     <h2 className={classes.sectionTitle}>Processo produttivo</h2>

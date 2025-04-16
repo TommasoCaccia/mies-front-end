@@ -6,7 +6,7 @@ export default function Home() {
     return (
         <>
             <div className={`container ${classes.container}`}>
-                <img src="/Diagnosi.jpg" className={`${classes.imgServizi} d-block`} alt="Logo"/>
+                <img src="/Diagnosi.webp" className={`${classes.imgServizi} d-block`} alt="Logo"/>
                 <div className={classes.textContainer}>
                     <h1 className={classes.titoloServizi}>I SERVIZI DI MIES</h1>
                     <p className={classes.paragrafoServizi}>

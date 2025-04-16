@@ -1,6 +1,6 @@
 "use client";
 import classes from './dipendenti.module.css';
-import icon from '@/public/images.png';
+import icon from '@/public/images.webp';
 import React from "react";
 import Image from "next/image";
 

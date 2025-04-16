@@ -23,6 +23,7 @@ export default function Pod() {
         f3_perdite: 0,
     });
     const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const PATH_DEV = process.env.NEXT_PUBLIC_PATH_DEV;
 
@@ -64,15 +65,13 @@ export default function Pod() {
     };
 
     const handleFileChange = (event) => {
-
-
         setFile(event.target.files[0]);
     };
+
     const handleSubmit = async (event) => {
-
         event.preventDefault();
-        // Verifica se è stato selezionato un file
 
+        // Se non è stato selezionato alcun file, mostra un alert
         if (!file) {
             await Swal.fire({
                 icon: 'error',
@@ -81,11 +80,14 @@ export default function Pod() {
             });
             return;
         }
-        // Crea un FormData con il file caricato
+
+        // Imposta lo state di loading
+        setIsLoading(true);
 
         const formData = new FormData();
         formData.append('fileName', file.name);
         formData.append('fileData', file);
+
         try {
             // Effettua la richiesta al server
             const response = await fetch(`${PATH_DEV}/files/upload`, {
@@ -94,21 +96,17 @@ export default function Pod() {
                 credentials: 'include'
             });
 
-            // Leggi il contenuto della risposta come testo
             const responseText = await response.text();
 
             if (response.ok) {
-                // Mostra un messaggio di successo con il contenuto della risposta
                 await Swal.fire({
                     icon: 'success',
                     title: 'Successo',
                     text: responseText || 'File caricato e processato con successo.'
                 });
-
-                // Reindirizzamento se necessario
-                await fetchPods();
+                // Esempio: puoi chiamare una funzione per aggiornare il contenuto, se necessario
+                // await fetchPods();
             } else {
-                // Mostra il messaggio di errore dal server
                 await Swal.fire({
                     icon: 'error',
                     title: 'Errore',
@@ -116,16 +114,18 @@ export default function Pod() {
                 });
             }
         } catch (error) {
-            // Gestione degli errori di rete o di esecuzione
             console.error("Errore nella richiesta:", error);
             await Swal.fire({
                 icon: 'error',
                 title: 'Errore',
                 text: 'Si è verificato un errore imprevisto. Riprova più tardi.'
             });
+        } finally {
+            // Al termine della richiesta, reinizializza lo state di loading
+            setIsLoading(false);
         }
-
     };
+
     const updatePod = async (podId) => {
 
 
@@ -363,8 +363,12 @@ export default function Pod() {
                     <form onSubmit={handleSubmit} className={classes.formBolletta}>
                         <input type="file" accept="application/pdf" onChange={handleFileChange}
                                className="form-control"/>
-                        <button type="submit" className={`btn btn-primary mt-3 ${classes.bottoneCarica}`}>
-                            Carica
+                        <button
+                            type="submit"
+                            className={`btn btn-primary mt-3 ${classes.bottoneCarica}`}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? <span className={classes.spinner}></span> : "Carica"}
                         </button>
                     </form>
                 </div>

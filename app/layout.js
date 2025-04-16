@@ -19,12 +19,14 @@ export default function RootLayout({children}) {
     return (
         <html lang="en">
         <body className={inter.className}>
-        <MainHeader/>
-        <BackToTop/>
-        <Suspense fallback={<Loading/>}>
-            {children}
-        </Suspense>
-        <MainFooter/>
+        <div id="__next">
+            <MainHeader/>
+            <BackToTop/>
+            <Suspense fallback={<Loading/>}>
+                {children}
+            </Suspense>
+            <MainFooter/>
+        </div>
         </body>
         </html>
     );

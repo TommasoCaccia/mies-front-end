@@ -3,7 +3,7 @@ import classes from '@/app/servizi/diagnosi-energetica/page.module.css';
 export default function DiagnosiEnergetica() {
     return (
         <>
-            <img src="/Diagnosi.jpg" className={classes.imgDiagnosi} alt="Logo"/>
+            <img src="/Diagnosi.webp" className={classes.imgDiagnosi} alt="Logo"/>
             <div className={classes.container}>
                 <div className={classes.textTitle}>
                     <h1 className={classes.titoloServizi}>
@@ -34,11 +34,11 @@ export default function DiagnosiEnergetica() {
                             parità di servizi offerti.
                         </p>
                     </div>
-                    <img src="/Opportunita.jpg" className={classes.sectionImage} alt="Immagine 1"/>
+                    <img src="/Opportunita.webp" className={classes.sectionImage} alt="Immagine 1"/>
                 </div>
 
                 <div className={classes.cardsContainerRev}>
-                    <img src="/Strumenti.jpg" className={classes.sectionImage} alt="Immagine degli Strumenti"/>
+                    <img src="/Strumenti.webp" className={classes.sectionImage} alt="Immagine degli Strumenti"/>
                     <div className={classes.textContainer}>
                         <h2 className={classes.sectionTitle}>Strumenti e Soluzioni</h2>
                         <p className={classes.sectionText}>
