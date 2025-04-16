@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import Modal from 'react-modal';
-import classes from '@/Components/ModalForm/modalForm.module.css'; // Assicurati che il percorso sia corretto
+import classes from '@/Components/ModalForm/ModalForm.module.css'; // Assicurati che il percorso sia corretto
 
 // Imposta l'elemento app per l'accessibilità (usa 'body' oppure aggiungi il div con id appropriato nel RootLayout)
 Modal.setAppElement('body');
