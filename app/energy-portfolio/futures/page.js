@@ -6,7 +6,6 @@ import {motion} from "framer-motion";
 import dynamic from "next/dynamic";
 import {futures} from '@/Components/PBI/reportsConfig';
 
-
 const DynamicPowerBIReport = dynamic(() => import('../../../Components/PBI/DynamicPowerBIReport'), {ssr: false});
 
 export default function Home() {
@@ -25,13 +24,9 @@ export default function Home() {
     const [maximumLevelMonthly, setMaximumLevelMonthly] = useState("");
 
     const [checkModality, setCheckModality] = useState(false);
-    const [frequencyAlert, setFrequencyAlert] = useState("Weekly And Monthly");
     const [checkModalityYearly, setCheckModalityYearly] = useState(false);
-    const [frequencyYearly, setFrequencyYearly] = useState("Weekly And Monthly");
     const [checkModalityQuarterly, setCheckModalityQuarterly] = useState(false);
-    const [frequencyQuarterly, setFrequencyQuarterly] = useState("Weekly And Monthly");
     const [checkModalityMonthly, setCheckModalityMonthly] = useState(false);
-    const [frequencyMonthly, setFrequencyMonthly] = useState("Weekly And Monthly")
 
     const [futuresType, setFuturesType] = useState("General");
 
@@ -140,44 +135,124 @@ export default function Home() {
     }, []);
 
 
-    const getLimit = () => {
-        if (checkModality === 'percentage') {
-            return 100; // Limite per la percentuale
+    // Funzioni di validazione migliorate per essere utilizzate con il JSX aggiornato
+
+// Funzione per ottenere il limite corretto in base alla modalità
+    const getLimit = (modalityType) => {
+        // Controlla quale modalità è attiva in base al parametro
+        switch (modalityType) {
+            case 'general':
+                return checkModality ? 100 : 400;
+            case 'yearly':
+                return checkModalityYearly ? 100 : 400;
+            case 'quarterly':
+                return checkModalityQuarterly ? 100 : 400;
+            case 'monthly':
+                return checkModalityMonthly ? 100 : 400;
+            default:
+                return 400; // Default fallback
         }
-        return 400; // Limite per il valore
     };
 
-// Funzioni di controllo per gli input
-    const handleMinimumLevelBlur = (level, setLevel, setError) => {
-        const limit = getLimit();
-        const value = parseFloat(level);
+// Funzione per verificare la relazione tra minimo e massimo
+    const checkRangeError = (min, max, setRangeError) => {
+        const minValue = parseFloat(min);
+        const maxValue = parseFloat(max);
 
-        // Verifica se il valore è tra 0 e il limite
-        if (value < 0 || value > limit) {
-            setError(true);
-        } else {
-            setError(false);
-        }
-    };
-
-    const handleMaximumLevelBlur = (level, setLevel, setError, minLevel, setRangeError) => {
-        const limit = getLimit();
-        const value = parseFloat(level);
-
-        // Verifica se il valore è tra 0 e il limite
-        if (value < 0 || value > limit) {
-            setError(true);
-        } else {
-            setError(false);
-        }
-
-        // Controllo se il massimo è minore del minimo
-        if (parseFloat(level) < parseFloat(minLevel) && minLevel !== '') {
+        if (!isNaN(minValue) && !isNaN(maxValue) && minValue > maxValue) {
             setRangeError(true);
         } else {
             setRangeError(false);
         }
     };
+
+// Funzione per la validazione del minimo
+    const handleMinimumLevelBlur = (level, setLevel, setError, maxLevel, setRangeError, modalityType) => {
+        const limit = getLimit(modalityType);
+        const value = parseFloat(level);
+
+        // Verifica se il valore è tra 0 e il limite
+        if (isNaN(value) || value < 0 || value > limit) {
+            setError(true);
+        } else {
+            setError(false);
+        }
+
+        // Verifica la relazione minimo/massimo
+        if (maxLevel !== '') {
+            checkRangeError(level, maxLevel, setRangeError);
+        }
+    };
+
+// Funzione per la validazione del massimo
+    const handleMaximumLevelBlur = (level, setLevel, setError, minLevel, setRangeError, modalityType) => {
+        const limit = getLimit(modalityType);
+        const value = parseFloat(level);
+
+        // Verifica se il valore è tra 0 e il limite
+        if (isNaN(value) || value < 0 || value > limit) {
+            setError(true);
+        } else {
+            setError(false);
+        }
+
+        // Verifica la relazione minimo/massimo
+        if (minLevel !== '') {
+            checkRangeError(minLevel, level, setRangeError);
+        }
+    };
+
+// UseEffect per rieseguire le validazioni quando cambia la modalità general
+    useEffect(() => {
+        // Validazione General
+        if (minimumLevel !== '') {
+            handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError,
+                maximumLevel, setRangeError, 'general');
+        }
+        if (maximumLevel !== '') {
+            handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError,
+                minimumLevel, setRangeError, 'general');
+        }
+    }, [checkModality]);
+
+// UseEffect per la sezione Yearly
+    useEffect(() => {
+        // Validazione Yearly
+        if (minimumLevelYearly !== '') {
+            handleMinimumLevelBlur(minimumLevelYearly, setMinimumLevelYearly, setMinimumLevelYearlyError,
+                maximumLevelYearly, setRangeYearlyError, 'yearly');
+        }
+        if (maximumLevelYearly !== '') {
+            handleMaximumLevelBlur(maximumLevelYearly, setMaximumLevelYearly, setMaximumLevelYearlyError,
+                minimumLevelYearly, setRangeYearlyError, 'yearly');
+        }
+    }, [checkModalityYearly]);
+
+// UseEffect per la sezione Quarterly
+    useEffect(() => {
+        // Validazione Quarterly
+        if (minimumLevelQuarterly !== '') {
+            handleMinimumLevelBlur(minimumLevelQuarterly, setMinimumLevelQuarterly, setMinimumLevelQuarterlyError,
+                maximumLevelQuarterly, setRangeQuarterlyError, 'quarterly');
+        }
+        if (maximumLevelQuarterly !== '') {
+            handleMaximumLevelBlur(maximumLevelQuarterly, setMaximumLevelQuarterly, setMaximumLevelQuarterlyError,
+                minimumLevelQuarterly, setRangeQuarterlyError, 'quarterly');
+        }
+    }, [checkModalityQuarterly]);
+
+// UseEffect per la sezione Monthly
+    useEffect(() => {
+        // Validazione Monthly
+        if (minimumLevelMonthly !== '') {
+            handleMinimumLevelBlur(minimumLevelMonthly, setMinimumLevelMonthly, setMinimumLevelMonthlyError,
+                maximumLevelMonthly, setRangeMonthlyError, 'monthly');
+        }
+        if (maximumLevelMonthly !== '') {
+            handleMaximumLevelBlur(maximumLevelMonthly, setMaximumLevelMonthly, setMaximumLevelMonthlyError,
+                minimumLevelMonthly, setRangeMonthlyError, 'monthly');
+        }
+    }, [checkModalityMonthly]);
 
     useEffect(() => {
         if (deleteAlert.active) {
@@ -208,24 +283,38 @@ export default function Home() {
             }
 
             const data = await response.text(); // Il backend restituisce TEXT_PLAIN
-            if (data == "ok") {
+
+            if (data == "Nessun alert attivo") {
                 // Se tutto è corretto, invia direttamente l'email
                 sendEmail();
             } else {
-                /*
-                                if (!(String(minimumLevel).trim()) || !(String(maximumLevel).trim()) || !(String(minimumLevelYearly).trim()) ||
-                                    !(String(maximumLevelYearly).trim()) || !(String(minimumLevelQuarterly).trim()) || !(String(maximumLevelQuarterly).trim()) ||
-                                    !(String(minimumLevelMonthly).trim()) || !(String(maximumLevelMonthly).trim())){
-                                    Swal.fire({
-                                        icon: "warning",
-                                        title: "Attention!",
-                                        text: "Please fill in all required fields before proceeding.",
-                                        confirmButtonText: "OK",
-                                    });
-                                    return; // Interrompe l'esecuzione
-                                }
+                // Valida solo i campi relativi al tipo di futures selezionato
+                let isValid = true;
 
-                 */
+                if (futuresType === "All") {
+                    if (!(String(minimumLevelYearly).trim()) || !(String(maximumLevelYearly).trim())) {
+                        isValid = false;
+                    }else if (!(String(minimumLevelQuarterly).trim()) || !(String(maximumLevelQuarterly).trim())) {
+                        isValid = false;
+                    }else if (!(String(minimumLevelMonthly).trim()) || !(String(maximumLevelMonthly).trim())) {
+                        isValid = false;
+                    }
+                } else {
+                    if (!(String(minimumLevel).trim()) || !(String(maximumLevel).trim())) {
+                        isValid = false;
+                    }
+                }
+
+                if (!isValid) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Attention!",
+                        text: "Please fill in all required fields before proceeding.",
+                        confirmButtonText: "OK",
+                    });
+                    return; // Interrompe l'esecuzione
+                }
+
                 Swal.fire({
                     icon: "warning",
                     title: "Attention!",
@@ -237,7 +326,6 @@ export default function Home() {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // L'utente ha premuto "Continua"
-                        alert("isConfirmed")
                         setDeleteAlert({active: true, message: data});
                     }
                 });
@@ -269,7 +357,6 @@ export default function Home() {
             }
 
             const data = await response.json();
-            alert(JSON.stringify(data, null, 2));
             // Assicuriamoci che `alertData` sia effettivamente un array prima di iterarlo
             if (!data.alerts || !Array.isArray(data.alerts)) {
                 console.log("Errore: alertData non è un array valido", data);
@@ -277,10 +364,10 @@ export default function Home() {
             }
 
             let check = [false, false, false]; // [Yearly, Quarterly, Monthly]
-            let minimumLevelYearly, maximumLevelYearly, checkModalityYearly, frequencyYearly;
-            let minimumLevelQuarterly, maximumLevelQuarterly, checkModalityQuarterly, frequencyQuarterly;
-            let minimumLevelMonthly, maximumLevelMonthly, checkModalityMonthly, frequencyMonthly;
-            let minimumLevel, maximumLevel, checkModality, frequencyAlert;
+            let minimumLevelYearly, maximumLevelYearly, checkModalityYearly;
+            let minimumLevelQuarterly, maximumLevelQuarterly, checkModalityQuarterly;
+            let minimumLevelMonthly, maximumLevelMonthly, checkModalityMonthly;
+            let minimumLevel, maximumLevel, checkModality;
 
             data.alerts.forEach((alertFutures) => {
 
@@ -296,28 +383,24 @@ export default function Home() {
                         minimumLevelYearly = alertFutures.minPriceValue || "";
                         maximumLevelYearly = alertFutures.maxPriceValue || "";
                         checkModalityYearly = !!alertFutures.checkModality;
-                        frequencyYearly = alertFutures.frequencyA || "Weekly and Monthly";
                         check[0] = true;  // Imposta Yearly a true
                         break;
                     case "Quarterly":
                         minimumLevelQuarterly = alertFutures.minPriceValue || "";
                         maximumLevelQuarterly = alertFutures.maxPriceValue || "";
                         checkModalityQuarterly = !!alertFutures.checkModality;
-                        frequencyQuarterly = alertFutures.frequencyA || "Weekly and Monthly";
                         check[1] = true;  // Imposta Quarterly a true
                         break;
                     case "Monthly":
                         minimumLevelMonthly = alertFutures.minPriceValue || "";
                         maximumLevelMonthly = alertFutures.maxPriceValue || "";
                         checkModalityMonthly = !!alertFutures.checkModality;
-                        frequencyMonthly = alertFutures.frequencyA || "Weekly and Monthly";
                         check[2] = true;  // Imposta Monthly a true
                         break;
                     case "General":
                         minimumLevel = alertFutures.minPriceValue || "";
                         maximumLevel = alertFutures.maxPriceValue || "";
                         checkModality = !!alertFutures.checkModality;
-                        frequencyAlert = alertFutures.frequencyA || "Weekly and Monthly";
                         break;
                     default:
                         console.warn(`Tipo di alert non riconosciuto: ${normalizedFuturesType}`);
@@ -329,39 +412,32 @@ export default function Home() {
                 setMinimumLevelYearly(minimumLevelYearly);
                 setMaximumLevelYearly(maximumLevelYearly);
                 setCheckModalityYearly(checkModalityYearly);
-                setFrequencyYearly(frequencyYearly);
                 setMinimumLevelQuarterly(minimumLevelQuarterly);
                 setMaximumLevelQuarterly(maximumLevelQuarterly);
                 setCheckModalityQuarterly(checkModalityQuarterly);
-                setFrequencyQuarterly(frequencyQuarterly);
                 setMinimumLevelMonthly(minimumLevelMonthly);
                 setMaximumLevelMonthly(maximumLevelMonthly);
                 setCheckModalityMonthly(checkModalityMonthly);
-                setFrequencyMonthly(frequencyMonthly);
             } else if (check[0]) {
                 setFuturesType("Yearly");
                 setMinimumLevel(minimumLevelYearly);
                 setMaximumLevel(maximumLevelYearly);
                 setCheckModality(checkModalityYearly);
-                setFrequencyAlert(frequencyYearly);
             } else if (check[1]) {
                 setFuturesType("Quarterly");
                 setMinimumLevel(minimumLevelQuarterly);
                 setMaximumLevel(maximumLevelQuarterly);
                 setCheckModality(checkModalityQuarterly);
-                setFrequencyAlert(frequencyQuarterly);
             } else if (check[2]) {
                 setFuturesType("Monthly");
                 setMinimumLevel(minimumLevelMonthly);
                 setMaximumLevel(maximumLevelMonthly);
                 setCheckModality(checkModalityMonthly);
-                setFrequencyAlert(frequencyMonthly);
             } else {
                 setFuturesType("General");
                 setMinimumLevel(minimumLevel);
                 setMaximumLevel(maximumLevel);
                 setCheckModality(checkModality);
-                setFrequencyAlert(frequencyAlert);
             }
 
             setActiveAlert(data.checkEmail || false);
@@ -376,12 +452,26 @@ export default function Home() {
     }, []);
     useEffect(() => {
 
-    }, [checkModalityMonthly, checkModalityQuarterly, checkModalityYearly, frequencyYearly, frequencyQuarterly, frequencyMonthly]);
+    }, [checkModalityMonthly, checkModalityQuarterly, checkModalityYearly]);
 
 // Funzione per inviare l'email
     const sendEmail = async () => {
-        // Verifica se ci sono errori
-        const hasErrors = minimumLevelError || maximumLevelError || rangeError || minimumLevelYearlyError || maximumLevelYearlyError || rangeYearlyError || minimumLevelQuarterlyError || maximumLevelQuarterlyError || rangeQuarterlyError || minimumLevelMonthlyError || maximumLevelMonthlyError || rangeMonthlyError;
+        // Verifica se ci sono errori in base al tipo di futures selezionato
+        let hasErrors = false;
+
+        if (futuresType === "General") {
+            hasErrors = minimumLevelError || maximumLevelError || rangeError;
+        } else if (futuresType === "Yearly") {
+            hasErrors = minimumLevelYearlyError || maximumLevelYearlyError || rangeYearlyError;
+        } else if (futuresType === "Quarterly") {
+            hasErrors = minimumLevelQuarterlyError || maximumLevelQuarterlyError || rangeQuarterlyError;
+        } else if (futuresType === "Monthly") {
+            hasErrors = minimumLevelMonthlyError || maximumLevelMonthlyError || rangeMonthlyError;
+        } else if (futuresType === "All") {
+            hasErrors = minimumLevelYearlyError || maximumLevelYearlyError || rangeYearlyError ||
+                minimumLevelQuarterlyError || maximumLevelQuarterlyError || rangeQuarterlyError ||
+                minimumLevelMonthlyError || maximumLevelMonthlyError || rangeMonthlyError;
+        }
 
         // Se ci sono errori, non inviare l'email
         if (hasErrors) {
@@ -394,10 +484,37 @@ export default function Home() {
             return; // Ferma l'esecuzione
         }
 
+        // Verifica che tutti i campi richiesti siano compilati in base al tipo di futures selezionato
+        let isValid = true;
+
+        if (futuresType === "All") {
+            if (!(String(minimumLevelYearly).trim()) || !(String(maximumLevelYearly).trim())) {
+                isValid = false;
+            }else if (!(String(minimumLevelQuarterly).trim()) || !(String(maximumLevelQuarterly).trim())) {
+                isValid = false;
+            }else if (!(String(minimumLevelMonthly).trim()) || !(String(maximumLevelMonthly).trim())) {
+                isValid = false;
+            }
+        } else {
+            if (!(String(minimumLevel).trim()) || !(String(maximumLevel).trim())) {
+                isValid = false;
+            }
+        }
+
+        if (!isValid) {
+            Swal.fire({
+                icon: "warning",
+                title: "Attention!",
+                text: "Please fill in all required fields before proceeding.",
+                confirmButtonText: "OK",
+            });
+            return; // Interrompe l'esecuzione
+        }
+
         try {
             let response;
             if (futuresType === "All") {
-                response = await fetch(`${PATH}/cliente/sendWeeklyEmail`, {
+                response = await fetch(`${PATH}/email/send-email`, {
                     method: "POST",
                     credentials: "include",
                     headers: {
@@ -407,15 +524,12 @@ export default function Home() {
                         minimumLevelYearly,
                         maximumLevelYearly,
                         checkModalityYearly,
-                        frequencyYearly,
                         minimumLevelQuarterly,
                         maximumLevelQuarterly,
                         checkModalityQuarterly,
-                        frequencyQuarterly,
                         minimumLevelMonthly,
                         maximumLevelMonthly,
                         checkModalityMonthly,
-                        frequencyMonthly,
                         futuresYearly,
                         futuresQuarterly,
                         futuresMonthly,
@@ -425,7 +539,7 @@ export default function Home() {
                     }),
                 });
             } else {
-                response = await fetch(`${PATH}/cliente/send-email`, {
+                response = await fetch(`${PATH}/email/send-email`, {
                     method: "POST",
                     credentials: "include",
                     headers: {
@@ -435,7 +549,6 @@ export default function Home() {
                         minimumLevel,
                         maximumLevel,
                         checkModality,
-                        frequencyAlert,
                         futuresType,
                         deleteAlert,
                         activeAlert
@@ -444,14 +557,29 @@ export default function Home() {
             }
 
             if (response.ok) {
-                alert(`Email inviata con successo!`);
+                Swal.fire({
+                    icon: "success",
+                    title: "Success!",
+                    text: "Email inviata con successo!",
+                    confirmButtonText: "OK",
+                });
             } else {
                 const errorText = await response.text();
-                alert(`Errore: ${errorText}`);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: `Errore: ${errorText}`,
+                    confirmButtonText: "OK",
+                });
             }
         } catch (error) {
             console.error("Errore durante l'invio dell'email:", error);
-            //alert("Si è verificato un errore durante l'invio dell'email.");
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Si è verificato un errore durante l'invio dell'email.",
+                confirmButtonText: "OK",
+            });
         }
     };
 
@@ -551,462 +679,560 @@ export default function Home() {
                 <motion.div id="Alert" ref={sectionRefs.current.Alert} className={classes.section} initial="hidden"
                             animate="visible" variants={sectionVariants}>
 
-                    <div id="Alert" ref={sectionRefs.current.Alert}>
-                        <div className={classes.alertContainer}>
-                            {/* Titolo "Email Alert" */}
-                            <h1 className={classes.alertTitle}>Email Alert</h1>
-                            {/* Futures type select */}
-                            <div className={classes.inputGroupHorizontal} style={{paddingTop: '5%'}}>
-                                <label className={classes.label}>Futures type</label>
-                                <select className={classes.select} value={futuresType}
-                                        onChange={(e) => setFuturesType(e.target.value)}>
-                                    <option value="General">General</option>
+                    <div className={classes.container}>
+                        <div className={classes.emailContent}>
+                            <h1 className={classes.pageTitle}>Email Alert</h1>
+
+                            <div className={classes.formGroup}>
+                                <label className={classes.label} htmlFor="futures-type">Futures type</label>
+                                <select
+                                    id="futures-type"
+                                    className={classes.select}
+                                    value={futuresType}
+                                    onChange={(e) => setFuturesType(e.target.value)}
+                                >
                                     <option value="All">All</option>
                                     <option value="Yearly">Yearly</option>
                                     <option value="Quarterly">Quarterly</option>
                                     <option value="Monthly">Monthly</option>
+                                    <option value="General">General</option>
                                 </select>
                             </div>
 
-                            {/* Conditionally render fields based on futuresType */}
                             {futuresType === "General" && (
-                                <div className={classes.converterContainer}>
-                                    {/* Input per il minimo */}
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Minimum level</label>
-                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`}
-                                               value={minimumLevel}
-                                               onChange={(e) => setMinimumLevel(e.target.value)}
-                                               onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
-                                               className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
-                                        />
-                                        {minimumLevelError && (
-                                            <div className={classes.errorMessage}>
-                                                The value must be between 0 and {getLimit()}!
-                                            </div>
-                                        )}
+                                <div className={classes.formSection}>
+                                    <div style={{position: 'relative'}}>
+                                        <span className={classes.sectionTitleBefore}></span>
+                                        <h2 className={classes.sectionTitle}>General</h2>
                                     </div>
+                                    <div className={classes.formRow}>
+                                        {/* Input for minimum */}
+                                        <div className={classes.formControl}>
+                                            <label className={classes.label}>Minimum level</label>
+                                            <input
+                                                type="number"
+                                                placeholder={`Enter minimum level (0 to ${getLimit()})`}
+                                                className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
+                                                value={minimumLevel}
+                                                onChange={(e) => {
+                                                    setMinimumLevel(e.target.value);
+                                                    // Validazione anche durante l'immissione dei caratteri per un'esperienza utente migliore
+                                                    if (maximumLevel !== '') {
+                                                        checkRangeError(e.target.value, maximumLevel, setRangeError);
+                                                    }
+                                                }}
+                                                onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError, maximumLevel, setRangeError)}
+                                            />
+                                            {minimumLevelError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    {/* Input per il massimo */}
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Maximum level</label>
-                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`}
-                                               value={maximumLevel}
-                                               onChange={(e) => setMaximumLevel(e.target.value)}
-                                               onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
-                                               className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
-                                        />
-                                        {maximumLevelError && (
-                                            <div className={classes.errorMessage}>
-                                                The value must be between 0 and {getLimit()}!
-                                            </div>
-                                        )}
-                                    </div>
+                                        {/* Input for maximum */}
+                                        <div className={classes.formControl}>
+                                            <label className={classes.label}>Maximum level</label>
+                                            <input
+                                                type="number"
+                                                placeholder={`Enter maximum level (0 to ${getLimit()})`}
+                                                className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
+                                                value={maximumLevel}
+                                                onChange={(e) => {
+                                                    setMaximumLevel(e.target.value);
+                                                    // Validazione anche durante l'immissione dei caratteri per un'esperienza utente migliore
+                                                    if (minimumLevel !== '') {
+                                                        checkRangeError(minimumLevel, e.target.value, setRangeError);
+                                                    }
+                                                }}
+                                                onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
+                                            />
+                                            {maximumLevelError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Frequency</label>
-                                        <select
-                                            className={classes.select}
-                                            value={frequencyAlert}  // Imposta il valore su quello dello stato
-                                            onChange={(e) => setFrequencyAlert(e.target.value)}
-                                        >
-                                            <option value="Weekly and Monthly">Weekly and Monthly</option>
-                                            <option value="Monthly">Monthly</option>
-                                            <option value="Weekly">Weekly</option>
-                                        </select>
+                                        <div className={classes.formControl}>
+                                            <label className={classes.label}>Modality</label>
+                                            <select
+                                                className={classes.select}
+                                                value={checkModality ? "Percentage" : "Value"}
+                                                onChange={(e) => setCheckModality(e.target.value === "Percentage")}
+                                            >
+                                                <option value="Value">Value</option>
+                                                <option value="Percentage">Percentage</option>
+                                            </select>
+                                        </div>
                                     </div>
-
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Modality</label>
-                                        <select className={classes.select}
-                                                value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                                onChange={(e) => setCheckModality(e.target.value === "Percentage")}>
-                                            <option value="Value">Value</option>
-                                            <option value="Percentage">Percentage</option>
-                                        </select>
-                                    </div>
+                                    {rangeError && (
+                                        <div style={classes.errorMessage}>
+                                            The minimum value cannot be greater than the maximum value!
+                                        </div>
+                                    )}
                                 </div>
                             )}
 
                             {futuresType === "All" && (
                                 <>
-                                    <h3 className={classes.h3}>Yearly</h3>
-                                    <div className={classes.converterContainer}>
-                                        {/* Input Yearly Minimo */}
-                                        <div className={classes.inputGroupHorizontal}>
-                                            <label className={classes.label}>Minimum level</label>
-                                            <input type="number" placeholder="Enter minimum level"
-                                                   value={minimumLevelYearly}
-                                                   onChange={(e) => setMinimumLevelYearly(e.target.value)}
-                                                   onBlur={() => handleMinimumLevelBlur(minimumLevelYearly, setMinimumLevelYearly, setMinimumLevelYearlyError)}
-                                                   className={`${classes.input} ${minimumLevelYearlyError ? classes.errorInput : ''}`}
-                                            />
-                                            {minimumLevelYearlyError && (
-                                                <div className={classes.errorMessage}>
-                                                    The value must be between 0 and {getLimit()}!
-                                                </div>
-                                            )}
+                                    {/* Yearly Section */}
+                                    <div className={classes.formSection}>
+                                        <div style={{position: 'relative'}}>
+                                            <span className={classes.sectionTitleBefore}></span>
+                                            <h2 className={classes.sectionTitle}>Yearly</h2>
                                         </div>
+                                        <div className={classes.formRow}>
+                                            {/* Input Yearly Minimum */}
+                                            <div className={classes.formControl}>
+                                                <label className={classes.label}>Minimum level</label>
+                                                <input
+                                                    type="number"
+                                                    placeholder={`Enter minimum level (0 to ${getLimit('yearly')})`}
+                                                    className={`${classes.input} ${minimumLevelYearlyError ? classes.errorInput : ''}`}
+                                                    value={minimumLevelYearly}
+                                                    onChange={(e) => {
+                                                        setMinimumLevelYearly(e.target.value);
+                                                        if (maximumLevelYearly !== '') {
+                                                            checkRangeError(e.target.value, maximumLevelYearly, setRangeYearlyError);
+                                                        }
+                                                    }}
+                                                    onBlur={() => handleMinimumLevelBlur(minimumLevelYearly, setMinimumLevelYearly, setMinimumLevelYearlyError, maximumLevelYearly, setRangeYearlyError, 'yearly')}
+                                                />
+                                                {minimumLevelYearlyError && (
+                                                    <div className={classes.errorMessage}>
+                                                        The value must be between 0 and {getLimit('yearly')}!
+                                                    </div>
+                                                )}
+                                            </div>
 
-                                        {/* Input Yearly Massimo */}
-                                        <div className={classes.inputGroupHorizontal}>
-                                            <label className={classes.label}>Maximum level</label>
-                                            <input type="number" placeholder="Enter maximum level"
-                                                   value={maximumLevelYearly}
-                                                   onChange={(e) => setMaximumLevelYearly(e.target.value)}
-                                                   onBlur={() => handleMaximumLevelBlur(maximumLevelYearly, setMaximumLevelYearly, setMaximumLevelYearlyError, minimumLevelYearly, setRangeYearlyError)}
-                                                   className={`${classes.input} ${maximumLevelYearlyError ? classes.errorInput : ''}`}
-                                            />
-                                            {maximumLevelYearlyError && (
-                                                <div className={classes.errorMessage}>
-                                                    The value must be between 0 and {getLimit()}!
-                                                </div>
-                                            )}
-                                        </div>
+                                            {/* Input Yearly Maximum */}
+                                            <div className={classes.formControl}>
+                                                <label className={classes.label}>Maximum level</label>
+                                                <input
+                                                    type="number"
+                                                    placeholder={`Enter maximum level (0 to ${getLimit('yearly')})`}
+                                                    className={`${classes.input} ${maximumLevelYearlyError ? classes.errorInput : ''}`}
+                                                    value={maximumLevelYearly}
+                                                    onChange={(e) => {
+                                                        setMaximumLevelYearly(e.target.value);
+                                                        if (minimumLevelYearly !== '') {
+                                                            checkRangeError(minimumLevelYearly, e.target.value, setRangeYearlyError);
+                                                        }
+                                                    }}
+                                                    onBlur={() => handleMaximumLevelBlur(maximumLevelYearly, setMaximumLevelYearly, setMaximumLevelYearlyError, minimumLevelYearly, setRangeYearlyError, 'yearly')}
+                                                />
+                                                {maximumLevelYearlyError && (
+                                                    <div className={classes.errorMessage}>
+                                                        The value must be between 0 and {getLimit('yearly')}!
+                                                    </div>
+                                                )}
+                                            </div>
 
-                                        <div className={classes.inputGroupHorizontal}>
-                                            <label className={classes.label}>Frequency</label>
-                                            <select className={classes.select}
-                                                    value={frequencyYearly}  // Imposta il valore su quello dello stato
-                                                    onChange={(e) => setFrequencyYearly(e.target.value)}>
-                                                <option value="Weekly and Monthly">Weekly and Monthly</option>
-                                                <option value="Monthly">Monthly</option>
-                                                <option value="Weekly">Weekly</option>
-                                            </select>
-                                        </div>
-
-                                        <div className={classes.inputGroupHorizontal}>
-                                            <label className={classes.label}>Modality</label>
-                                            <select className={classes.select}
-                                                    value={checkModalityYearly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
+                                            <div className={classes.formControl}>
+                                                <label className={classes.label}>Modality</label>
+                                                <select
+                                                    className={classes.select}
+                                                    value={checkModalityYearly ? "Percentage" : "Value"}
                                                     onChange={(e) => setCheckModalityYearly(e.target.value === "Percentage")}
-                                            >
-                                                <option value="Value">Value</option>
-                                                <option value="Percentage">Percentage</option>
-                                            </select>
+                                                >
+                                                    <option value="Value">Value</option>
+                                                    <option value="Percentage">Percentage</option>
+                                                </select>
+                                            </div>
                                         </div>
+                                        {rangeYearlyError && (
+                                            <div className={classes.errorMessage}>
+                                                The minimum value cannot be greater than the maximum value!
+                                            </div>
+                                        )}
                                     </div>
-                                    {rangeYearlyError && (
-                                        <div className={classes.errorMessage}>
-                                            The minimum value cannot be greater than the maximum value!
-                                        </div>
-                                    )}
-                                    <h3 className={classes.h3}>Quarterly</h3>
-                                    <div className={classes.converterContainer}>
-                                        {/* Input Quarterly Minimo */}
-                                        <div className={classes.inputGroupHorizontal}>
-                                            <label className={classes.label}>Minimum level</label>
-                                            <input type="number" placeholder="Enter minimum level"
-                                                   value={minimumLevelQuarterly}
-                                                   onChange={(e) => setMinimumLevelQuarterly(e.target.value)}
-                                                   onBlur={() => handleMinimumLevelBlur(minimumLevelQuarterly, setMinimumLevelQuarterly, setMinimumLevelQuarterlyError)}
-                                                   className={`${classes.input} ${minimumLevelQuarterlyError ? classes.errorInput : ''}`}
-                                            />
-                                            {minimumLevelQuarterlyError && (
-                                                <div className={classes.errorMessage}>
-                                                    The value must be between 0 and {getLimit()}!
-                                                </div>
-                                            )}
-                                        </div>
 
-                                        {/* Input Quarterly Massimo */}
-                                        <div className={classes.inputGroupHorizontal}>
-                                            <label className={classes.label}>Maximum level</label>
-                                            <input type="number" placeholder="Enter maximum level"
-                                                   value={maximumLevelQuarterly}
-                                                   onChange={(e) => setMaximumLevelQuarterly(e.target.value)}
-                                                   onBlur={() => handleMaximumLevelBlur(maximumLevelQuarterly, setMaximumLevelQuarterly, setMaximumLevelQuarterlyError, minimumLevelQuarterly, setRangeQuarterlyError)}
-                                                   className={`${classes.input} ${maximumLevelQuarterlyError ? classes.errorInput : ''}`}
-                                            />
-                                            {maximumLevelQuarterlyError && (
-                                                <div className={classes.errorMessage}>
-                                                    The value must be between 0 and {getLimit()}!
-                                                </div>
-                                            )}
+                                    {/* Quarterly Section */}
+                                    <div className={classes.formSection}>
+                                        <div style={{position: 'relative'}}>
+                                            <span className={classes.sectionTitleBefore}></span>
+                                            <h2 className={classes.sectionTitle}>Quarterly</h2>
                                         </div>
+                                        <div className={classes.formRow}>
+                                            {/* Input Quarterly Minimum */}
+                                            <div className={classes.formControl}>
+                                                <label className={classes.label}>Minimum level</label>
+                                                <input
+                                                    type="number"
+                                                    placeholder={`Enter minimum level (0 to ${getLimit('quarterly')})`}
+                                                    className={`${classes.input} ${minimumLevelQuarterlyError ? classes.errorInput : ''}`}
+                                                    value={minimumLevelQuarterly}
+                                                    onChange={(e) => {
+                                                        setMinimumLevelQuarterly(e.target.value);
+                                                        if (maximumLevelQuarterly !== '') {
+                                                            checkRangeError(e.target.value, maximumLevelQuarterly, setRangeQuarterlyError);
+                                                        }
+                                                    }}
+                                                    onBlur={() => handleMinimumLevelBlur(minimumLevelQuarterly, setMinimumLevelQuarterly, setMinimumLevelQuarterlyError, maximumLevelQuarterly, setRangeQuarterlyError, 'quarterly')}
+                                                />
+                                                {minimumLevelQuarterlyError && (
+                                                    <div className={classes.errorMessage}>
+                                                        The value must be between 0 and {getLimit('quarterly')}!
+                                                    </div>
+                                                )}
+                                            </div>
 
-                                        <div className={classes.inputGroupHorizontal}>
-                                            <label className={classes.label}>Frequency</label>
-                                            <select
-                                                className={classes.select}
-                                                value={frequencyQuarterly}  // Imposta il valore su quello dello stato
-                                                onChange={(e) => setFrequencyQuarterly(e.target.value)}
-                                            >
-                                                <option value="Weekly and Monthly">Weekly and Monthly</option>
-                                                <option value="Monthly">Monthly</option>
-                                                <option value="Weekly">Weekly</option>
-                                            </select>
-                                        </div>
+                                            {/* Input Quarterly Maximum */}
+                                            <div className={classes.formControl}>
+                                                <label className={classes.label}>Maximum level</label>
+                                                <input
+                                                    type="number"
+                                                    placeholder={`Enter maximum level (0 to ${getLimit('quarterly')})`}
+                                                    className={`${classes.input} ${maximumLevelQuarterlyError ? classes.errorInput : ''}`}
+                                                    value={maximumLevelQuarterly}
+                                                    onChange={(e) => {
+                                                        setMaximumLevelQuarterly(e.target.value);
+                                                        if (minimumLevelQuarterly !== '') {
+                                                            checkRangeError(minimumLevelQuarterly, e.target.value, setRangeQuarterlyError);
+                                                        }
+                                                    }}
+                                                    onBlur={() => handleMaximumLevelBlur(maximumLevelQuarterly, setMaximumLevelQuarterly, setMaximumLevelQuarterlyError, minimumLevelQuarterly, setRangeQuarterlyError, 'quarterly')}
+                                                />
+                                                {maximumLevelQuarterlyError && (
+                                                    <div className={classes.errorMessage}>
+                                                        The value must be between 0 and {getLimit('quarterly')}!
+                                                    </div>
+                                                )}
+                                            </div>
 
-                                        <div className={classes.inputGroupHorizontal}>
-                                            <label className={classes.label}>Modality</label>
-                                            <select
-                                                className={classes.select}
-                                                value={checkModalityQuarterly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                                onChange={(e) => setCheckModalityQuarterly(e.target.value === "Percentage")}
-                                            >
-                                                <option value="Value">Value</option>
-                                                <option value="Percentage">Percentage</option>
-                                            </select>
+                                            <div className={classes.formControl}>
+                                                <label className={classes.label}>Modality</label>
+                                                <select
+                                                    className={classes.select}
+                                                    value={checkModalityQuarterly ? "Percentage" : "Value"}
+                                                    onChange={(e) => setCheckModalityQuarterly(e.target.value === "Percentage")}
+                                                >
+                                                    <option value="Value">Value</option>
+                                                    <option value="Percentage">Percentage</option>
+                                                </select>
+                                            </div>
                                         </div>
+                                        {rangeQuarterlyError && (
+                                            <div className={classes.errorMessage}>
+                                                The minimum value cannot be greater than the maximum value!
+                                            </div>
+                                        )}
                                     </div>
-                                    {rangeQuarterlyError && (
-                                        <div className={classes.errorMessage}>
-                                            The minimum value cannot be greater than the maximum value!
-                                        </div>
-                                    )}
-                                    <h3 className={classes.h3}>Monthly</h3>
-                                    <div className={classes.converterContainer}>
-                                        <div className={classes.inputGroupHorizontal}>
-                                            <label className={classes.label}>Minimum level</label>
-                                            <input type="number" placeholder="Enter minimum level"
-                                                   value={minimumLevelMonthly}
-                                                   onChange={(e) => setMinimumLevelMonthly(e.target.value)}
-                                                   onBlur={() => handleMinimumLevelBlur(minimumLevelMonthly, setMinimumLevelMonthly, setMinimumLevelMonthlyError)}
-                                                   className={`${classes.input} ${minimumLevelMonthlyError ? classes.errorInput : ''}`}
-                                            />
-                                            {minimumLevelMonthlyError && (
-                                                <div className={classes.errorMessage}>
-                                                    The value must be between 0 and {getLimit()}!
-                                                </div>
-                                            )}
-                                        </div>
 
-                                        {/* Input Monthly Massimo */}
-                                        <div className={classes.inputGroupHorizontal}>
-                                            <label className={classes.label}>Maximum level</label>
-                                            <input type="number" placeholder="Enter maximum level"
-                                                   value={maximumLevelMonthly}
-                                                   onChange={(e) => setMaximumLevelMonthly(e.target.value)}
-                                                   onBlur={() => handleMaximumLevelBlur(maximumLevelMonthly, setMaximumLevelMonthly, setMaximumLevelMonthlyError, minimumLevelMonthly, setRangeMonthlyError)}
-                                                   className={`${classes.input} ${maximumLevelMonthlyError ? classes.errorInput : ''}`}
-                                            />
-                                            {maximumLevelMonthlyError && (
-                                                <div className={classes.errorMessage}>
-                                                    The value must be between 0 and {getLimit()}!
-                                                </div>
-                                            )}
+                                    {/* Monthly Section */}
+                                    <div className={classes.formSection}>
+                                        <div style={{position: 'relative'}}>
+                                            <span className={classes.sectionTitleBefore}></span>
+                                            <h2 className={classes.sectionTitle}>Monthly</h2>
                                         </div>
+                                        <div className={classes.formRow}>
+                                            {/* Input Monthly Minimum */}
+                                            <div className={classes.formControl}>
+                                                <label className={classes.label}>Minimum level</label>
+                                                <input
+                                                    type="number"
+                                                    placeholder={`Enter minimum level (0 to ${getLimit('monthly')})`}
+                                                    className={`${classes.input} ${minimumLevelMonthlyError ? classes.errorInput : ''}`}
+                                                    value={minimumLevelMonthly}
+                                                    onChange={(e) => {
+                                                        setMinimumLevelMonthly(e.target.value);
+                                                        if (maximumLevelMonthly !== '') {
+                                                            checkRangeError(e.target.value, maximumLevelMonthly, setRangeMonthlyError);
+                                                        }
+                                                    }}
+                                                    onBlur={() => handleMinimumLevelBlur(minimumLevelMonthly, setMinimumLevelMonthly, setMinimumLevelMonthlyError, maximumLevelMonthly, setRangeMonthlyError, 'monthly')}
+                                                />
+                                                {minimumLevelMonthlyError && (
+                                                    <div className={classes.errorMessage}>
+                                                        The value must be between 0 and {getLimit('monthly')}!
+                                                    </div>
+                                                )}
+                                            </div>
 
-                                        <div className={classes.inputGroupHorizontal}>
-                                            <label className={classes.label}>Frequency</label>
-                                            <select className={classes.select}
-                                                    value={frequencyMonthly}  // Imposta il valore su quello dello stato
-                                                    onChange={(e) => setFrequencyMonthly(e.target.value)}>
-                                                <option value="Weekly and Monthly">Weekly and Monthly</option>
-                                                <option value="Monthly">Monthly</option>
-                                                <option value="Weekly">Weekly</option>
-                                            </select>
-                                        </div>
+                                            {/* Input Monthly Maximum */}
+                                            <div className={classes.formControl}>
+                                                <label className={classes.label}>Maximum level</label>
+                                                <input
+                                                    type="number"
+                                                    placeholder={`Enter maximum level (0 to ${getLimit('monthly')})`}
+                                                    className={`${classes.input} ${maximumLevelMonthlyError ? classes.errorInput : ''}`}
+                                                    value={maximumLevelMonthly}
+                                                    onChange={(e) => {
+                                                        setMaximumLevelMonthly(e.target.value);
+                                                        if (minimumLevelMonthly !== '') {
+                                                            checkRangeError(minimumLevelMonthly, e.target.value, setRangeMonthlyError);
+                                                        }
+                                                    }}
+                                                    onBlur={() => handleMaximumLevelBlur(maximumLevelMonthly, setMaximumLevelMonthly, setMaximumLevelMonthlyError, minimumLevelMonthly, setRangeMonthlyError, 'monthly')}
+                                                />
+                                                {maximumLevelMonthlyError && (
+                                                    <div className={classes.errorMessage}>
+                                                        The value must be between 0 and {getLimit('monthly')}!
+                                                    </div>
+                                                )}
+                                            </div>
 
-                                        <div className={classes.inputGroupHorizontal}>
-                                            <label className={classes.label}>Modality</label>
-                                            <select className={classes.select}
-                                                    value={checkModalityMonthly ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                                    onChange={(e) => setCheckModalityMonthly(e.target.value === "Percentage")}>
-                                                <option value="Value">Value</option>
-                                                <option value="Percentage">Percentage</option>
-                                            </select>
+                                            <div className={classes.formControl}>
+                                                <label className={classes.label}>Modality</label>
+                                                <select
+                                                    className={classes.select}
+                                                    value={checkModalityMonthly ? "Percentage" : "Value"}
+                                                    onChange={(e) => setCheckModalityMonthly(e.target.value === "Percentage")}
+                                                >
+                                                    <option value="Value">Value</option>
+                                                    <option value="Percentage">Percentage</option>
+                                                </select>
+                                            </div>
                                         </div>
+                                        {rangeMonthlyError && (
+                                            <div className={classes.errorMessage}>
+                                                The minimum value cannot be greater than the maximum value!
+                                            </div>
+                                        )}
                                     </div>
-                                    {rangeMonthlyError && (
-                                        <div className={classes.errorMessage}>
-                                            The minimum value cannot be greater than the maximum value!
-                                        </div>
-                                    )}
                                 </>
                             )}
 
                             {futuresType === "Yearly" && (
-                                <div className={classes.converterContainer}>
-                                    {/* Input per il minimo */}
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Minimum level</label>
-                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`}
-                                               value={minimumLevel}
-                                               onChange={(e) => setMinimumLevel(e.target.value)}
-                                               onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
-                                               className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
-                                        />
-                                        {minimumLevelError && (
-                                            <div className={classes.errorMessage}>
-                                                The value must be between 0 and {getLimit()}!
-                                            </div>
-                                        )}
+                                <div className={classes.formSection}>
+                                    <div style={{position: 'relative'}}>
+                                        <h2 className={classes.sectionTitle}>Yearly</h2>
                                     </div>
+                                    <div className={classes.formRow}>
+                                        {/* Input for minimum */}
+                                        <div className={classes.formControl}>
+                                            <label className={classes.label}>Minimum level</label>
+                                            <input
+                                                type="number"
+                                                placeholder={`Enter minimum level (0 to ${getLimit()})`}
+                                                className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
+                                                value={minimumLevel}
+                                                onChange={(e) => {
+                                                    setMinimumLevel(e.target.value);
+                                                    // Validazione anche durante l'immissione dei caratteri per un'esperienza utente migliore
+                                                    if (maximumLevel !== '') {
+                                                        checkRangeError(e.target.value, maximumLevel, setRangeError);
+                                                    }
+                                                }}
+                                                onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError, maximumLevel, setRangeError)}
+                                            />
+                                            {minimumLevelError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    {/* Input per il massimo */}
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Maximum level</label>
-                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`}
-                                               value={maximumLevel}
-                                               onChange={(e) => setMaximumLevel(e.target.value)}
-                                               onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
-                                               className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
-                                        />
-                                        {maximumLevelError && (
-                                            <div className={classes.errorMessage}>
-                                                The value must be between 0 and {getLimit()}!
-                                            </div>
-                                        )}
-                                    </div>
+                                        {/* Input for maximum */}
+                                        <div className={classes.formControl}>
+                                            <label className={classes.label}>Maximum level</label>
+                                            <input
+                                                type="number"
+                                                placeholder={`Enter maximum level (0 to ${getLimit()})`}
+                                                className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
+                                                value={maximumLevel}
+                                                onChange={(e) => {
+                                                    setMaximumLevel(e.target.value);
+                                                    // Validazione anche durante l'immissione dei caratteri per un'esperienza utente migliore
+                                                    if (minimumLevel !== '') {
+                                                        checkRangeError(minimumLevel, e.target.value, setRangeError);
+                                                    }
+                                                }}
+                                                onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
+                                            />
+                                            {maximumLevelError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Frequency</label>
-                                        <select
-                                            className={classes.select}
-                                            value={frequencyAlert}  // Imposta il valore su quello dello stato
-                                            onChange={(e) => setFrequencyAlert(e.target.value)}
-                                        >
-                                            <option value="Weekly and Monthly">Weekly and Monthly</option>
-                                            <option value="Monthly">Monthly</option>
-                                            <option value="Weekly">Weekly</option>
-                                        </select>
+                                        <div className={classes.formControl}>
+                                            <label className={classes.label}>Modality</label>
+                                            <select
+                                                className={classes.select}
+                                                value={checkModality ? "Percentage" : "Value"}
+                                                onChange={(e) => setCheckModality(e.target.value === "Percentage")}
+                                            >
+                                                <option value="Value">Value</option>
+                                                <option value="Percentage">Percentage</option>
+                                            </select>
+                                        </div>
                                     </div>
-
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Modality</label>
-                                        <select
-                                            className={classes.select}
-                                            value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                            onChange={(e) => setCheckModality(e.target.value === "Percentage")}
-                                        >
-                                            <option value="Value">Value</option>
-                                            <option value="Percentage">Percentage</option>
-                                        </select>
-                                    </div>
+                                    {rangeError && (
+                                        <div className={classes.errorMessage}>
+                                            The minimum value cannot be greater than the maximum value!
+                                        </div>
+                                    )}
                                 </div>
                             )}
-
                             {futuresType === "Quarterly" && (
-                                <div className={classes.converterContainer}>
-                                    {/* Input per il minimo */}
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Minimum level</label>
-                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`}
-                                               value={minimumLevel}
-                                               onChange={(e) => setMinimumLevel(e.target.value)}
-                                               onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
-                                               className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
-                                        />
-                                        {minimumLevelError && (
-                                            <div className={classes.errorMessage}>
-                                                The value must be between 0 and {getLimit()}!
-                                            </div>
-                                        )}
+                                <div className={classes.formSection}>
+                                    <div style={{position: 'relative'}}>
+                                        <span className={classes.sectionTitleBefore}></span>
+                                        <h2 className={classes.sectionTitle}>Quarterly</h2>
                                     </div>
+                                    <div className={classes.formRow}>
+                                        {/* Input for minimum */}
+                                        <div className={classes.formControl}>
+                                            <label className={classes.label}>Minimum level</label>
+                                            <input
+                                                type="number"
+                                                placeholder={`Enter minimum level (0 to ${getLimit()})`}
+                                                className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
+                                                value={minimumLevel}
+                                                onChange={(e) => {
+                                                    setMinimumLevel(e.target.value);
+                                                    // Validazione anche durante l'immissione dei caratteri per un'esperienza utente migliore
+                                                    if (maximumLevel !== '') {
+                                                        checkRangeError(e.target.value, maximumLevel, setRangeError);
+                                                    }
+                                                }}
+                                                onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError, maximumLevel, setRangeError)}
+                                            />
+                                            {minimumLevelError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    {/* Input per il massimo */}
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Maximum level</label>
-                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`}
-                                               value={maximumLevel}
-                                               onChange={(e) => setMaximumLevel(e.target.value)}
-                                               onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
-                                               className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
-                                        />
-                                        {maximumLevelError && (
-                                            <div className={classes.errorMessage}>
-                                                The value must be between 0 and {getLimit()}!
-                                            </div>
-                                        )}
-                                    </div>
+                                        {/* Input for maximum */}
+                                        <div className={classes.formControl}>
+                                            <label className={classes.label}>Maximum level</label>
+                                            <input
+                                                type="number"
+                                                placeholder={`Enter maximum level (0 to ${getLimit()})`}
+                                                className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
+                                                value={maximumLevel}
+                                                onChange={(e) => {
+                                                    setMaximumLevel(e.target.value);
+                                                    // Validazione anche durante l'immissione dei caratteri per un'esperienza utente migliore
+                                                    if (minimumLevel !== '') {
+                                                        checkRangeError(minimumLevel, e.target.value, setRangeError);
+                                                    }
+                                                }}
+                                                onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
+                                            />
+                                            {maximumLevelError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Frequency</label>
-                                        <select
-                                            className={classes.select}
-                                            value={frequencyAlert}  // Imposta il valore su quello dello stato
-                                            onChange={(e) => setFrequencyAlert(e.target.value)}
-                                        >
-                                            <option value="Weekly and Monthly">Weekly and Monthly</option>
-                                            <option value="Monthly">Monthly</option>
-                                            <option value="Weekly">Weekly</option>
-                                        </select>
+                                        <div className={classes.formControl}>
+                                            <label className={classes.label}>Modality</label>
+                                            <select
+                                                className={classes.select}
+                                                value={checkModality ? "Percentage" : "Value"}
+                                                onChange={(e) => setCheckModality(e.target.value === "Percentage")}
+                                            >
+                                                <option value="Value">Value</option>
+                                                <option value="Percentage">Percentage</option>
+                                            </select>
+                                        </div>
                                     </div>
-
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Modality</label>
-                                        <select
-                                            className={classes.select}
-                                            value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                            onChange={(e) => setCheckModality(e.target.value === "Percentage")}
-                                        >
-                                            <option value="Value">Value</option>
-                                            <option value="Percentage">Percentage</option>
-                                        </select>
-                                    </div>
+                                    {rangeError && (
+                                        <div style={classes.errorMessage}>
+                                            The minimum value cannot be greater than the maximum value!
+                                        </div>
+                                    )}
                                 </div>
                             )}
-
                             {futuresType === "Monthly" && (
-                                <div className={classes.converterContainer}>
-                                    {/* Input per il minimo */}
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Minimum level</label>
-                                        <input type="number" placeholder={`Enter minimum level (0 to ${getLimit()})`}
-                                               value={minimumLevel}
-                                               onChange={(e) => setMinimumLevel(e.target.value)}
-                                               onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError)}
-                                               className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
-                                        />
-                                        {minimumLevelError && (
-                                            <div className={classes.errorMessage}>
-                                                The value must be between 0 and {getLimit()}!
-                                            </div>
-                                        )}
+                                <div className={classes.formSection}>
+                                    <div style={{position: 'relative'}}>
+                                        <span className={classes.sectionTitleBefore}></span>
+                                        <h2 className={classes.sectionTitle}>Monthly</h2>
                                     </div>
+                                    <div className={classes.formRow}>
+                                        {/* Input for minimum */}
+                                        <div className={classes.formControl}>
+                                            <label className={classes.label}>Minimum level</label>
+                                            <input
+                                                type="number"
+                                                placeholder={`Enter minimum level (0 to ${getLimit()})`}
+                                                className={`${classes.input} ${minimumLevelError ? classes.errorInput : ''}`}
+                                                value={minimumLevel}
+                                                onChange={(e) => {
+                                                    setMinimumLevel(e.target.value);
+                                                    // Validazione anche durante l'immissione dei caratteri per un'esperienza utente migliore
+                                                    if (maximumLevel !== '') {
+                                                        checkRangeError(e.target.value, maximumLevel, setRangeError);
+                                                    }
+                                                }}
+                                                onBlur={() => handleMinimumLevelBlur(minimumLevel, setMinimumLevel, setMinimumLevelError, maximumLevel, setRangeError)}
+                                            />
+                                            {minimumLevelError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    {/* Input per il massimo */}
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Maximum level</label>
-                                        <input type="number" placeholder={`Enter maximum level (0 to ${getLimit()})`}
-                                               value={maximumLevel}
-                                               onChange={(e) => setMaximumLevel(e.target.value)}
-                                               onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
-                                               className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
-                                        />
-                                        {maximumLevelError && (
-                                            <div className={classes.errorMessage}>
-                                                The value must be between 0 and {getLimit()}!
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Frequency</label>
-                                        <select className={classes.select} value={frequencyAlert}
-                                                onChange={(e) => setFrequencyAlert(e.target.value)}>
-                                            <option value="Weekly and Monthly">Weekly and Monthly</option>
-                                            <option value="Monthly">Monthly</option>
-                                            <option value="Weekly">Weekly</option>
-                                        </select>
-                                    </div>
+                                        {/* Input for maximum */}
+                                        <div className={classes.formControl}>
+                                            <label className={classes.label}>Maximum level</label>
+                                            <input
+                                                type="number"
+                                                placeholder={`Enter maximum level (0 to ${getLimit()})`}
+                                                className={`${classes.input} ${maximumLevelError ? classes.errorInput : ''}`}
+                                                value={maximumLevel}
+                                                onChange={(e) => {
+                                                    setMaximumLevel(e.target.value);
+                                                    // Validazione anche durante l'immissione dei caratteri per un'esperienza utente migliore
+                                                    if (minimumLevel !== '') {
+                                                        checkRangeError(minimumLevel, e.target.value, setRangeError);
+                                                    }
+                                                }}
+                                                onBlur={() => handleMaximumLevelBlur(maximumLevel, setMaximumLevel, setMaximumLevelError, minimumLevel, setRangeError)}
+                                            />
+                                            {maximumLevelError && (
+                                                <div className={classes.errorMessage}>
+                                                    The value must be between 0 and {getLimit()}!
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    <div className={classes.inputGroupHorizontal}>
-                                        <label className={classes.label}>Modality</label>
-                                        <select className={classes.select}
-                                                value={checkModality ? "Percentage" : "Value"}  // Imposta il valore in base allo stato booleano
-                                                onChange={(e) => setCheckModality(e.target.value === "Percentage")}>
-                                            <option value="Value">Value</option>
-                                            <option value="Percentage">Percentage</option>
-                                        </select>
+                                        <div className={classes.formControl}>
+                                            <label className={classes.label}>Modality</label>
+                                            <select
+                                                className={classes.select}
+                                                value={checkModality ? "Percentage" : "Value"}
+                                                onChange={(e) => setCheckModality(e.target.value === "Percentage")}
+                                            >
+                                                <option value="Value">Value</option>
+                                                <option value="Percentage">Percentage</option>
+                                            </select>
+                                        </div>
                                     </div>
+                                    {rangeError && (
+                                        <div style={classes.errorMessage}>
+                                            The minimum value cannot be greater than the maximum value!
+                                        </div>
+                                    )}
                                 </div>
                             )}
-                            {rangeError && (
-                                <div className={classes.errorMessage}>
-                                    The minimum value cannot be greater than the maximum value!
+                            <div className={classes.alertBottom}>
+                                <div className={classes.toggleContainer}>
+                                    <label className={classes.switch}>
+                                        <input
+                                            type="checkbox"
+                                            className={classes.checkbox}
+                                            checked={activeAlert}
+                                            onChange={(e) => setActiveAlert(e.target.checked)}
+                                        />
+                                        <span className={`${classes.slider} ${classes.round}`}></span>
+                                    </label>
+                                    <span className={classes.toggleLabel}>Active Alert</span>
                                 </div>
-                            )}
-                            <div style={{marginTop: '2%'}}>
-                                <input type="checkbox" className={classes} checked={activeAlert}
-                                       onChange={(e) => setActiveAlert(e.target.checked)}/>
-                                <label className={classes.label} style={{marginLeft: '4px'}}>Active Alert</label>
+
+                                <button className={classes.convertButton} onClick={fetchCheckAlert}>
+                                    Save
+                                </button>
                             </div>
-
-                            <button className={classes.convertButton} onClick={fetchCheckAlert}>
-                                Send email
-                            </button>
                         </div>
                     </div>
                 </motion.div>
